@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HamburgerMenu.Sincronizar"
+             NavigationPage.BackButtonTitle="Atrás"
+             Title="Sincronizar">
+    <ScrollView>
+        <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout>
+                    <Label Text="Sincronizar"
+                            VerticalOptions="CenterAndExpand" 
+                            HorizontalOptions="CenterAndExpand" />
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                        <ActivityIndicator x:Name="activity"
+                               Color="Red" 
+                               BackgroundColor="Blue" 
+                               IsRunning="False"
+                               IsEnabled="False"  
+                               IsVisible="False"            
+                               HorizontalOptions="FillAndExpand" />
+                    </StackLayout>
+                    <Button Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
+                    <Button Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
+                </StackLayout>
+            </Frame>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

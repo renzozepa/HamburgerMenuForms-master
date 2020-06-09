@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage
+    x:Class="HamburgerMenu.HamburgerMenu"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Visual="Material"
+    NavigationPage.BackButtonTitle="Atrás">
+
+    <MasterDetailPage.Master>
+        <ContentPage BackgroundColor="#5e5a5a" Padding="0,0,0,0" Title="Menú">
+            <ListView x:Name="ListMenu" BackgroundColor="White" ItemSelected="ListMenu_ItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ImageCell
+                            Height="25"
+                            Detail="{Binding MenuDetail}"
+                            DetailColor="Black"
+                            ImageSource="{Binding icon}"
+                            Text="{Binding MenuTitle}"
+                            TextColor="Black" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ContentPage>
+    </MasterDetailPage.Master>
+
+</MasterDetailPage>

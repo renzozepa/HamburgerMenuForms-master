@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HamburgerMenu.Personal"
+             Visual="Material"
+             Title="Personal disponible"
+             NavigationPage.BackButtonTitle="Atrás">
+    <ContentPage.Content>
+        <StackLayout Padding="5">
+            <!--<ListView x:Name="PersonalListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding NOMBRE}"
+                              Detail="{Binding SITUACION}"
+                              TextColor="Teal"
+                              DetailColor="Blue"></TextCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+            <SearchBar x:Name="SBBusqueda" 
+                       Placeholder="Personal"
+                       TextChanged="SBBusqueda_TextChanged"
+                       BackgroundColor="#FBCBF3"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width=".5*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0"
+                       FontAttributes="Bold"
+                       Text="NOMBRE"></Label>
+                <Label Grid.Column="1"
+                       FontAttributes="Bold"
+                       Text="SITUACION"></Label>
+                <Label Grid.Column="2"
+                       FontAttributes="Bold"
+                       Text=""></Label>
+            </Grid>
+            <CollectionView x:Name="PersonalCollectionView">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"></GridItemsLayout>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width=".5*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding NOMBRE}"></Label>
+                            <Label Grid.Column="1" Text="{Binding SITUACION}"></Label>
+                            <Image Grid.Column="2" Source="ic_more_vert"></Image>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
