@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HamburgerMenu.TipoMarcacion"
+             Title=" Tipo de marcación "
+             BackgroundColor="LightBlue">
+    <ScrollView>
+        <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout>
+                    <Label Text="Tipo de marcación"
+                            VerticalOptions="CenterAndExpand" 
+                            HorizontalOptions="CenterAndExpand" />
+                    <Button Text="Ingreso" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Ingreso"/>
+                    <Button Text=" Salida almorzar" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SalidaAlmorzar"/>
+                    <Button Text=" Retorno almorzar " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Ingresoalmorzar"/>
+                    <Button Text="Salida " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Salida"/>
+                </StackLayout>
+            </Frame>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

@@ -71,9 +71,9 @@ namespace HamburgerMenu.ViewModels
             grid.Children.Add(buttonCancel);
             grid.Children.Add(buttonHelp);
 
-            var options = new MobileBarcodeScanningOptions();
-
-            options.PossibleFormats = new List<BarcodeFormat>()
+            var options = new MobileBarcodeScanningOptions
+            {
+                PossibleFormats = new List<BarcodeFormat>()
             {
                 ZXing.BarcodeFormat.EAN_8,
                 ZXing.BarcodeFormat.EAN_13,
@@ -82,6 +82,7 @@ namespace HamburgerMenu.ViewModels
                 ZXing.BarcodeFormat.CODE_39,
                 ZXing.BarcodeFormat.CODE_93,
                 ZXing.BarcodeFormat.CODE_128
+            }
             };
 
             var page = new ZXingScannerPage(options, grid)
@@ -123,16 +124,16 @@ namespace HamburgerMenu.ViewModels
                             {
                                 List<PersonalTareo> listll = (List<PersonalTareo>)resultado;
                                 string id_situacion = string.Empty;
-                                string situacion = string.Empty;                                
+                                string situacion = string.Empty;
                                 int personal = 0;
                                 string nombre_personal = string.Empty;
-                                string proyecto = string.Empty;                                
+                                string proyecto = string.Empty;
                                 int clase = 0;
 
                                 foreach (PersonalTareo itemPersonalTareo in listll)
                                 {
                                     id_situacion = itemPersonalTareo.ID_SITUACION.ToString();
-                                    situacion = itemPersonalTareo.SITUACION.ToString();                                    
+                                    situacion = itemPersonalTareo.SITUACION.ToString();
                                     personal = int.Parse(itemPersonalTareo.ID_PERSONAL.ToString());
                                     nombre_personal = itemPersonalTareo.NOMBRE.ToString();
                                     proyecto = itemPersonalTareo.ID_PROYECTO.ToString();
@@ -141,20 +142,22 @@ namespace HamburgerMenu.ViewModels
 
                                 if (id_situacion == "10")
                                 {
-                                    INSERT_TAREO(nombre_personal,personal, proyecto, Convert.ToInt32(id_situacion), clase, 1);
+                                    INSERT_TAREO(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase);
                                     await Navigation.PopAsync();
                                     BarcodeText = result.Text;
                                     BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
                                     //BarcodeFormat = situacion;
                                 }
-                                else {
+                                else
+                                {
                                     await Navigation.PopAsync();
                                     BarcodeText = result.Text;
-                                    BarcodeFormat = situacion;
+                                    BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
                                     await page.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es : " + situacion, "OK");
-                                }                                
+                                }
                             }
-                            else {
+                            else
+                            {
                                 await Navigation.PopAsync();
                                 BarcodeText = result.Text;
                                 await page.DisplayAlert("Ayuda", "El trabajador no se encuentra registrado", "OK");
@@ -165,7 +168,7 @@ namespace HamburgerMenu.ViewModels
 
                             throw;
                         }
-                        
+
                     }
 
                 });
@@ -177,7 +180,7 @@ namespace HamburgerMenu.ViewModels
             return db.Query<PersonalTareo>("SELECT * FROM PersonalTareo where NUMERO_DOCUIDEN = ? and ID_TAREADOR = ? ", numero, App.Tareador);
         }
 
-        public static void INSERT_TAREO(string nombre_personal , Int32 ID_PERSONAL,string ID_PROYECTO,Int32 ID_SITUACION, Int32 ID_CLASE_TRABAJADOR, Int32 TIPO_MARCACION)
+        public static void INSERT_TAREO(string nombre_personal, Int32 ID_PERSONAL, string ID_PROYECTO, Int32 ID_SITUACION, Int32 ID_CLASE_TRABAJADOR)
         {
             try
             {
@@ -187,13 +190,13 @@ namespace HamburgerMenu.ViewModels
                     var DatosRegistro = new TareoPersonal
                     {
                         ID_TAREADOR = App.Tareador,
-                        ID_PERSONAL = ID_PERSONAL,    
+                        ID_PERSONAL = ID_PERSONAL,
                         PERSONAL = nombre_personal,
                         ID_PROYECTO = ID_PROYECTO,
                         ID_SITUACION = ID_SITUACION,
                         ID_CLASE_TRABAJADOR = ID_CLASE_TRABAJADOR,
                         FECHA_TAREO = DateTime.Now,
-                        TIPO_MARCACION = TIPO_MARCACION,
+                        TIPO_MARCACION = App.TipoMarcacion,
                         HORA = DateTime.Now.ToShortTimeString(),
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
