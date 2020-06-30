@@ -21,7 +21,7 @@ namespace HamburgerMenu
         public App(string filepath)
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new Login());
+            MainPage = new NavigationPage(new Login());            
             FilePath = filepath;
         }
 

@@ -23,7 +23,7 @@ namespace HamburgerMenu
             base.OnAppearing();
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<TareoPersonal>();
+                //conn.CreateTable<TareoPersonal>();                
                 var contacts = conn.Table<TareoPersonal>().ToList().Where(x => x.ID_TAREADOR == App.Tareador);
                 //PersonalListView.ItemsSource = contacts;
                 TareoCollectionView.ItemsSource = contacts;

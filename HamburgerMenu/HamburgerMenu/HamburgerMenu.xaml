@@ -1,26 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MasterDetailPage
     x:Class="HamburgerMenu.HamburgerMenu"
+    xmlns:local="clr-namespace:HamburgerMenu"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Visual="Material"
-    NavigationPage.BackButtonTitle="Atrás">
+    Visual="Material" NavigationPage.HasNavigationBar="False">
 
     <MasterDetailPage.Master>
-        <ContentPage BackgroundColor="#5e5a5a" Padding="0,0,0,0" Title="Menú">
-            <ListView x:Name="ListMenu" BackgroundColor="White" ItemSelected="ListMenu_ItemSelected">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ImageCell
-                            Height="25"
-                            Detail="{Binding MenuDetail}"
-                            DetailColor="Black"
-                            ImageSource="{Binding icon}"
-                            Text="{Binding MenuTitle}"
-                            TextColor="Black" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+        <ContentPage BackgroundColor="#5e5a5a" Padding="0,0,0,0" Title="Menú" NavigationPage.HasBackButton="False">
+            <Grid BackgroundColor="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid BackgroundColor="#E6002B">
+                    <Image Source="bg.png" Aspect="AspectFill" />
+                    <StackLayout Padding="0,0,0,0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Image BackgroundColor="White" Source="logo.png" Aspect="AspectFill" WidthRequest="100" HeightRequest="100" />
+                        <Label Text="Tareo Haug" TextColor="White" FontSize="Large" />
+                    </StackLayout>
+                </Grid>
+                <StackLayout Margin="0,0,0,0" Grid.Row="1" Spacing="15">
+                    <ListView x:Name="ListMenu" BackgroundColor="White" ItemSelected="ListMenu_ItemSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,10,0,10" Spacing="20">
+                                        <Image Source="{Binding icon}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" />
+                                        <Label Text="{Binding MenuTitle}" FontSize="Medium" VerticalOptions="Center" TextColor="Black" />
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </Grid>
+
         </ContentPage>
     </MasterDetailPage.Master>
 

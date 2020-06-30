@@ -2,8 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.TipoMarcacion"
-             Title=" Tipo de marcación "
-             BackgroundColor="LightBlue">
+             Title=" Tipo de marcación ">
     <ScrollView>
         <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
             <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">

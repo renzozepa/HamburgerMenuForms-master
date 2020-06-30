@@ -24,7 +24,7 @@ namespace HamburgerMenu.Vistas
             try
             {                
                 var db = new SQLiteConnection(App.FilePath);
-                IEnumerable<LoginLocal> resultado = SELECT_WHERE(db, usuario.Text, contra.Text);
+                IEnumerable<LoginLocal> resultado = ConsultarUsuario(db, usuario.Text, contra.Text);
                 if (resultado.Count() > 0)
                 {
                     List<LoginLocal> listll = (List<LoginLocal>)resultado;
@@ -37,7 +37,7 @@ namespace HamburgerMenu.Vistas
                 }
                 else
                 {
-                    DisplayAlert("Tareo HAUG", "Verifique su usuario/contraseñ", "Ok");
+                    DisplayAlert("Tareo HAUG", "Verifique su usuario/contraseña", "Ok");
                 }
             }
             catch (Exception ex)
@@ -51,9 +51,9 @@ namespace HamburgerMenu.Vistas
         {
             Navigation.PushAsync(new RegistroUsuario());
         }
-        public static IEnumerable<LoginLocal> SELECT_WHERE(SQLiteConnection db, string usuario, string contra)
+        public static IEnumerable<LoginLocal> ConsultarUsuario(SQLiteConnection db, string usuario, string contra)
         {
-            return db.Query<LoginLocal>("SELECT * FROM LoginLocal where USUARIO = ? and CONTRASENIA = ?", usuario, contra);
+            return db.Query<LoginLocal>("Select * From LoginLocal where USUARIO = ? and CONTRASENIA = ?", usuario, contra);
         }
 
         private void Btn_Listar(object sender, EventArgs e)

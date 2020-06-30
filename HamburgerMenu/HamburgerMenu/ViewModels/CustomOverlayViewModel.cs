@@ -81,7 +81,8 @@ namespace HamburgerMenu.ViewModels
                 ZXing.BarcodeFormat.QR_CODE,
                 ZXing.BarcodeFormat.CODE_39,
                 ZXing.BarcodeFormat.CODE_93,
-                ZXing.BarcodeFormat.CODE_128
+                ZXing.BarcodeFormat.CODE_128,
+                ZXing.BarcodeFormat.PDF_417
             }
             };
 
@@ -202,12 +203,11 @@ namespace HamburgerMenu.ViewModels
                         SINCRONIZADO = 0,
                         FECHA_SINCRONIZADO = DateTime.Now
                     };
-                    conn.Insert(DatosRegistro);
+                    conn.Insert(DatosRegistro);                    
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

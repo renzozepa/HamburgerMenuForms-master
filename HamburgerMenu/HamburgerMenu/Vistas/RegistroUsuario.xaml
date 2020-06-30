@@ -7,12 +7,16 @@
         <StackLayout>
             <Label Text="Nombre: "/>
             <Entry Placeholder="Introduce tu nombre" x:Name="Nombre"/>
-            <Label Text="Tareador: "/>
-            <Entry Placeholder="Introduce tareador" x:Name="Tareador"/>
             <Label Text="Usuario: "/>
             <Entry Placeholder="Escribe tu usuario" Keyboard="Email" x:Name="Usuario"/>
             <Label Text="Contraseña: "/>
             <Entry Placeholder="Elige una contraseña" IsPassword="True" x:Name="Contrasenia"/>
+            <Label Text="Confirmar contraseña: "/>
+            <Entry Placeholder="Confirmar contraseña" IsPassword="True" x:Name="Conf_Contrasenia"/>
+            <Label Text="Tareador: "/>
+            <Entry Placeholder="Introduce tareador" x:Name="Tareador"/>
+            <Label Text="Nro. Celular: "/>
+            <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
             <Button Text="Agregar" Clicked="Btn_agregar" BackgroundColor="#E6002B"></Button>
         </StackLayout>
     </ScrollView>

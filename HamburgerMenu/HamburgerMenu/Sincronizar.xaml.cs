@@ -100,8 +100,32 @@ namespace HamburgerMenu
                     TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
                     TareoPersonalApiItem.FECHA_REGISTRO, Convert.ToString(TareoPersonalApiItem.SINCRONIZADO), TareoPersonalApiItem.FECHA_SINCRONIZADO));
                 //t.Wait();
+                UpdTareo(TareoPersonalApiItem.ID);
             }
             
         }
+        public static void UpdTareo(int id)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                {
+                    //conn.CreateTable<TareoPersonal>();
+                    var DatosRegistro = new TareoPersonal
+                    {
+                       ID = id,
+                       SINCRONIZADO = 1,
+                       FECHA_SINCRONIZADO = DateTime.Now                       
+                    };
+                    conn.Update(DatosRegistro);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

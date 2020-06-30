@@ -23,7 +23,8 @@ namespace HamburgerMenu
                 new Menu{ Page= new Proyectos(),MenuTitle="Proyectos",  MenuDetail="Proyectos disponibles",icon="settings.png"},
                 new Menu{ Page= new Personal(),MenuTitle="Personal disponible",  MenuDetail="Personal disponible",icon="user.png"},
                 new Menu{ Page= new Tareo(),MenuTitle="Tareo",  MenuDetail="Tareo",icon="ic_fingerprint.png"},
-                new Menu{ Page= new TipoMarcacion(),MenuTitle="Marcación",  MenuDetail="Marcación",icon="message.png"}
+                new Menu{ Page= new TipoMarcacion(),MenuTitle="Marcación",  MenuDetail="Marcación",icon="message.png"},
+                new Menu{ Page= new Vistas.Login(),MenuTitle="Cerrar sesión",  MenuDetail="Cerrar sesión",icon="salir.png"}
             };
             ListMenu.ItemsSource = menu;
         }

@@ -20,6 +20,17 @@ namespace HamburgerMenu.Droid
 
             base.OnCreate(bundle);
 
+            //====================================
+            int uiOptions = (int)Window.DecorView.SystemUiVisibility;
+
+            uiOptions |= (int)SystemUiFlags.LowProfile;
+            //uiOptions |= (int)SystemUiFlags.Fullscreen;
+            //uiOptions |= (int)SystemUiFlags.HideNavigation;
+            uiOptions |= (int)SystemUiFlags.ImmersiveSticky;
+
+            Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
+            //====================================
+
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
             global::Xamarin.Forms.FormsMaterial.Init(this, bundle);
@@ -39,5 +50,6 @@ namespace HamburgerMenu.Droid
 
         }
     }
+
 }
 
