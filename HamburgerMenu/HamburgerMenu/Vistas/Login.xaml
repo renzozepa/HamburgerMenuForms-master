@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Vistas.Login"
-             xmlns:local="clr-namespace:HamburgerMenu"
-             Visual="Material">
-    <ScrollView>
+             Visual="Material" 
+             NavigationPage.HasNavigationBar="False">
+    <ScrollView >
         <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
             <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout>

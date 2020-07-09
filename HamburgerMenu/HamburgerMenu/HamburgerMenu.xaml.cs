@@ -10,8 +10,7 @@ namespace HamburgerMenu
         public HamburgerMenu()
         {
             InitializeComponent();
-            MyMenu();
-
+            MyMenu();            
         }
         public void MyMenu()
         {
@@ -64,7 +63,5 @@ namespace HamburgerMenu
                 set;
             }
         }
-
-        
     }
 }

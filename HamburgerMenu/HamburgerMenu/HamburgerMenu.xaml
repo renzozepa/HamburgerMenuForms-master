@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MasterDetailPage
     x:Class="HamburgerMenu.HamburgerMenu"
-    xmlns:local="clr-namespace:HamburgerMenu"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Visual="Material" NavigationPage.HasNavigationBar="False">
+    Visual="Material" 
+    NavigationPage.HasNavigationBar="False">
 
     <MasterDetailPage.Master>
-        <ContentPage BackgroundColor="#5e5a5a" Padding="0,0,0,0" Title="Menú" NavigationPage.HasBackButton="False">
+        <ContentPage BackgroundColor="#E6002B" Padding="0,0,0,0" Title="Menú" NavigationPage.HasBackButton="False">
             <Grid BackgroundColor="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="200" />
@@ -35,7 +35,6 @@
                     </ListView>
                 </StackLayout>
             </Grid>
-
         </ContentPage>
     </MasterDetailPage.Master>
 

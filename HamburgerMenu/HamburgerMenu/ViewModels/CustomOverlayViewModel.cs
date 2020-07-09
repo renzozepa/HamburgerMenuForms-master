@@ -54,22 +54,22 @@ namespace HamburgerMenu.ViewModels
 
         async Task ScanCode()
         {
-            var grid = new Grid() { BackgroundColor = Color.Transparent };
-            grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
-            grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+            //var grid = new Grid() { BackgroundColor = Color.Transparent };
+            //grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
+            //grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            //grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+            //grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
 
-            var buttonCancel = new Button() { BackgroundColor = Color.Black, Text = "Cancelar" };
-            Grid.SetRow(buttonCancel, 1);
-            Grid.SetColumn(buttonCancel, 0);
+            //var buttonCancel = new Button() { BackgroundColor = Color.Black, Text = "Cancelar" };
+            //Grid.SetRow(buttonCancel, 1);
+            //Grid.SetColumn(buttonCancel, 0);
 
-            var buttonHelp = new Button() { BackgroundColor = Color.Black, Text = "Torch" };
-            Grid.SetRow(buttonHelp, 1);
-            Grid.SetColumn(buttonHelp, 1);
+            //var buttonHelp = new Button() { BackgroundColor = Color.Black, Text = "Torch" };
+            //Grid.SetRow(buttonHelp, 1);
+            //Grid.SetColumn(buttonHelp, 1);
 
-            grid.Children.Add(buttonCancel);
-            grid.Children.Add(buttonHelp);
+            //grid.Children.Add(buttonCancel);
+            //grid.Children.Add(buttonHelp);
 
             var options = new MobileBarcodeScanningOptions
             {
@@ -81,28 +81,44 @@ namespace HamburgerMenu.ViewModels
                 ZXing.BarcodeFormat.QR_CODE,
                 ZXing.BarcodeFormat.CODE_39,
                 ZXing.BarcodeFormat.CODE_93,
-                ZXing.BarcodeFormat.CODE_128,
-                ZXing.BarcodeFormat.PDF_417
+                ZXing.BarcodeFormat.CODE_128
+                //,ZXing.BarcodeFormat.PDF_417
             }
             };
+            var overlay = new ZXingDefaultOverlay
+            {
+                ShowFlashButton = false,
+                TopText = "Coloca el código de barras frente al dispositivo",
+                BottomText = "El escaneo es automático",
+                Opacity = 0.75
+            };
+            overlay.BindingContext = overlay;
 
-            var page = new ZXingScannerPage(options, grid)
+            var page = new ZXingScannerPage(options, overlay)
             {
                 Title = "Haug Tareo",
+                DefaultOverlayShowFlashButton = true,
             };
-
-            buttonCancel.Clicked += async delegate
-            {
-                page.IsScanning = false;
-                await Navigation.PopAsync();
-            };
-
-            buttonHelp.Clicked += async delegate
-            {
-                await page.DisplayAlert("Ayuda", "Coloca el código frente al dispositivo para escanearlo", "OK");
-            };
-
             await Navigation.PushAsync(page);
+
+
+            //var page = new ZXingScannerPage(options, grid)
+            //{
+            //    Title = "Haug Tareo",
+            //};
+
+            //buttonCancel.Clicked += async delegate
+            //{
+            //    page.IsScanning = false;
+            //    await Navigation.PopAsync();
+            //};
+
+            //buttonHelp.Clicked += async delegate
+            //{
+            //    await page.DisplayAlert("Ayuda", "Coloca el código frente al dispositivo para escanearlo", "OK");
+            //};
+
+            //await Navigation.PushAsync(page);
 
             page.OnScanResult += (result) =>
             {
@@ -178,7 +194,7 @@ namespace HamburgerMenu.ViewModels
 
         public static IEnumerable<PersonalTareo> SELECT_WHERE(SQLiteConnection db, string numero)
         {
-            return db.Query<PersonalTareo>("SELECT * FROM PersonalTareo where NUMERO_DOCUIDEN = ? and ID_TAREADOR = ? ", numero, App.Tareador);
+            return db.Query<PersonalTareo>("Select * From PersonalTareo where NUMERO_DOCUIDEN = ? and ID_TAREADOR = ? ", numero, App.Tareador);
         }
 
         public static void INSERT_TAREO(string nombre_personal, Int32 ID_PERSONAL, string ID_PROYECTO, Int32 ID_SITUACION, Int32 ID_CLASE_TRABAJADOR)

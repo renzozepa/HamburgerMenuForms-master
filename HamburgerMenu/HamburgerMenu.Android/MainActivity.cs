@@ -29,6 +29,8 @@ namespace HamburgerMenu.Droid
             uiOptions |= (int)SystemUiFlags.ImmersiveSticky;
 
             Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
+
+            Window.SetStatusBarColor(Android.Graphics.Color.Argb(0, 255, 0, 0));
             //====================================
 
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");

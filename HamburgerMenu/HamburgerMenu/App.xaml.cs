@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Xamarin.Forms;
 
 namespace HamburgerMenu
@@ -15,7 +14,7 @@ namespace HamburgerMenu
         public static Int32 TipoMarcacion;
         public App ()
 		{
-			InitializeComponent();
+            InitializeComponent();
 			MainPage = new NavigationPage(new Login()); 
 		}
         public App(string filepath)
