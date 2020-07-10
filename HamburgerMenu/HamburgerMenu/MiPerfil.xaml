@@ -1,12 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HamburgerMenu.MiPerfil">
-    <ContentPage.Content>
+             x:Class="HamburgerMenu.MiPerfil"
+             Visual="Material">
+    <ScrollView>
         <StackLayout>
-            <Label Text="Mi perfil"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Nombre: "/>
+            <Entry Placeholder="Renzo Zelaya" x:Name="Nombre"/>
+            <Label Text="Usuario: "/>
+            <Entry Placeholder="User01" Keyboard="Email" x:Name="Usuario"/>
+            <Label Text="Contraseña: "/>
+            <Entry Placeholder="********" IsPassword="True" x:Name="Contrasenia"/>
+            <Label Text="Tareador: "/>
+            <Entry Placeholder="00028153" x:Name="Tareador"/>
+            <Label Text="Nro. Celular: "/>
+            <Entry Placeholder="989140701" x:Name="Celular"/>
+            <Button Text="Actualizar" BackgroundColor="#E6002B"></Button>
         </StackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>

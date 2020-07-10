@@ -20,7 +20,7 @@
                     </StackLayout>
                     <Button Text="Iniciar sesión" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_login"/>
                     <Button Text="Registrar" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_Registrar"/>
-                    <Button Text="Listar usuarios" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Listar"/>
+                    <Button Text="Listar usuarios" BackgroundColor="#E6002B" IsVisible="False" TextColor="White" Clicked="Btn_Listar"/>
                 </StackLayout>
             </Frame>
         </FlexLayout>
