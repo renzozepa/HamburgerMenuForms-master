@@ -31,6 +31,7 @@ namespace HamburgerMenu.Vistas
                     foreach (LoginLocal itemLoginLocal in listll)
                     {
                         App.Tareador = itemLoginLocal.TAREADOR.ToString();
+                        App.Usuario = Convert.ToInt32(itemLoginLocal.ID.ToString());
                     }
                     
                     Navigation.PushAsync(new HamburgerMenu());

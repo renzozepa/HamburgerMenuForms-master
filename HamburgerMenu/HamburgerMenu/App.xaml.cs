@@ -12,6 +12,7 @@ namespace HamburgerMenu
         public static string FilePath;
         public static string Tareador;
         public static Int32 TipoMarcacion;
+        public static Int32 Usuario;
         public App ()
 		{
             InitializeComponent();

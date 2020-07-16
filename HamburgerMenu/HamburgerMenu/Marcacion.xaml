@@ -17,6 +17,10 @@
             <Label Text="Formato" />
 
             <Label Text="{Binding BarcodeFormat}" />
+            
+            <Label Text="Hora" />
+
+            <Label Text="{Binding HoraMarcado}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

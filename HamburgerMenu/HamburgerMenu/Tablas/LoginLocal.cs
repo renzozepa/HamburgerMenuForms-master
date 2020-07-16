@@ -17,6 +17,8 @@ namespace HamburgerMenu
         public string CONTRASENIA { get; set; }
         [MaxLength(255)]
         public string TAREADOR { get; set; }
+        [MaxLength(15)]
+        public string CELULAR { get; set; }
 
     }
 }

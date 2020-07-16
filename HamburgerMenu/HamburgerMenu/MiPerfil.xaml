@@ -6,16 +6,16 @@
     <ScrollView>
         <StackLayout>
             <Label Text="Nombre: "/>
-            <Entry Placeholder="Renzo Zelaya" x:Name="Nombre"/>
+            <Entry Placeholder="Introduce tu nombre" x:Name="Nombre"/>
             <Label Text="Usuario: "/>
-            <Entry Placeholder="User01" Keyboard="Email" x:Name="Usuario"/>
+            <Entry Placeholder="Escribe tu usuario" Keyboard="Email" x:Name="Usuario"/>
             <Label Text="Contraseña: "/>
-            <Entry Placeholder="********" IsPassword="True" x:Name="Contrasenia"/>
+            <Entry IsPassword="True" x:Name="Contrasenia"/>
             <Label Text="Tareador: "/>
-            <Entry Placeholder="00028153" x:Name="Tareador"/>
+            <Entry Placeholder="Introduce tareador" x:Name="Tareador"/>
             <Label Text="Nro. Celular: "/>
-            <Entry Placeholder="989140701" x:Name="Celular"/>
-            <Button Text="Actualizar" BackgroundColor="#E6002B"></Button>
+            <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
+            <Button Text="Actualizar" BackgroundColor="#E6002B" Clicked="BtnActualizar_Clicked"></Button>
         </StackLayout>
     </ScrollView>
 </ContentPage>

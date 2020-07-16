@@ -110,19 +110,23 @@ namespace HamburgerMenu
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                 {
-                    //conn.CreateTable<TareoPersonal>();
-                    var DatosRegistro = new TareoPersonal
+                    var tareo = conn.Table<TareoPersonal>().FirstOrDefault(j => j.ID == id);
+
+                    if (tareo == null)
                     {
-                       ID = id,
-                       SINCRONIZADO = 1,
-                       FECHA_SINCRONIZADO = DateTime.Now                       
-                    };
-                    conn.Update(DatosRegistro);
+                        throw new Exception("Tareo no encontrado en database!");
+                    }
+
+                    tareo.SINCRONIZADO = 1;
+                    tareo.FECHA_SINCRONIZADO = DateTime.Now;
+
+                    conn.Update(tareo);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                string mensaje = ex.InnerException.ToString();
+                string mensaje_1 = mensaje;
                 throw;
             }
         }

@@ -24,11 +24,18 @@ namespace HamburgerMenu.ViewModels
         public ICommand ScannerCommand { get; set; }
 
         private string barcodeText;
+        private string horaMarcado;
 
         public string BarcodeText
         {
             get => barcodeText;
             set { barcodeText = value; OnPropertyChanged(); }
+        }
+
+        public string HoraMarcado
+        {
+            get => horaMarcado;
+            set { horaMarcado = value; OnPropertyChanged(); }
         }
 
         private BarcodeFormat _barcodeFormat;
@@ -50,27 +57,11 @@ namespace HamburgerMenu.ViewModels
             Navigation = navigation;
             ScannerCommand = new Command(async () => await ScanCode());
             barcodeText = "N/A";
+            horaMarcado = DateTime.Now.ToString();
         }
 
         async Task ScanCode()
         {
-            //var grid = new Grid() { BackgroundColor = Color.Transparent };
-            //grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
-            //grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            //grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-            //grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-
-            //var buttonCancel = new Button() { BackgroundColor = Color.Black, Text = "Cancelar" };
-            //Grid.SetRow(buttonCancel, 1);
-            //Grid.SetColumn(buttonCancel, 0);
-
-            //var buttonHelp = new Button() { BackgroundColor = Color.Black, Text = "Torch" };
-            //Grid.SetRow(buttonHelp, 1);
-            //Grid.SetColumn(buttonHelp, 1);
-
-            //grid.Children.Add(buttonCancel);
-            //grid.Children.Add(buttonHelp);
-
             var options = new MobileBarcodeScanningOptions
             {
                 PossibleFormats = new List<BarcodeFormat>()
@@ -82,7 +73,6 @@ namespace HamburgerMenu.ViewModels
                 ZXing.BarcodeFormat.CODE_39,
                 ZXing.BarcodeFormat.CODE_93,
                 ZXing.BarcodeFormat.CODE_128
-                //,ZXing.BarcodeFormat.PDF_417
             }
             };
             var overlay = new ZXingDefaultOverlay
@@ -100,25 +90,6 @@ namespace HamburgerMenu.ViewModels
                 DefaultOverlayShowFlashButton = true,
             };
             await Navigation.PushAsync(page);
-
-
-            //var page = new ZXingScannerPage(options, grid)
-            //{
-            //    Title = "Haug Tareo",
-            //};
-
-            //buttonCancel.Clicked += async delegate
-            //{
-            //    page.IsScanning = false;
-            //    await Navigation.PopAsync();
-            //};
-
-            //buttonHelp.Clicked += async delegate
-            //{
-            //    await page.DisplayAlert("Ayuda", "Coloca el código frente al dispositivo para escanearlo", "OK");
-            //};
-
-            //await Navigation.PushAsync(page);
 
             page.OnScanResult += (result) =>
             {
@@ -163,13 +134,14 @@ namespace HamburgerMenu.ViewModels
                                     await Navigation.PopAsync();
                                     BarcodeText = result.Text;
                                     BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                    //BarcodeFormat = situacion;
+                                    HoraMarcado = DateTime.Now.ToString();
                                 }
                                 else
                                 {
                                     await Navigation.PopAsync();
                                     BarcodeText = result.Text;
                                     BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
+                                    HoraMarcado = DateTime.Now.ToString();
                                     await page.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es : " + situacion, "OK");
                                 }
                             }
@@ -177,6 +149,8 @@ namespace HamburgerMenu.ViewModels
                             {
                                 await Navigation.PopAsync();
                                 BarcodeText = result.Text;
+                                BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
+                                HoraMarcado = DateTime.Now.ToString();
                                 await page.DisplayAlert("Ayuda", "El trabajador no se encuentra registrado", "OK");
                             }
                         }
@@ -214,7 +188,7 @@ namespace HamburgerMenu.ViewModels
                         ID_CLASE_TRABAJADOR = ID_CLASE_TRABAJADOR,
                         FECHA_TAREO = DateTime.Now,
                         TIPO_MARCACION = App.TipoMarcacion,
-                        HORA = DateTime.Now.ToShortTimeString(),
+                        HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
                         FECHA_SINCRONIZADO = DateTime.Now
