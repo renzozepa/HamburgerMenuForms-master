@@ -12,9 +12,9 @@ using Xamarin.Forms.Xaml;
 namespace HamburgerMenu
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class Tareo : ContentPage
+	public partial class TareoPorSincronizar : ContentPage
 	{
-		public Tareo ()
+		public TareoPorSincronizar ()
 		{
 			InitializeComponent ();
 		}
@@ -24,7 +24,7 @@ namespace HamburgerMenu
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
                 //conn.CreateTable<TareoPersonal>();                
-                var contacts = conn.Table<TareoPersonal>().ToList().Where(x => x.ID_TAREADOR == App.Tareador && x.SINCRONIZADO == 1);
+                var contacts = conn.Table<TareoPersonal>().ToList().Where(x => x.ID_TAREADOR == App.Tareador && x.SINCRONIZADO == 0);
                 //PersonalListView.ItemsSource = contacts;
                 TareoCollectionView.ItemsSource = contacts;
             }

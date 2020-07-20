@@ -1,37 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HamburgerMenu.Personal"
+             xmlns:forms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Core"
+             x:Class="HamburgerMenu.TareoPorSincronizar"
              Visual="Material"
-             Title="Personal disponible"
-             NavigationPage.BackButtonTitle="Atrás">
+             Title="Tareo por sincronizar">
     <ContentPage.Content>
-        <StackLayout Padding="5">
-            <SearchBar x:Name="SBBusqueda" 
-                       Placeholder="Personal"
-                       TextChanged="SBBusqueda_TextChanged"
-                       BackgroundColor="#FBCBF3"/>
-
-            <ListView x:Name="PersonalListView" 
-                      ItemSelected="OnListItemSelected" 
-                      CachingStrategy="RecycleElement">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding NOMBRE}"
-                              Detail="{Binding SITUACION}"
-                              TextColor="Teal"
-                              DetailColor="Blue"></TextCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-            <!--<Grid>
+        <StackLayout Padding="3">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width=".5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
@@ -39,12 +22,15 @@
                        Text="NOMBRE"></Label>
                 <Label Grid.Column="1"
                        FontAttributes="Bold"
-                       Text="SITUACION"></Label>
+                       Text="FECHA"></Label>
                 <Label Grid.Column="2"
+                       FontAttributes="Bold"
+                       Text="HORA"></Label>
+                <Label Grid.Column="3"
                        FontAttributes="Bold"
                        Text=""></Label>
             </Grid>
-            <CollectionView x:Name="PersonalCollectionView">
+            <CollectionView x:Name="TareoCollectionView">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"></GridItemsLayout>
                 </CollectionView.ItemsLayout>
@@ -52,17 +38,19 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width=".5*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{Binding NOMBRE}"></Label>
-                            <Label Grid.Column="1" Text="{Binding SITUACION}"></Label>
-                            <Image Grid.Column="2" Source="ic_more_vert"></Image>
+                            <Label forms:Grid.Column="0" Text="{Binding PERSONAL}"></Label>
+                            <Label forms:Grid.Column="1" Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}"></Label>
+                            <Label forms:Grid.Column="2" Text="{Binding HORA}"></Label>
+                            <Image forms:Grid.Column="3" Source="ic_more_vert"></Image>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            </CollectionView>-->
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

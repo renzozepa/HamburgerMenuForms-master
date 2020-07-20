@@ -18,7 +18,7 @@ namespace HamburgerMenu.Vistas
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                if (Conf_Contrasenia.Text.ToString().Trim() == Contrasenia.Text.ToString().Trim())
+                if (string.Equals(Conf_Contrasenia.Text.ToString().Trim(),Contrasenia.Text.ToString().Trim()))
                 {
                     conn.CreateTable<LoginLocal>();
                     var DatosRegistro = new LoginLocal { NOMBRE = Nombre.Text, USUARIO = Usuario.Text, CONTRASENIA = Contrasenia.Text, TAREADOR = Tareador.Text, CELULAR = Celular.Text };
@@ -26,7 +26,7 @@ namespace HamburgerMenu.Vistas
                     LimpiarFormulario();
                 }
                 else {
-                    DisplayAlert("Tareo HAUG", "Error al confirmar contraseña.", "Ok");
+                    DisplayAlert("Tareo HAUG", "Ingresar la misma contraseña.", "Ok");
                 }
                 
             }            

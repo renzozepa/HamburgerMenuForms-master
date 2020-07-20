@@ -21,7 +21,8 @@ namespace HamburgerMenu
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            PersonalCollectionView.ItemsSource = SearchEmployers();
+            PersonalListView.ItemsSource = SearchEmployers();
+            //PersonalCollectionView.ItemsSource = SearchEmployers();
         }
 
         private void SBBusqueda_TextChanged(object sender, TextChangedEventArgs e)
@@ -31,8 +32,9 @@ namespace HamburgerMenu
 
             try
             {
-                var personaltareo = SearchEmployers().Where(f => f.NOMBRE.Contains(variable.ToUpper())).OrderBy(o => o.NOMBRE).ToList();
-                PersonalCollectionView.ItemsSource = personaltareo;
+                var personaltareo = SearchEmployers().Where(f => f.NOMBRE.Contains(variable.ToUpper())).OrderBy(o => o.NOMBRE).ToList();                
+                PersonalListView.ItemsSource = SearchEmployers();
+                //PersonalCollectionView.ItemsSource = personaltareo;
             }
             catch (Exception)
             {
@@ -44,10 +46,21 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<PersonalTareo>();
+                //conn.CreateTable<PersonalTareo>();
                 return conn.Table<PersonalTareo>().Where(x => x.ID_TAREADOR == App.Tareador).OrderBy(c => c.NOMBRE).ToList();
             }
 
+        }
+
+        private void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem != null)
+            {
+                Navigation.PushAsync(new PersonalDetalle
+                {
+                    BindingContext = e.SelectedItem as PersonalTareo
+                });
+            }
         }
     }
 }

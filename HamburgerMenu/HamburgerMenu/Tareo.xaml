@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:forms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Core"
+             xmlns:forms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Core"             
              x:Class="HamburgerMenu.Tareo"
              Visual="Material"
-             Title="Tareo"
-             forms:NavigationPage.BackButtonTitle="Atrás">
+             Title="Tareo sincronizado">
     <ContentPage.Content>
-        <StackLayout Padding="5">
+        <StackLayout Padding="3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -16,9 +15,7 @@
                     <ColumnDefinition Width=".5*"></ColumnDefinition>
                     <ColumnDefinition Width=".5*"></ColumnDefinition>
                     <ColumnDefinition Width=".5*"></ColumnDefinition>
-                    <!--<ColumnDefinition Width=".5*"></ColumnDefinition>
                     <ColumnDefinition Width=".5*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>-->
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
                        FontAttributes="Bold"
@@ -30,12 +27,6 @@
                        FontAttributes="Bold"
                        Text="HORA"></Label>
                 <Label Grid.Column="3"
-                       FontAttributes="Bold"
-                       Text="SINCRONIZADO"></Label>
-                <Label Grid.Column="4"
-                       FontAttributes="Bold"
-                       Text="F. SINCRONIZADO"></Label>
-                <Label Grid.Column="5"
                        FontAttributes="Bold"
                        Text=""></Label>
             </Grid>
@@ -51,15 +42,11 @@
                                 <ColumnDefinition Width=".5*"></ColumnDefinition>
                                 <ColumnDefinition Width=".5*"></ColumnDefinition>
                                 <ColumnDefinition Width=".5*"></ColumnDefinition>
-                                <ColumnDefinition Width=".5*"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Label forms:Grid.Column="0" Text="{Binding PERSONAL}"></Label>
-                            <Label forms:Grid.Column="1" Text="{Binding FECHA, StringFormat='.{0:dd/MM/yyyy}'}"></Label>
+                            <Label forms:Grid.Column="1" Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}"></Label>
                             <Label forms:Grid.Column="2" Text="{Binding HORA}"></Label>
-                            <Label forms:Grid.Column="3" Text="{Binding SINCRONIZADO}"></Label>
-                            <Label forms:Grid.Column="4" Text="{Binding FECHA_SINCRONIZADO,StringFormat='.{0:dd/MM/yyyy}'}"></Label>
-                            <Image forms:Grid.Column="5" Source="ic_more_vert"></Image>
+                            <Image forms:Grid.Column="3" Source="ic_more_vert"></Image>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

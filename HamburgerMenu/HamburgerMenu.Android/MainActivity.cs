@@ -25,11 +25,10 @@ namespace HamburgerMenu.Droid
 
             uiOptions |= (int)SystemUiFlags.LowProfile;
             //uiOptions |= (int)SystemUiFlags.Fullscreen;
-            //uiOptions |= (int)SystemUiFlags.HideNavigation;
+            uiOptions |= (int)SystemUiFlags.HideNavigation;
             uiOptions |= (int)SystemUiFlags.ImmersiveSticky;
 
             Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
-
             Window.SetStatusBarColor(Android.Graphics.Color.Argb(0, 255, 0, 0));
             //====================================
 
