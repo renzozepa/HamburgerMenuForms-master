@@ -20,7 +20,7 @@ namespace HamburgerMenu
                 new Menu{ Page= new MiPerfil(),MenuTitle="Mi perfil",  MenuDetail="Mi perfil",icon="user.png"},
                 new Menu{ Page= new Sincronizar(),MenuTitle="Sincronizar",  MenuDetail="Sincronizar",icon="actualizar.png"},
                 new Menu{ Page= new Proyectos(),MenuTitle="Proyectos",  MenuDetail="Proyectos disponibles",icon="settings.png"},
-                new Menu{ Page= new Personal(),MenuTitle="Personal disponible",  MenuDetail="Personal disponible",icon="user.png"},
+                new Menu{ Page= new PersonalDisponible(),MenuTitle="Personal disponible",  MenuDetail="Personal disponible",icon="user.png"},
                 new Menu{ Page= new Tareos(),MenuTitle="Tareo",  MenuDetail="Tareo",icon="ic_fingerprint.png"},
                 new Menu{ Page= new TipoMarcacion(),MenuTitle="Marcación",  MenuDetail="Marcación",icon="message.png"},
                 new Menu{ Page= new Vistas.Login(),MenuTitle="Cerrar sesión",  MenuDetail="Cerrar sesión",icon="salir.png"}

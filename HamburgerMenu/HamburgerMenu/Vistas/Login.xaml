@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              x:Class="HamburgerMenu.Vistas.Login"
              Visual="Material" 
              NavigationPage.HasNavigationBar="False">
@@ -21,6 +22,7 @@
                     <Button Text="Iniciar sesión" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_login"/>
                     <Button Text="Registrar" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_Registrar"/>
                     <Button Text="Listar usuarios" BackgroundColor="#E6002B" IsVisible="False" TextColor="White" Clicked="Btn_Listar"/>
+                    <buttons:SfButton x:Name="SfButton" Text="ButtonSyncfusion"/>
                 </StackLayout>
             </Frame>
         </FlexLayout>

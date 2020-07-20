@@ -1,4 +1,5 @@
 ﻿using HamburgerMenu.Vistas;
+using Syncfusion.Licensing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,15 @@ namespace HamburgerMenu
         public static Int32 Usuario;
         public App ()
 		{
+            SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");
+
             InitializeComponent();
 			MainPage = new NavigationPage(new Login()); 
 		}
         public App(string filepath)
         {
+            SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");
+
             InitializeComponent();
             MainPage = new NavigationPage(new Login());            
             FilePath = filepath;

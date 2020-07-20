@@ -12,10 +12,10 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width=".5*"></ColumnDefinition>
-                    <ColumnDefinition Width=".5*"></ColumnDefinition>
-                    <ColumnDefinition Width=".5*"></ColumnDefinition>
-                    <ColumnDefinition Width=".5*"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="50"></ColumnDefinition>
+                    <ColumnDefinition Width="50*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
                        FontAttributes="Bold"
@@ -38,10 +38,10 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width=".5*"></ColumnDefinition>
-                                <ColumnDefinition Width=".5*"></ColumnDefinition>
-                                <ColumnDefinition Width=".5*"></ColumnDefinition>
-                                <ColumnDefinition Width=".5*"></ColumnDefinition>
+                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Label forms:Grid.Column="0" Text="{Binding PERSONAL}"></Label>
                             <Label forms:Grid.Column="1" Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}"></Label>

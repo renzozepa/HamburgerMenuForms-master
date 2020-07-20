@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.IO;
+using Syncfusion.Buttons.XForms.Android;
 
 namespace HamburgerMenu.Droid
 {
@@ -25,7 +26,7 @@ namespace HamburgerMenu.Droid
 
             uiOptions |= (int)SystemUiFlags.LowProfile;
             //uiOptions |= (int)SystemUiFlags.Fullscreen;
-            uiOptions |= (int)SystemUiFlags.HideNavigation;
+            //uiOptions |= (int)SystemUiFlags.HideNavigation;
             uiOptions |= (int)SystemUiFlags.ImmersiveSticky;
 
             Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
@@ -41,6 +42,8 @@ namespace HamburgerMenu.Droid
             string CompletePath = Path.Combine(foldername, filename);
 
             global::ZXing.Net.Mobile.Forms.Android.Platform.Init();
+
+            
 
             LoadApplication(new App(CompletePath));
         }

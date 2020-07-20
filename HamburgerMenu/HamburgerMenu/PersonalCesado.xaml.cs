@@ -11,13 +11,14 @@ using Xamarin.Forms.Xaml;
 
 namespace HamburgerMenu
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Personal : ContentPage
-    {
-        public Personal()
-        {
-            InitializeComponent();
-        }
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class PersonalCesado : ContentPage
+	{
+		public PersonalCesado ()
+		{
+			InitializeComponent ();
+		}
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -56,7 +57,7 @@ namespace HamburgerMenu
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
                 //conn.CreateTable<PersonalTareo>();
-                return conn.Table<PersonalTareo>().Where(x => x.ID_TAREADOR == App.Tareador && x.ID_SITUACION == 10).OrderBy(c => c.NOMBRE).ToList();
+                return conn.Table<PersonalTareo>().Where(x => x.ID_TAREADOR == App.Tareador && x.ID_SITUACION > 10).OrderBy(c => c.NOMBRE).ToList();
             }
 
         }
