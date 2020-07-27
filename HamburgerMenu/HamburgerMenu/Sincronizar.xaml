@@ -1,29 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Sincronizar"
              NavigationPage.BackButtonTitle="Atrás"
              Title="Sincronizar">
-    <ScrollView>
-        <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
-                <StackLayout>
-                    <Label Text="Sincronizar"
+    <AbsoluteLayout>
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="5">
+            <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+                <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
+                    <StackLayout>
+                        <Label Text="Sincronizar"
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                        <ActivityIndicator x:Name="activity"
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                            <ActivityIndicator x:Name="activity"
                                Color="Red" 
                                BackgroundColor="Blue" 
                                IsRunning="False"
                                IsEnabled="False"  
                                IsVisible="False"            
                                HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+                        <Button Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
+                        <Button Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
                     </StackLayout>
-                    <Button Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
-                    <Button Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
-                </StackLayout>
-            </Frame>
-        </FlexLayout>
-    </ScrollView>
+                </Frame>
+            </FlexLayout>
+        </ScrollView>
+        <!--<busyindicator:SfBusyIndicator x:Name="busyindicator"
+                                       AnimationType="SlicedCircle"
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                                       AbsoluteLayout.LayoutFlags="All"
+                                       BackgroundColor="Silver"
+                                       HorizontalOptions="Center"
+                                       TextColor="White"                                       
+                                       IsVisible="{Binding IsRunning}"                                       
+                                       Title="Cargando..."
+                                       VerticalOptions="Center"
+                                       ViewBoxWidth="80"
+                                       ViewBoxHeight="80">
+        </busyindicator:SfBusyIndicator>-->
+    </AbsoluteLayout>
+
+
 </ContentPage>

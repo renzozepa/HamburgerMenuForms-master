@@ -137,6 +137,12 @@
     <PackageReference Include="Syncfusion.Xamarin.Buttons">
       <Version>18.1.0.59</Version>
     </PackageReference>
+    <PackageReference Include="Syncfusion.Xamarin.SfBusyIndicator">
+      <Version>18.1.0.59</Version>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.Xamarin.SfPicker">
+      <Version>18.1.0.59</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
     <PackageReference Include="Xamarin.Forms.Visual.Material">
       <Version>4.5.0.356</Version>

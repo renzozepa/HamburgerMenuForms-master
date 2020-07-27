@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              x:Class="HamburgerMenu.Vistas.Login"
              Visual="Material" 
              NavigationPage.HasNavigationBar="False">
@@ -22,7 +23,15 @@
                     <Button Text="Iniciar sesión" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_login"/>
                     <Button Text="Registrar" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_Registrar"/>
                     <Button Text="Listar usuarios" BackgroundColor="#E6002B" IsVisible="False" TextColor="White" Clicked="Btn_Listar"/>
-                    <buttons:SfButton x:Name="SfButton" Text="ButtonSyncfusion"/>
+                    <!--<buttons:SfButton x:Name="SfButton" Text="Iniciar sesión" BackgroundColor="#E6002B" 
+                                      CornerRadius="20" TextColor="White" Clicked="btn_login">
+                        <buttons:SfButton.Content>
+                            <StackLayout Orientation="Horizontal">
+                                <busyindicator:SfBusyIndicator AnimationType="SingleCircle"  IsBusy="True" TextColor="White" WidthRequest="50"/>
+                                <Label Text="Loading..." FontSize="8" VerticalTextAlignment="Center" TextColor="White" />
+                            </StackLayout>
+                        </buttons:SfButton.Content>
+                    </buttons:SfButton>-->
                 </StackLayout>
             </Frame>
         </FlexLayout>

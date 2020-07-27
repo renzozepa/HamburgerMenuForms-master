@@ -2,12 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Marcacion"
-             Title=" Marcación "
-             BackgroundColor="LightBlue">
+             Title=" Marcación ">
     <ContentPage.Content>
         <StackLayout Margin="10" Padding="10">
             <Button 
                 Text="Escanear código" 
+                BackgroundColor="#E6002B" 
+                TextColor="White"
                 Command="{Binding ScannerCommand}" />
 
             <Label Text="Resultado" />
