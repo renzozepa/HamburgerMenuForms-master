@@ -16,12 +16,6 @@ namespace HamburgerMenu
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Sincronizar : ContentPage
     {
-        //private bool _IsRunning = false;
-
-        //public bool IsRunning {
-        //    get => _IsRunning;
-        //    set { _IsRunning = value; OnPropertyChanged(); }
-        //}
         public static List<PersonalTareoApi> LstPersonalTareo { get; set; }
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
         public Sincronizar ()
@@ -41,7 +35,6 @@ namespace HamburgerMenu
         {
             try
             {
-                //IsRunning = true;
                 LstPersonalTareo = new List<PersonalTareoApi>();
                 var t = Task.Run(async () => LstPersonalTareo = await HaugApi.Metodo.GetAllPersonalTareadorAsync(App.Tareador));
 
@@ -83,11 +76,9 @@ namespace HamburgerMenu
                         
                     }
                 }
-                //IsRunning = false;
             }  
             catch (Exception)
             {
-                //IsRunning = false;
                 throw;
             }
         }
@@ -95,7 +86,6 @@ namespace HamburgerMenu
         {
             try
             {
-                //IsRunning = true;
                 LstTareoPersonal = new List<TareoPersonalApi>();
 
                 var db = new SQLiteConnection(App.FilePath);
@@ -106,18 +96,15 @@ namespace HamburgerMenu
                     var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
                         TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
                         TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                        TareoPersonalApiItem.FECHA_REGISTRO, Convert.ToString(TareoPersonalApiItem.SINCRONIZADO), TareoPersonalApiItem.FECHA_SINCRONIZADO));
+                        TareoPersonalApiItem.FECHA_REGISTRO));
                     //t.Wait();
                     UpdTareo(TareoPersonalApiItem.ID);
                 }
             }
             catch (Exception)
             {
-                //IsRunning = false;
                 throw;
-            }
-            
-            
+            }  
         }
         public static void UpdTareo(int id)
         {

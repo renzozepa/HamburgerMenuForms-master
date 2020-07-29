@@ -65,15 +65,15 @@ namespace HamburgerMenu.ViewModels
             var options = new MobileBarcodeScanningOptions
             {
                 PossibleFormats = new List<BarcodeFormat>()
-            {
-                ZXing.BarcodeFormat.EAN_8,
-                ZXing.BarcodeFormat.EAN_13,
-                ZXing.BarcodeFormat.AZTEC,
-                ZXing.BarcodeFormat.QR_CODE,
-                ZXing.BarcodeFormat.CODE_39,
-                ZXing.BarcodeFormat.CODE_93,
-                ZXing.BarcodeFormat.CODE_128
-            }
+                {
+                    ZXing.BarcodeFormat.EAN_8,
+                    ZXing.BarcodeFormat.EAN_13,
+                    ZXing.BarcodeFormat.AZTEC,
+                    ZXing.BarcodeFormat.QR_CODE,
+                    ZXing.BarcodeFormat.CODE_39,
+                    ZXing.BarcodeFormat.CODE_93,
+                    ZXing.BarcodeFormat.CODE_128
+                }
             };
             var overlay = new ZXingDefaultOverlay
             {
@@ -186,12 +186,11 @@ namespace HamburgerMenu.ViewModels
                         ID_PROYECTO = ID_PROYECTO,
                         ID_SITUACION = ID_SITUACION,
                         ID_CLASE_TRABAJADOR = ID_CLASE_TRABAJADOR,
-                        FECHA_TAREO = DateTime.Now,
+                        FECHA_TAREO = App.FMarcacion,
                         TIPO_MARCACION = App.TipoMarcacion,
                         HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
-                        SINCRONIZADO = 0,
-                        FECHA_SINCRONIZADO = DateTime.Now
+                        SINCRONIZADO = 0
                     };
                     conn.Insert(DatosRegistro);                    
                 }

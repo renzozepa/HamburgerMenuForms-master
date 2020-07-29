@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:sfDatePicker="clr-namespace:Syncfusion.XForms.Pickers;assembly=Syncfusion.SfPicker.XForms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.TipoMarcacion"
@@ -11,7 +12,9 @@
                     <Label Text="Tipo de marcación"
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />
+                    <checkbox:SfCheckBox x:Name="CbCambioFecha" Text="Cambiar fecha de marcación" StateChanged="CbCambioFecha_StateChanged" />
                     <sfDatePicker:SfDatePicker
+                        x:Name="DpFechaTransac"
                         HeaderText="Seleccionar fecha"
                         HeaderBackgroundColor="#E6002B"
                         HeaderTextColor="White"
@@ -25,7 +28,8 @@
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
                         Format="dd_MMM_yyyy"
-                        Visual="Material">
+                        Visual="Material"
+                        IsEnabled="False">
                     </sfDatePicker:SfDatePicker>
                     <Button Text="Ingreso" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Ingreso"/>
                     <Button Text=" Salida almorzar" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SalidaAlmorzar"/>

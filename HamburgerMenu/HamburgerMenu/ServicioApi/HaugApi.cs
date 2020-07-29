@@ -35,9 +35,8 @@ namespace HamburgerMenu.ServicioApi
                     LstTask = JsonConvert.DeserializeObject<List<PersonalTareoApi>>(content);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
             return LstTask;
@@ -71,11 +70,10 @@ namespace HamburgerMenu.ServicioApi
         //public async Task PostJsonHttpClient(object content, CancellationToken cancellationToken)
         public async Task PostJsonHttpClient(string ID_TAREADOR,string ID_PERSONAL, string PERSONAL, string ID_PROYECTO, 
             string ID_SITUACION, string ID_CLASE_TRABAJADOR , DateTime FECHA_TAREO, string TIPO_MARCACION, string HORA, 
-            DateTime FECHA_REGISTRO, string SINCRONIZADO, DateTime FECHA_SINCRONIZADO)
+            DateTime FECHA_REGISTRO)
         {
             try
             {
-
                 TareoPersonalApi varTareo = new TareoPersonalApi
                 {
                     ID = 1,
@@ -89,8 +87,8 @@ namespace HamburgerMenu.ServicioApi
                     TIPO_MARCACION = Convert.ToInt32(TIPO_MARCACION),
                     HORA = HORA,
                     FECHA_REGISTRO = FECHA_REGISTRO,
-                    SINCRONIZADO = Convert.ToInt32(SINCRONIZADO),
-                    FECHA_SINCRONIZADO = FECHA_SINCRONIZADO
+                    SINCRONIZADO = 0,
+                    FECHA_SINCRONIZADO = DateTime.Now.Date
                 };
 
                 var httpClient = new HttpClient();
@@ -98,14 +96,11 @@ namespace HamburgerMenu.ServicioApi
                 HttpContent httpContent = new StringContent(json);
                 httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 
-
                 HttpResponseMessage response = await httpClient.PostAsync(urlapiTareo, httpContent).ConfigureAwait(false);
                 string respuesta = response.RequestMessage.ToString();
                 string status_code = response.StatusCode.ToString();
-
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
@@ -150,7 +145,7 @@ namespace HamburgerMenu.ServicioApi
 
                 return codigoMovimientoEspecial;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

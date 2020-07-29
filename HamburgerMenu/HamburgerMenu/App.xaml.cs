@@ -13,6 +13,7 @@ namespace HamburgerMenu
         public static string FilePath;
         public static string Tareador;
         public static Int32 TipoMarcacion;
+        public static DateTime FMarcacion;
         public static Int32 Usuario;
         public App ()
 		{
