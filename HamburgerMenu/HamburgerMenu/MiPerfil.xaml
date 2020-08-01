@@ -15,6 +15,10 @@
             <Entry Placeholder="Introduce tareador" x:Name="Tareador"/>
             <Label Text="Nro. Celular: "/>
             <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
+            <Label Text="Token: "/>
+            <Entry Placeholder="" x:Name="Token"/>
+            <Label Text="F. Expiración token: "/>
+            <Entry Placeholder="" x:Name="FToken"/>
             <Button Text="Actualizar" BackgroundColor="#E6002B" Clicked="BtnActualizar_Clicked"></Button>
         </StackLayout>
     </ScrollView>

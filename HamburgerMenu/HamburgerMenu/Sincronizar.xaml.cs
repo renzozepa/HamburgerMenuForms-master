@@ -16,8 +16,10 @@ namespace HamburgerMenu
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Sincronizar : ContentPage
     {
+        public static List<TareadorDispositivosApi> LstTareadorDispositivos { get; set; }
         public static List<PersonalTareoApi> LstPersonalTareo { get; set; }
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
+
         public Sincronizar ()
 		{
 			InitializeComponent ();
@@ -93,7 +95,8 @@ namespace HamburgerMenu
 
                 foreach (TareoPersonal TareoPersonalApiItem in resultado)
                 {
-                    var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
+                    var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
+                        TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
                         TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
                         TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
                         TareoPersonalApiItem.FECHA_REGISTRO));
@@ -133,5 +136,44 @@ namespace HamburgerMenu
             }
         }
 
+        private void Btn_SincroAltaUsuario(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Btn_SincroGetToken(object sender, EventArgs e)
+        {
+            try
+            {
+                LstTareadorDispositivos = new List<TareadorDispositivosApi>();
+                var t = Task.Run(async () => LstTareadorDispositivos = await HaugApi.Metodo.GetToken(App.Celular, App.Tareador));
+
+                t.Wait();
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                {
+                    var Usuario = conn.Table<LoginLocal>().FirstOrDefault(j => j.CELULAR == App.Celular && j.TAREADOR == App.Tareador);
+
+                    if (Usuario == null)
+                    {
+                        throw new Exception("Usuario no encontrado.!");
+                    }
+                    if (LstTareadorDispositivos != null)
+                    {
+                        Usuario.TOKEN = LstTareadorDispositivos[0].TOKEN.ToString();
+                        App.Token = LstTareadorDispositivos[0].TOKEN.ToString();
+                        Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);
+
+                        conn.Update(Usuario);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
+        }
+        
     }
 }

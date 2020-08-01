@@ -15,6 +15,9 @@ namespace HamburgerMenu
         public static Int32 TipoMarcacion;
         public static DateTime FMarcacion;
         public static Int32 Usuario;
+        public static string Token;
+        public static string Celular;
+
         public App ()
 		{
             SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");

@@ -32,6 +32,15 @@ namespace HamburgerMenu.Vistas
                     {
                         App.Tareador = itemLoginLocal.TAREADOR.ToString();
                         App.Usuario = Convert.ToInt32(itemLoginLocal.ID.ToString());
+                        if (!string.IsNullOrEmpty(itemLoginLocal.TOKEN))
+                        {
+                            App.Token = itemLoginLocal.TOKEN.ToString();
+                        }
+                        
+                        if (!string.IsNullOrEmpty(itemLoginLocal.CELULAR))
+                        {
+                            App.Celular = itemLoginLocal.CELULAR.ToString();
+                        }                        
                     }
                     
                     Navigation.PushAsync(new HamburgerMenu());
@@ -43,7 +52,6 @@ namespace HamburgerMenu.Vistas
             }
             catch (Exception ex)
             {
-
                 DisplayAlert("Error", ex.Message.ToString(),"Ok");
             }
             
@@ -54,6 +62,7 @@ namespace HamburgerMenu.Vistas
         }
         public static IEnumerable<LoginLocal> ConsultarUsuario(SQLiteConnection db, string usuario, string contra)
         {
+            db.CreateTable<LoginLocal>();
             return db.Query<LoginLocal>("Select * From LoginLocal where USUARIO = ? and CONTRASENIA = ?", usuario, contra);
         }
 

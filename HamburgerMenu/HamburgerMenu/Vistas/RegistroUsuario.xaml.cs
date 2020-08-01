@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Xamarin.Forms;
@@ -18,18 +19,32 @@ namespace HamburgerMenu.Vistas
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                if (string.Equals(Conf_Contrasenia.Text.ToString().Trim(),Contrasenia.Text.ToString().Trim()))
+                
+                IEnumerable<LoginLocal> resultado = ValidarUsuario(conn, Usuario.Text);
+                if (resultado.Count() > 0)
                 {
-                    conn.CreateTable<LoginLocal>();
-                    var DatosRegistro = new LoginLocal { NOMBRE = Nombre.Text, USUARIO = Usuario.Text, CONTRASENIA = Contrasenia.Text, TAREADOR = Tareador.Text, CELULAR = Celular.Text };
-                    conn.Insert(DatosRegistro);
-                    LimpiarFormulario();
+                    DisplayAlert("Tareo HAUG", "Usuario ya existente.", "Ok");
                 }
                 else {
-                    DisplayAlert("Tareo HAUG", "Ingresar la misma contraseña.", "Ok");
+                    if (string.Equals(Conf_Contrasenia.Text.ToString().Trim(), Contrasenia.Text.ToString().Trim()))
+                    {
+                        conn.CreateTable<LoginLocal>();
+                        var DatosRegistro = new LoginLocal { NOMBRE = Nombre.Text, USUARIO = Usuario.Text, CONTRASENIA = Contrasenia.Text, TAREADOR = Tareador.Text, CELULAR = Celular.Text };
+                        conn.Insert(DatosRegistro);
+                        LimpiarFormulario();
+                    }
+                    else
+                    {
+                        DisplayAlert("Tareo HAUG", "Ingresar la misma contraseña.", "Ok");
+                    }
                 }
                 
+                
             }            
+        }
+        public static IEnumerable<LoginLocal> ValidarUsuario(SQLiteConnection db, string usuario)
+        {
+            return db.Query<LoginLocal>("Select * From LoginLocal where USUARIO = ? ", usuario);
         }
         void LimpiarFormulario()
         {

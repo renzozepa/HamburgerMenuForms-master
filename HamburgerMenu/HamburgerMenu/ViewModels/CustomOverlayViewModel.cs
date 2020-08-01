@@ -177,7 +177,7 @@ namespace HamburgerMenu.ViewModels
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                 {
-                    conn.CreateTable<PersonalTareo>();
+                    conn.CreateTable<TareoPersonal>();
                     var DatosRegistro = new TareoPersonal
                     {
                         ID_TAREADOR = App.Tareador,
@@ -190,12 +190,13 @@ namespace HamburgerMenu.ViewModels
                         TIPO_MARCACION = App.TipoMarcacion,
                         HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
-                        SINCRONIZADO = 0
+                        SINCRONIZADO = 0,
+                        TOKEN = App.Token
                     };
                     conn.Insert(DatosRegistro);                    
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

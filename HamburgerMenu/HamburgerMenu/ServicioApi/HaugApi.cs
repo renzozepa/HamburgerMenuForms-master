@@ -17,7 +17,31 @@ namespace HamburgerMenu.ServicioApi
         public static HaugApi Metodo = new HaugApi();
         public const string urlapi = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/PERSONAL";
         public const string urlapiTareo = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/TAREOPERSONAL";
+        public const string urlapiToken = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/TAREADOR_DISPOSITIVOS";
 
+        public async Task<List<TareadorDispositivosApi>> GetToken(string ParamCelular, string ParamTareador)
+        {
+            List<TareadorDispositivosApi> LstTask = new List<TareadorDispositivosApi>();
+            try
+            {
+                HttpClient client = new HttpClient
+                {
+                    MaxResponseContentBufferSize = 256000
+                };
+                var uri = new Uri(urlapiToken + "?celular=" + ParamCelular + "&tareador=" + ParamTareador);
+                var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    LstTask = JsonConvert.DeserializeObject<List<TareadorDispositivosApi>>(content);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return LstTask;
+        }
         public async Task<List<PersonalTareoApi>> GetAllPersonalTareadorAsync(string ParamTareador)
         {
             List<PersonalTareoApi> LstTask = new List<PersonalTareoApi>();
@@ -68,8 +92,8 @@ namespace HamburgerMenu.ServicioApi
         }
 
         //public async Task PostJsonHttpClient(object content, CancellationToken cancellationToken)
-        public async Task PostJsonHttpClient(string ID_TAREADOR,string ID_PERSONAL, string PERSONAL, string ID_PROYECTO, 
-            string ID_SITUACION, string ID_CLASE_TRABAJADOR , DateTime FECHA_TAREO, string TIPO_MARCACION, string HORA, 
+        public async Task PostJsonHttpClient(string ID_TAREADOR, string ID_PERSONAL, string PERSONAL, string ID_PROYECTO,
+            string ID_SITUACION, string ID_CLASE_TRABAJADOR, DateTime FECHA_TAREO, string TIPO_MARCACION, string HORA,
             DateTime FECHA_REGISTRO)
         {
             try
@@ -88,14 +112,15 @@ namespace HamburgerMenu.ServicioApi
                     HORA = HORA,
                     FECHA_REGISTRO = FECHA_REGISTRO,
                     SINCRONIZADO = 0,
-                    FECHA_SINCRONIZADO = DateTime.Now.Date
+                    FECHA_SINCRONIZADO = DateTime.Now.Date,
+                    TOKEN = App.Token
                 };
 
                 var httpClient = new HttpClient();
                 var json = JsonConvert.SerializeObject(varTareo);
                 HttpContent httpContent = new StringContent(json);
                 httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                
+
                 HttpResponseMessage response = await httpClient.PostAsync(urlapiTareo, httpContent).ConfigureAwait(false);
                 string respuesta = response.RequestMessage.ToString();
                 string status_code = response.StatusCode.ToString();
@@ -105,7 +130,7 @@ namespace HamburgerMenu.ServicioApi
 
                 throw;
             }
-            
+
         }
         public async Task<String> CrearTareo(TareoPersonalApi entidad)
         {

@@ -19,5 +19,6 @@ namespace HamburgerMenu.Models
         public DateTime FECHA_REGISTRO { get; set; }
         public int SINCRONIZADO { get; set; }
         public DateTime FECHA_SINCRONIZADO { get; set; }
+        public string TOKEN { get; set; }
     }
 }

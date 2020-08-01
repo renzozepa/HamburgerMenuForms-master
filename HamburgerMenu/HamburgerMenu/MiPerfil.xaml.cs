@@ -10,13 +10,13 @@ using Xamarin.Forms.Xaml;
 
 namespace HamburgerMenu
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class MiPerfil : ContentPage
-	{
-		public MiPerfil ()
-		{
-			InitializeComponent ();
-		}
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MiPerfil : ContentPage
+    {
+        public MiPerfil()
+        {
+            InitializeComponent();
+        }
 
         protected override void OnAppearing()
         {
@@ -44,6 +44,14 @@ namespace HamburgerMenu
                 {
                     Celular.Text = perfil.CELULAR.ToString();
                 }
+
+                if (!string.IsNullOrEmpty(perfil.TOKEN))
+                {
+                    Token.Text = perfil.TOKEN.ToString();
+                }
+                
+                FToken.Text = perfil.FECHA_VIGENCIA.ToString("dd/MM/yyyy");
+                
             }
         }
 

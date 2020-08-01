@@ -12,15 +12,8 @@
                     <Label Text="Sincronizar"
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                        <ActivityIndicator x:Name="activity"
-                               Color="Red" 
-                               BackgroundColor="Blue" 
-                               IsRunning="False"
-                               IsEnabled="False"  
-                               IsVisible="False"            
-                               HorizontalOptions="FillAndExpand" />
-                    </StackLayout>
+                    <Button Text="Alta de usuario" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroAltaUsuario"/>
+                    <Button Text="Obtener Token" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroGetToken"/>
                     <Button Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
                     <Button Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
                 </StackLayout>
