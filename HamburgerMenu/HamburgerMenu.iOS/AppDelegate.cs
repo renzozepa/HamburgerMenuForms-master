@@ -25,11 +25,11 @@ namespace HamburgerMenu.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-global::Xamarin.Forms.Forms.Init();
-SfCheckBoxRenderer.Init();
-SfDatePickerRenderer.Init();
-SfBusyIndicatorRenderer.Init();
-SfButtonRenderer.Init();
+            global::Xamarin.Forms.Forms.Init();
+            SfCheckBoxRenderer.Init();
+            SfDatePickerRenderer.Init();
+            SfBusyIndicatorRenderer.Init();
+            SfButtonRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

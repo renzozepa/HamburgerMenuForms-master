@@ -19,11 +19,26 @@ namespace HamburgerMenu
         public static List<TareadorDispositivosApi> LstTareadorDispositivos { get; set; }
         public static List<PersonalTareoApi> LstPersonalTareo { get; set; }
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
-
         public Sincronizar ()
 		{
 			InitializeComponent ();
-            //IsRunning = false;
+            if (App.Token == null)
+            {
+                BtnSincroAltaUsuario.IsEnabled = false;
+                BtnSincroPersoDisponible.IsEnabled = false;
+                BtnSincronizTareoPersonal.IsEnabled = false;
+            }
+            else if (App.FExpiracion <= DateTime.Now.Date)
+            {
+                BtnSincroAltaUsuario.IsEnabled = false;
+                BtnSincroPersoDisponible.IsEnabled = false;
+                BtnSincronizTareoPersonal.IsEnabled = false;
+            }
+            else {
+                BtnSincroAltaUsuario.IsEnabled = true;
+                BtnSincroPersoDisponible.IsEnabled = true;
+                BtnSincronizTareoPersonal.IsEnabled = true;
+            }
         }
         public static IEnumerable<PersonalTareo> ValidarExitencia(SQLiteConnection db, string numerodocumento)
         {
@@ -135,12 +150,10 @@ namespace HamburgerMenu
                 throw;
             }
         }
-
         private void Btn_SincroAltaUsuario(object sender, EventArgs e)
         {
 
         }
-
         private void Btn_SincroGetToken(object sender, EventArgs e)
         {
             try
@@ -160,11 +173,22 @@ namespace HamburgerMenu
                     }
                     if (LstTareadorDispositivos != null)
                     {
-                        Usuario.TOKEN = LstTareadorDispositivos[0].TOKEN.ToString();
-                        App.Token = LstTareadorDispositivos[0].TOKEN.ToString();
-                        Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);
+                        if (LstTareadorDispositivos.Count > 0)
+                        {
+                            Usuario.TOKEN = LstTareadorDispositivos[0].TOKEN.ToString();
+                            App.Token = LstTareadorDispositivos[0].TOKEN.ToString();
 
-                        conn.Update(Usuario);
+                            if (App.Token != null)
+                            {
+                                BtnSincroAltaUsuario.IsEnabled = true;
+                                BtnSincroPersoDisponible.IsEnabled = true;
+                                BtnSincronizTareoPersonal.IsEnabled = true;
+                            }
+
+                            Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);
+                            App.FExpiracion = LstTareadorDispositivos[0].FECHA_VENCIMIENTO.Value;
+                            conn.Update(Usuario);
+                        }                        
                     }
                 }
             }

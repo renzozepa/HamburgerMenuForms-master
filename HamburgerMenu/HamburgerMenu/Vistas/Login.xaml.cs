@@ -35,6 +35,7 @@ namespace HamburgerMenu.Vistas
                         if (!string.IsNullOrEmpty(itemLoginLocal.TOKEN))
                         {
                             App.Token = itemLoginLocal.TOKEN.ToString();
+                            App.FExpiracion = itemLoginLocal.FECHA_VIGENCIA.Date;
                         }
                         
                         if (!string.IsNullOrEmpty(itemLoginLocal.CELULAR))

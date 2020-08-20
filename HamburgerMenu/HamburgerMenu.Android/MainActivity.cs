@@ -43,8 +43,6 @@ namespace HamburgerMenu.Droid
 
             global::ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
-            
-
             LoadApplication(new App(CompletePath));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)

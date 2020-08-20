@@ -12,10 +12,10 @@
                     <Label Text="Sincronizar"
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />
-                    <Button Text="Alta de usuario" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroAltaUsuario"/>
-                    <Button Text="Obtener Token" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroGetToken"/>
-                    <Button Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
-                    <Button Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
+                    <Button x:Name="BtnSincroAltaUsuario" Text="Alta de usuario" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroAltaUsuario"/>
+                    <Button x:Name="BtnSincroGetToken" Text="Obtener Token" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroGetToken"/>
+                    <Button x:Name="BtnSincroPersoDisponible" Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
+                    <Button x:Name="BtnSincronizTareoPersonal" Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
                 </StackLayout>
             </Frame>
         </FlexLayout>

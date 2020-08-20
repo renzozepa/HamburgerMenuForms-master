@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SQLite;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -17,29 +18,50 @@ namespace HamburgerMenu
             Detail = new NavigationPage(new Feed());
             List<Menu> menu = new List<Menu>
             {
-                new Menu{ Page= new MiPerfil(),MenuTitle="Mi perfil",  MenuDetail="Mi perfil",icon="user.png"},
-                new Menu{ Page= new Sincronizar(),MenuTitle="Sincronizar",  MenuDetail="Sincronizar",icon="actualizar.png"},
-                new Menu{ Page= new Proyectos(),MenuTitle="Proyectos",  MenuDetail="Proyectos disponibles",icon="settings.png"},
-                new Menu{ Page= new PersonalDisponible(),MenuTitle="Personal disponible",  MenuDetail="Personal disponible",icon="user.png"},
-                new Menu{ Page= new Tareos(),MenuTitle="Tareo",  MenuDetail="Tareo",icon="ic_fingerprint.png"},
-                new Menu{ Page= new TipoMarcacion(),MenuTitle="Marcación",  MenuDetail="Marcación",icon="message.png"},
-                new Menu{ Page= new Vistas.Login(),MenuTitle="Cerrar sesión",  MenuDetail="Cerrar sesión",icon="salir.png"}
+                new Menu{ Page= new MiPerfil(),MenuTitle="Mi perfil",  MenuDetail="Mi perfil",icon="user.png",Id=1},
+                new Menu{ Page= new Sincronizar(),MenuTitle="Sincronizar",  MenuDetail="Sincronizar",icon="actualizar.png",Id=2},
+                new Menu{ Page= new Proyectos(),MenuTitle="Proyectos",  MenuDetail="Proyectos disponibles",icon="settings.png",Id=3},
+                new Menu{ Page= new PersonalDisponible(),MenuTitle="Personal disponible",  MenuDetail="Personal disponible",icon="user.png",Id=4},
+                new Menu{ Page= new Tareos(),MenuTitle="Tareo",  MenuDetail="Tareo",icon="ic_fingerprint.png",Id=5},
+                new Menu{ Page= new TipoMarcacion(),MenuTitle="Marcación",  MenuDetail="Marcación",icon="message.png",Id=6},
+                new Menu{ Page= new Vistas.Login(),MenuTitle="Cerrar sesión",  MenuDetail="Cerrar sesión",icon="salir.png",Id=7}                
             };
             ListMenu.ItemsSource = menu;
+            
         }
 
         private void ListMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
+            
             var menu = e.SelectedItem as Menu;
             if (menu != null)
             {
-                IsPresented = false;
-                Detail = new NavigationPage(menu.Page);
+                if (menu.Id == 7)
+                {
+                    App.Token = null;
+                }
+                if (App.Token != null)
+                {
+                    IsPresented = false;
+                    Detail = new NavigationPage(menu.Page);
+                }
+                else {
+                    if (menu.Id == 1 || menu.Id == 2 || menu.Id == 7)
+                    {
+                        IsPresented = false;
+                        Detail = new NavigationPage(menu.Page);
+                    }
+                }                                   
             }
         }
 
         public class Menu
         {
+            public int Id
+            {
+                get;
+                set;
+            }
             public string MenuTitle
             {
                 get;

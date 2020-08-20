@@ -17,6 +17,7 @@ namespace HamburgerMenu
         public static Int32 Usuario;
         public static string Token;
         public static string Celular;
+        public static DateTime FExpiracion;
 
         public App ()
 		{
