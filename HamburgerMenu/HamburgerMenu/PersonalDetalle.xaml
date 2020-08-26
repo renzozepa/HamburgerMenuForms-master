@@ -4,25 +4,29 @@
              x:Class="HamburgerMenu.PersonalDetalle"
              Visual="Material">
     <ScrollView>
-        <StackLayout>
-            <Label Text="Id: "/>
-            <Entry x:Name="Id" Text="{Binding ID_PERSONAL}"/>
-            <Label Text="Nombre: "/>
-            <Entry x:Name="Nombre" Text="{Binding NOMBRE}"/>
-            <Label Text="Tipo documento: "/>
-            <Entry x:Name="Tdocumento" Text="{Binding TIPODOCUIDEN}"/>
-            <Label Text="N° documento: "/>
-            <Entry x:Name="Ndocumento" Text="{Binding NUMERO_DOCUIDEN}"/>
-            <Label Text="Situación "/>
-            <Entry x:Name="Situación" Text="{Binding SITUACION}"/>
-            <Label Text="Proyecto: "/>
-            <Entry x:Name="Proyecto" Text="{Binding PROYECTO}"/>
-            <Label Text="Tareador: "/>
-            <Entry x:Name="Tareador" Text="{Binding TAREADOR}"/>
-            <Label Text="Clase trabajador: "/>
-            <Entry x:Name="ClaseTrabajador" Text="{Binding CLASE_TRABAJADOR}"/>
-            <Label Text="Fecha sincronizado: "/>
-            <Entry x:Name="FSincronizado" Text="{Binding FECHA_SINCRONIZADO, StringFormat='.{0:dd/MM/yyyy}'}"/>
-        </StackLayout>
+        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout>
+                    <Label Text="Id: "/>
+                    <Entry x:Name="Id" Text="{Binding ID_PERSONAL}"/>
+                    <Label Text="Nombre: "/>
+                    <Entry x:Name="Nombre" Text="{Binding NOMBRE}"/>
+                    <Label Text="Tipo documento: "/>
+                    <Entry x:Name="Tdocumento" Text="{Binding TIPODOCUIDEN}"/>
+                    <Label Text="N° documento: "/>
+                    <Entry x:Name="Ndocumento" Text="{Binding NUMERO_DOCUIDEN}"/>
+                    <Label Text="Situación "/>
+                    <Entry x:Name="Situación" Text="{Binding SITUACION}"/>
+                    <Label Text="Proyecto: "/>
+                    <Entry x:Name="Proyecto" Text="{Binding PROYECTO}"/>
+                    <Label Text="Tareador: "/>
+                    <Entry x:Name="Tareador" Text="{Binding TAREADOR}"/>
+                    <Label Text="Clase trabajador: "/>
+                    <Entry x:Name="ClaseTrabajador" Text="{Binding CLASE_TRABAJADOR}"/>
+                    <Label Text="Fecha sincronizado: "/>
+                    <Entry x:Name="FSincronizado" Text="{Binding FECHA_SINCRONIZADO, StringFormat='.{0:dd/MM/yyyy}'}"/>
+                </StackLayout>
+            </Frame>
+        </FlexLayout>
     </ScrollView>
 </ContentPage>

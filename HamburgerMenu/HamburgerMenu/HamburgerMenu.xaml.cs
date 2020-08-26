@@ -24,7 +24,8 @@ namespace HamburgerMenu
                 new Menu{ Page= new PersonalDisponible(),MenuTitle="Personal disponible",  MenuDetail="Personal disponible",icon="user.png",Id=4},
                 new Menu{ Page= new Tareos(),MenuTitle="Tareo",  MenuDetail="Tareo",icon="ic_fingerprint.png",Id=5},
                 new Menu{ Page= new TipoMarcacion(),MenuTitle="Marcación",  MenuDetail="Marcación",icon="message.png",Id=6},
-                new Menu{ Page= new Vistas.Login(),MenuTitle="Cerrar sesión",  MenuDetail="Cerrar sesión",icon="salir.png",Id=7}                
+                new Menu{ Page= new Configuracion(),MenuTitle="Configuración",  MenuDetail="Configuración",icon="ic_build.png",Id=7},
+                new Menu{ Page= new Vistas.Login(),MenuTitle="Cerrar sesión",  MenuDetail="Cerrar sesión",icon="salir.png",Id=8}                
             };
             ListMenu.ItemsSource = menu;
             
@@ -36,7 +37,7 @@ namespace HamburgerMenu
             var menu = e.SelectedItem as Menu;
             if (menu != null)
             {
-                if (menu.Id == 7)
+                if (menu.Id == 8)
                 {
                     App.Token = null;
                 }
@@ -46,7 +47,7 @@ namespace HamburgerMenu
                     Detail = new NavigationPage(menu.Page);
                 }
                 else {
-                    if (menu.Id == 1 || menu.Id == 2 || menu.Id == 7)
+                    if (menu.Id == 1 || menu.Id == 2 || menu.Id == 8)
                     {
                         IsPresented = false;
                         Detail = new NavigationPage(menu.Page);

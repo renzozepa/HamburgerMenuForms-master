@@ -4,22 +4,26 @@
              x:Class="HamburgerMenu.MiPerfil"
              Visual="Material">
     <ScrollView>
-        <StackLayout>
-            <Label Text="Nombre: "/>
-            <Entry Placeholder="Introduce tu nombre" x:Name="Nombre"/>
-            <Label Text="Usuario: "/>
-            <Entry Placeholder="Escribe tu usuario" Keyboard="Email" x:Name="Usuario"/>
-            <Label Text="Contraseña: "/>
-            <Entry IsPassword="True" x:Name="Contrasenia"/>
-            <Label Text="Tareador: "/>
-            <Entry Placeholder="Introduce tareador" x:Name="Tareador"/>
-            <Label Text="Nro. Celular: "/>
-            <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
-            <Label Text="Token: "/>
-            <Entry Placeholder="" x:Name="Token"/>
-            <Label Text="F. Expiración token: "/>
-            <Entry Placeholder="" x:Name="FToken"/>
-            <Button Text="Actualizar" BackgroundColor="#E6002B" Clicked="BtnActualizar_Clicked"></Button>
-        </StackLayout>
+        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout>
+                    <Label Text="Nombre: "/>
+                    <Entry Placeholder="Introduce tu nombre" x:Name="Nombre"/>
+                    <Label Text="Usuario: "/>
+                    <Entry Placeholder="Escribe tu usuario" Keyboard="Email" x:Name="Usuario"/>
+                    <Label Text="Contraseña: "/>
+                    <Entry IsPassword="True" x:Name="Contrasenia"/>
+                    <Label Text="Tareador: "/>
+                    <Entry Placeholder="Introduce tareador" x:Name="Tareador"/>
+                    <Label Text="Nro. Celular: "/>
+                    <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
+                    <Label Text="Token: "/>
+                    <Entry Placeholder="" x:Name="Token"/>
+                    <Label Text="F. Expiración token: "/>
+                    <Entry Placeholder="" x:Name="FToken"/>
+                    <Button Text="Actualizar" BackgroundColor="#E6002B" Clicked="BtnActualizar_Clicked"></Button>
+                </StackLayout>
+            </Frame>
+        </FlexLayout>
     </ScrollView>
 </ContentPage>

@@ -7,8 +7,8 @@
              Visual="Material" 
              NavigationPage.HasNavigationBar="False">
     <ScrollView >
-        <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
+        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="Iniciar Sesión" FontSize="25" TextColor="Black" HorizontalOptions="Center"/>
                     <Entry Placeholder="Introduce tu usuario" Keyboard="Email" x:Name="usuario"/>
@@ -22,7 +22,7 @@
                     </StackLayout>
                     <Button Text="Iniciar sesión" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_login"/>
                     <Button Text="Registrar" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_Registrar"/>
-                    <Button Text="Listar usuarios" BackgroundColor="#E6002B" IsVisible="False" TextColor="White" Clicked="Btn_Listar"/>
+                    <Button Text="Listar usuarios" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Listar"/>
                     <!--<buttons:SfButton x:Name="SfButton" Text="Iniciar sesión" BackgroundColor="#E6002B" 
                                       CornerRadius="20" TextColor="White" Clicked="btn_login">
                         <buttons:SfButton.Content>
