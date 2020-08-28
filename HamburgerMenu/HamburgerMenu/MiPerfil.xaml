@@ -5,8 +5,8 @@
              Visual="Material">
     <ScrollView>
         <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
-                <StackLayout>
+            <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout Margin="5">
                     <Label Text="Nombre: "/>
                     <Entry Placeholder="Introduce tu nombre" x:Name="Nombre"/>
                     <Label Text="Usuario: "/>

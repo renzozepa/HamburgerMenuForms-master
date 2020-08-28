@@ -8,7 +8,7 @@
              NavigationPage.HasNavigationBar="False">
     <ScrollView >
         <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+            <Frame BorderColor="OrangeRed" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="Iniciar Sesión" FontSize="25" TextColor="Black" HorizontalOptions="Center"/>
                     <Entry Placeholder="Introduce tu usuario" Keyboard="Email" x:Name="usuario"/>

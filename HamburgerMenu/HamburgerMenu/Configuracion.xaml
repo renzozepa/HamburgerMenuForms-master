@@ -2,11 +2,24 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Configuracion">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+    <ScrollView >
+        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout Margin="5">
+                    <StackLayout Orientation="Horizontal">
+                        <Switch x:Name="AlmLocal" />
+                        <Label Text="Almacenar local"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Switch x:Name="AlmServer" />
+                        <Label Text="Almacenar servidor"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Switch x:Name="AlmLocalServer" />
+                        <Label Text="Almacenar local y servidor"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </FlexLayout>
+    </ScrollView>
 </ContentPage>

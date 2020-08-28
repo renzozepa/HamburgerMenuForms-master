@@ -186,7 +186,7 @@ namespace HamburgerMenu
                             }
 
                             Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);
-                            App.FExpiracion = LstTareadorDispositivos[0].FECHA_VENCIMIENTO.Value;
+                            App.FExpiracion = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO.Value);
                             conn.Update(Usuario);
                         }                        
                     }

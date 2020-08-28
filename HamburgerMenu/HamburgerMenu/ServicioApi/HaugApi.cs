@@ -90,7 +90,6 @@ namespace HamburgerMenu.ServicioApi
 
             return httpContent;
         }
-
         //public async Task PostJsonHttpClient(object content, CancellationToken cancellationToken)
         public async Task PostJsonHttpClient(string ID_TAREADOR, string ID_PERSONAL, string PERSONAL, string ID_PROYECTO,
             string ID_SITUACION, string ID_CLASE_TRABAJADOR, DateTime FECHA_TAREO, string TIPO_MARCACION, string HORA,
