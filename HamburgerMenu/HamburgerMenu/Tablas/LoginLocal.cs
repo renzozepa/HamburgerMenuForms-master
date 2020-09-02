@@ -4,7 +4,7 @@ using System.Text;
 using SQLite;
 
 namespace HamburgerMenu
-{
+{    
     public class LoginLocal
     {
         [PrimaryKey,AutoIncrement]

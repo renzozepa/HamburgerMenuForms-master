@@ -59,7 +59,7 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                //conn.CreateTable<PersonalTareo>();
+                conn.CreateTable<PersonalTareo>();
                 var perfil = conn.Table<LoginLocal>().FirstOrDefault(j => j.ID == App.Usuario);
 
                 if (perfil == null)

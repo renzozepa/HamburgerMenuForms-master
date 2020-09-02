@@ -7,16 +7,19 @@
             <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout Margin="5">
                     <StackLayout Orientation="Horizontal">
-                        <Switch x:Name="AlmLocal" />
+                        <Switch x:Name="AlmLocal" Toggled="AlmLocal_Toggled"/>
                         <Label Text="Almacenar local"  HorizontalOptions="StartAndExpand" FontSize="14" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
-                        <Switch x:Name="AlmServer" />
+                        <Switch x:Name="AlmServer" Toggled="AlmServer_Toggled" />
                         <Label Text="Almacenar servidor"  HorizontalOptions="StartAndExpand" FontSize="14" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
-                        <Switch x:Name="AlmLocalServer" />
+                        <Switch x:Name="AlmLocalServer" Toggled="AlmLocalServer_Toggled" />
                         <Label Text="Almacenar local y servidor"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Text="Actualizar" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Actualizar"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>
