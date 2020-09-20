@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using HamburgerMenu.Tablas;
+using SQLite;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -22,27 +23,55 @@ namespace HamburgerMenu
         {
             App.TipoMarcacion = 1;
             MarcarFecha();
-            Navigation.PushAsync(new Marcacion());
+            if (ValidarTipoConfiguracion())
+            {
+                Navigation.PushAsync(new MarcaciónZebra());
+            }
+            else {
+                Navigation.PushAsync(new Marcacion());
+            }
+            
         }
 
         private void Btn_SalidaAlmorzar(object sender, EventArgs e)
         {
             App.TipoMarcacion = 2;
             MarcarFecha();
-            Navigation.PushAsync(new Marcacion());
+            if (ValidarTipoConfiguracion())
+            {
+                Navigation.PushAsync(new MarcaciónZebra());
+            }
+            else
+            {
+                Navigation.PushAsync(new Marcacion());
+            }
         }
 
         private void Btn_Ingresoalmorzar(object sender, EventArgs e)
         {
             App.TipoMarcacion = 3;
             MarcarFecha();
-            Navigation.PushAsync(new Marcacion());
+            if (ValidarTipoConfiguracion())
+            {
+                Navigation.PushAsync(new MarcaciónZebra());
+            }
+            else
+            {
+                Navigation.PushAsync(new Marcacion());
+            }
         }
         private void Btn_Salida(object sender, EventArgs e)
         {
             App.TipoMarcacion = 4;
             MarcarFecha();
-            Navigation.PushAsync(new Marcacion());
+            if (ValidarTipoConfiguracion())
+            {
+                Navigation.PushAsync(new MarcaciónZebra());
+            }
+            else
+            {
+                Navigation.PushAsync(new Marcacion());
+            }
         }
 
         private void CbCambioFecha_StateChanged(object sender, Syncfusion.XForms.Buttons.StateChangedEventArgs e)
@@ -66,6 +95,29 @@ namespace HamburgerMenu
             {
                 App.FMarcacion = DateTime.Now.Date;
             }
+        }
+
+        public bool ValidarTipoConfiguracion()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+            {
+                conn.CreateTable<ConfiguracionLocal>();
+                IEnumerable<ConfiguracionLocal> VarConfiguracionLocal = ValidarExistenciaConfiguracion(conn);
+                if (VarConfiguracionLocal.Count() > 0)
+                {
+                    var objconfiguracion = conn.Table<ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
+                    if (objconfiguracion == null)
+                    {
+
+                    }
+                    return objconfiguracion.DISPOSITIVOZEBRA;
+                }
+            }
+            return false;
+        }
+        public static IEnumerable<ConfiguracionLocal> ValidarExistenciaConfiguracion(SQLiteConnection db)
+        {
+            return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal WHERE ID_USUARIO = ?", App.Usuario);
         }
     }
 }

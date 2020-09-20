@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HamburgerMenu.MarcaciónZebra">
+    <ScrollView>
+        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout Margin="5">
+                    
+                    <Label Text="Código marcación: "/>
+                    <Entry Placeholder="Introduce código marcación" x:Name="CodMarcacion" Text="{Binding Marcado,Mode=TwoWay}"/>
+                    
+
+                    <Label x:Name="LblHora" Text="{Binding HoraMarcado}"/>
+
+                </StackLayout>
+            </Frame>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

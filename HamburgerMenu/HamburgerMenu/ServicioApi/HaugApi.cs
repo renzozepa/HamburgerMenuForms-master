@@ -126,7 +126,6 @@ namespace HamburgerMenu.ServicioApi
             }
             catch (Exception)
             {
-
                 throw;
             }
 

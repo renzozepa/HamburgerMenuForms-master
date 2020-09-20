@@ -14,18 +14,23 @@ namespace HamburgerMenu.Vistas
         public RegistroUsuario()
         {
             InitializeComponent();
+            using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+            {
+                conn.CreateTable<LoginLocal>();
+            }
         }
         protected void Btn_agregar(object sender, EventArgs e)
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                
+
                 IEnumerable<LoginLocal> resultado = ValidarUsuario(conn, Usuario.Text);
                 if (resultado.Count() > 0)
                 {
                     DisplayAlert("Tareo HAUG", "Usuario ya existente.", "Ok");
                 }
-                else {
+                else
+                {
                     if (string.Equals(Conf_Contrasenia.Text.ToString().Trim(), Contrasenia.Text.ToString().Trim()))
                     {
                         conn.CreateTable<LoginLocal>();
@@ -38,9 +43,9 @@ namespace HamburgerMenu.Vistas
                         DisplayAlert("Tareo HAUG", "Ingresar la misma contraseña.", "Ok");
                     }
                 }
-                
-                
-            }            
+
+
+            }
         }
         public static IEnumerable<LoginLocal> ValidarUsuario(SQLiteConnection db, string usuario)
         {

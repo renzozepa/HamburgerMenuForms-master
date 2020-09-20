@@ -19,6 +19,10 @@
                         <Label Text="Almacenar local y servidor"  HorizontalOptions="StartAndExpand" FontSize="14" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
+                        <Switch x:Name="DispositivoZebra" />
+                        <Label Text="Dispositivo Zebra"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
                         <Button Text="Actualizar" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Actualizar"/>
                     </StackLayout>
                 </StackLayout>

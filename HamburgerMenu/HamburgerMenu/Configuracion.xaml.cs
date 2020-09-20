@@ -17,6 +17,7 @@ namespace HamburgerMenu
         public Configuracion()
         {
             InitializeComponent();
+            CargaInicial();                        
         }
 
         private void AlmLocal_Toggled(object sender, ToggledEventArgs e)
@@ -45,28 +46,59 @@ namespace HamburgerMenu
                 AlmServer.IsToggled = false;
             }
         }
+        public void CargaInicial()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+            {
+                conn.CreateTable<ConfiguracionLocal>();
+                IEnumerable<ConfiguracionLocal> VarConfiguracionLocal = ValidarExistenciaConfiguracion(conn);
+                if (VarConfiguracionLocal.Count() > 0)
+                {
+                    var objconfiguracion = conn.Table<ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
+                    if (objconfiguracion == null)
+                    {
 
+                    }
+
+                    AlmLocal.IsToggled = objconfiguracion.LOCAL;
+                    AlmServer.IsToggled = objconfiguracion.SERVER;
+                    AlmLocalServer.IsToggled = objconfiguracion.LOCALSERVER;
+                    DispositivoZebra.IsToggled = objconfiguracion.DISPOSITIVOZEBRA;
+                    
+                }                
+            }
+        }
         private void Btn_Actualizar(object sender, EventArgs e)
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<Configuracion>();
-                var objconfiguracion = conn.Table<ConfiguracionLocal>().FirstOrDefault();
-
-                if (objconfiguracion == null)
+                IEnumerable<ConfiguracionLocal> VarConfiguracionLocal = ValidarExistenciaConfiguracion(conn);
+                if (VarConfiguracionLocal.Count() > 0)
                 {
-                    objconfiguracion.LOCAL = false;
-                    objconfiguracion.SERVER = false;
-                    objconfiguracion.LOCALSERVER = false;
-                    conn.Insert(objconfiguracion);
+                    var objconfiguracion = conn.Table<ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
+                    if (objconfiguracion == null)
+                    {
+
+                    }
+
+                    objconfiguracion.LOCAL = AlmLocal.IsToggled;
+                    objconfiguracion.SERVER = AlmServer.IsToggled;
+                    objconfiguracion.LOCALSERVER = AlmLocalServer.IsToggled;
+                    objconfiguracion.DISPOSITIVOZEBRA = DispositivoZebra.IsToggled;
+
+                    conn.Update(objconfiguracion);
+                    DisplayAlert("Haug Tareo","Se actualizo correctamente los datos.","Ok");
                 }
-
-                objconfiguracion.LOCAL = AlmLocal.IsToggled;
-                objconfiguracion.SERVER = AlmServer.IsToggled;
-                objconfiguracion.LOCALSERVER = AlmLocalServer.IsToggled;
-
-                conn.Update(objconfiguracion);
+                else
+                {                    
+                    var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
+                    conn.Insert(DatosRegistro);
+                }
             }
+        }
+        public static IEnumerable<ConfiguracionLocal> ValidarExistenciaConfiguracion(SQLiteConnection db)
+        {
+            return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal WHERE ID_USUARIO = ?", App.Usuario);
         }
     }
 }

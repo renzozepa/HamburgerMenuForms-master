@@ -18,7 +18,6 @@ namespace HamburgerMenu
 			InitializeComponent ();
             BindingContext = new CustomOverlayViewModel(this.Navigation);
         }
-
-        
+ 
 	}
 }
