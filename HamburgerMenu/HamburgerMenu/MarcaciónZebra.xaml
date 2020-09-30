@@ -6,11 +6,12 @@
         <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
             <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout Margin="5">
-                    
+
+                    <Label Text="Ultima marcación: "/>
+                    <Label x:Name="LblMarcado" Text="{Binding UltimoMarcado}"/>
+                    <Label x:Name="LblUltimaHoraMarcado" Text="{Binding UltimoHoraMarcado}"/>
                     <Label Text="Código marcación: "/>
                     <Entry Placeholder="Introduce código marcación" x:Name="CodMarcacion" Text="{Binding Marcado,Mode=TwoWay}"/>
-                    
-
                     <Label x:Name="LblHora" Text="{Binding HoraMarcado}"/>
 
                 </StackLayout>

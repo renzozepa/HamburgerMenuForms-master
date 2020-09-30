@@ -1,30 +1,28 @@
-﻿using System;
-using System.Windows.Input;
-using System.Threading.Tasks;
+﻿using HamburgerMenu.Helpers;
+using HamburgerMenu.Models;
+using HamburgerMenu.ServicioApi;
+using HamburgerMenu.Tablas;
+using Plugin.Connectivity;
+using SQLite;
+using System;
 using System.Collections.Generic;
-using System.Text;
-
-using HamburgerMenu.Helpers;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 using ZXing;
 using ZXing.Mobile;
 using ZXing.Net.Mobile.Forms;
-
-using Xamarin.Forms;
-
-using SQLite;
-using System.Linq;
-using HamburgerMenu.Tablas;
 
 namespace HamburgerMenu.ViewModels
 {
     public class CustomOverlayViewModel : BaseViewModel
     {
         public INavigation Navigation { get; set; }
-
         public ICommand ScannerCommand { get; set; }
-
         private string barcodeText;
         private string horaMarcado;
+        public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
 
         public string BarcodeText
         {
@@ -129,8 +127,29 @@ namespace HamburgerMenu.ViewModels
                                 }
 
                                 if (id_situacion == "10")
-                                {
+                                {                                
                                     INSERT_TAREO(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase);
+
+                                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                                    if (RptConfiguracion.Count() > 0)
+                                    {
+                                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+
+                                        bool Server = false;
+                                        bool LocalServer = false;
+
+                                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                                        {
+                                            Server = itemConfiguracionLocal.SERVER;
+                                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                                        }
+
+                                        if (Server || LocalServer)
+                                        {
+                                            InsertarTareoServer();
+                                        }
+
+                                    }
                                     await Navigation.PopAsync();
                                     BarcodeText = result.Text;
                                     BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
@@ -198,6 +217,73 @@ namespace HamburgerMenu.ViewModels
             }
             catch (Exception ex)
             {
+                throw;
+            }
+        }
+
+        public static IEnumerable<ConfiguracionLocal> BuscarConfiguracionLocal(SQLiteConnection db)
+        {
+            return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal where ID_USUARIO = ? ", App.Usuario);
+        }
+        public static IEnumerable<TareoPersonal> ListarTareoPorSincronizar(SQLiteConnection db)
+        {
+            return db.Query<TareoPersonal>("Select * From TareoPersonal Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);
+        }
+        private static void InsertarTareoServer()
+        {
+            try
+            {
+                if (CrossConnectivity.Current.IsConnected)
+                {
+                    LstTareoPersonal = new List<TareoPersonalApi>();
+
+                    var db = new SQLiteConnection(App.FilePath);
+                    IEnumerable<TareoPersonal> resultado = ListarTareoPorSincronizar(db);
+
+                    foreach (TareoPersonal TareoPersonalApiItem in resultado)
+                    {
+                        var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
+                            TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
+                            TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
+                            TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
+                            TareoPersonalApiItem.FECHA_REGISTRO));
+                        UpdTareo(TareoPersonalApiItem.ID);
+                    }
+                }
+                else
+                {
+                    Application.Current.MainPage.DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public static void UpdTareo(int id)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                {
+                    var tareo = conn.Table<TareoPersonal>().FirstOrDefault(j => j.ID == id);
+
+                    if (tareo == null)
+                    {
+                        throw new Exception("Tareo no encontrado en database!");
+                    }
+
+                    tareo.SINCRONIZADO = 1;
+                    tareo.FECHA_SINCRONIZADO = DateTime.Now;
+
+                    conn.Update(tareo);
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.InnerException.ToString();
+                string mensaje_1 = mensaje;
                 throw;
             }
         }

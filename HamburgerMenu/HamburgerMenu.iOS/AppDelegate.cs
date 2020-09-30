@@ -1,3 +1,4 @@
+using Syncfusion.SfNumericUpDown.XForms.iOS;
 using Syncfusion.XForms.Pickers.iOS;
 using Syncfusion.SfBusyIndicator.XForms.iOS;
 using Syncfusion.XForms.iOS.Buttons;
@@ -25,7 +26,8 @@ namespace HamburgerMenu.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
+global::Xamarin.Forms.Forms.Init();
+SfNumericUpDownRenderer.Init();
             SfCheckBoxRenderer.Init();
             SfDatePickerRenderer.Init();
             SfBusyIndicatorRenderer.Init();

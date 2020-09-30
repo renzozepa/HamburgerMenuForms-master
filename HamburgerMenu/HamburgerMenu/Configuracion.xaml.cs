@@ -17,7 +17,7 @@ namespace HamburgerMenu
         public Configuracion()
         {
             InitializeComponent();
-            CargaInicial();                        
+            CargaInicial();
         }
 
         private void AlmLocal_Toggled(object sender, ToggledEventArgs e)
@@ -64,8 +64,9 @@ namespace HamburgerMenu
                     AlmServer.IsToggled = objconfiguracion.SERVER;
                     AlmLocalServer.IsToggled = objconfiguracion.LOCALSERVER;
                     DispositivoZebra.IsToggled = objconfiguracion.DISPOSITIVOZEBRA;
-                    
-                }                
+                    numericupdown.Value = objconfiguracion.MINUTOSENTREMARCACION;
+
+                }
             }
         }
         private void Btn_Actualizar(object sender, EventArgs e)
@@ -85,12 +86,13 @@ namespace HamburgerMenu
                     objconfiguracion.SERVER = AlmServer.IsToggled;
                     objconfiguracion.LOCALSERVER = AlmLocalServer.IsToggled;
                     objconfiguracion.DISPOSITIVOZEBRA = DispositivoZebra.IsToggled;
+                    objconfiguracion.MINUTOSENTREMARCACION = Convert.ToInt32(numericupdown.Value.ToString());
 
                     conn.Update(objconfiguracion);
-                    DisplayAlert("Haug Tareo","Se actualizo correctamente los datos.","Ok");
+                    DisplayAlert("Haug Tareo", "Se actualizo correctamente los datos.", "Ok");
                 }
                 else
-                {                    
+                {
                     var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
                     conn.Insert(DatosRegistro);
                 }
@@ -99,6 +101,17 @@ namespace HamburgerMenu
         public static IEnumerable<ConfiguracionLocal> ValidarExistenciaConfiguracion(SQLiteConnection db)
         {
             return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal WHERE ID_USUARIO = ?", App.Usuario);
+        }
+
+        private void Btn_Eliminar(object sender, EventArgs e)
+        {
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+            {
+                //conn.Query<ConfiguracionLocal>("Truncate table TareoPersonal");
+                conn.Execute("Delete From TareoPersonal");
+            }
+
         }
     }
 }

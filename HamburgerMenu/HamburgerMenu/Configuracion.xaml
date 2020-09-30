@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+xmlns:numericupdown="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Configuracion">
     <ScrollView >
@@ -23,7 +24,16 @@
                         <Label Text="Dispositivo Zebra"  HorizontalOptions="StartAndExpand" FontSize="14" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
+                        <StackLayout>
+                            <numericupdown:SfNumericUpDown Value="0" x:Name="numericupdown" BorderColor="Red" />
+                        </StackLayout>
+                        <Label Text="Minutos entre marcación"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
                         <Button Text="Actualizar" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Actualizar"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Text="Eliminar tareo" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Eliminar"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>

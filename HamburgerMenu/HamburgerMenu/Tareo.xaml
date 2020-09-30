@@ -12,10 +12,11 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"></ColumnDefinition>
-                    <ColumnDefinition Width="100"></ColumnDefinition>
-                    <ColumnDefinition Width="50"></ColumnDefinition>
-                    <ColumnDefinition Width="50*"></ColumnDefinition>
+                    <ColumnDefinition Width="180"></ColumnDefinition>
+                    <ColumnDefinition Width="80"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
                        FontAttributes="Bold"
@@ -28,6 +29,9 @@
                        Text="HORA"></Label>
                 <Label Grid.Column="3"
                        FontAttributes="Bold"
+                       Text="TIPO"></Label>
+                <Label Grid.Column="4"
+                       FontAttributes="Bold"
                        Text=""></Label>
             </Grid>
             <CollectionView x:Name="TareoCollectionView">
@@ -38,15 +42,17 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200"></ColumnDefinition>
-                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="180"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Label forms:Grid.Column="0" Text="{Binding PERSONAL}"></Label>
                             <Label forms:Grid.Column="1" Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}"></Label>
                             <Label forms:Grid.Column="2" Text="{Binding HORA}"></Label>
-                            <Image forms:Grid.Column="3" Source="ic_more_vert"></Image>
+                            <Label forms:Grid.Column="3" Text="{Binding TIPO_MARCACION}"></Label>
+                            <Image forms:Grid.Column="4" Source="ic_more_vert"></Image>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

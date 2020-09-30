@@ -24,9 +24,9 @@ namespace HamburgerMenu
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
                 //conn.CreateTable<TareoPersonal>();                
-                var contacts = conn.Table<TareoPersonal>().ToList().Where(x => x.ID_TAREADOR == App.Tareador && x.SINCRONIZADO == 1);
+                var VarTareo = conn.Table<TareoPersonal>().ToList().Where(x => x.ID_TAREADOR == App.Tareador && x.SINCRONIZADO == 1);
                 //PersonalListView.ItemsSource = contacts;
-                TareoCollectionView.ItemsSource = contacts;
+                TareoCollectionView.ItemsSource = VarTareo;
             }
         }
     }
