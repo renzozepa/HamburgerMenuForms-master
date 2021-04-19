@@ -93,7 +93,7 @@ namespace HamburgerMenu.ServicioApi
         //public async Task PostJsonHttpClient(object content, CancellationToken cancellationToken)
         public async Task PostJsonHttpClient(string ID_TAREADOR, string ID_PERSONAL, string PERSONAL, string ID_PROYECTO,
             string ID_SITUACION, string ID_CLASE_TRABAJADOR, DateTime FECHA_TAREO, string TIPO_MARCACION, string HORA,
-            DateTime FECHA_REGISTRO)
+            DateTime FECHA_REGISTRO, string dni)
         {
             try
             {
@@ -112,7 +112,8 @@ namespace HamburgerMenu.ServicioApi
                     FECHA_REGISTRO = FECHA_REGISTRO,
                     SINCRONIZADO = 0,
                     FECHA_SINCRONIZADO = DateTime.Now.Date,
-                    TOKEN = App.Token
+                    TOKEN = App.Token,
+                    NUMERO_DOCUIDEN = dni
                 };
 
                 var httpClient = new HttpClient();

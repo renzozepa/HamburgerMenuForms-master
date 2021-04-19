@@ -125,7 +125,7 @@ namespace HamburgerMenu
                             TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
                             TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
                             TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO));
+                            TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
                         UpdTareo(TareoPersonalApiItem.ID);
                     }
                 }

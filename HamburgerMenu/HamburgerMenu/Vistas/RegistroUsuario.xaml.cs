@@ -43,8 +43,6 @@ namespace HamburgerMenu.Vistas
                         DisplayAlert("Tareo HAUG", "Ingresar la misma contraseña.", "Ok");
                     }
                 }
-
-
             }
         }
         public static IEnumerable<LoginLocal> ValidarUsuario(SQLiteConnection db, string usuario)

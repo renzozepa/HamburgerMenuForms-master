@@ -21,6 +21,8 @@ namespace HamburgerMenu.ViewModels
         private string ultimomarcado;
         private string ultimohoraMarcado;
 
+        private bool resultConsulta = false;
+
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
 
         public string HoraMarcado
@@ -43,16 +45,16 @@ namespace HamburgerMenu.ViewModels
             get => ultimomarcado;
             set { ultimomarcado = value; OnPropertyChanged(); }
         }
-        public MarcacionZebraViewModel(INavigation navigation,Entry entry)
+        public MarcacionZebraViewModel(INavigation navigation, Entry entry)
         {
-            Navigation = navigation;            
+            Navigation = navigation;
             entry.TextChanged += Entry_TextChanged;
             horaMarcado = DateTime.Now.ToString();
         }
         void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
             HoraMarcado = DateTime.Now.ToString();
-            string CodDocumento = e.NewTextValue.ToString();            
+            string CodDocumento = e.NewTextValue.ToString();
 
             if (!string.IsNullOrWhiteSpace(CodDocumento))
             {
@@ -89,19 +91,20 @@ namespace HamburgerMenu.ViewModels
                                 HoraMarcado = DateTime.Now.ToString();
                                 Marcado = string.Empty;
                             }
-                            else {
-                                InsertarTareo(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase);
+                            else
+                            {
+                                InsertarTareo(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
 
                                 IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
                                 if (RptConfiguracion.Count() > 0)
                                 {
                                     List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
-                                    
+
                                     bool Server = false;
                                     bool LocalServer = false;
 
                                     foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
-                                    {                                       
+                                    {
                                         Server = itemConfiguracionLocal.SERVER;
                                         LocalServer = itemConfiguracionLocal.LOCALSERVER;
                                     }
@@ -117,33 +120,52 @@ namespace HamburgerMenu.ViewModels
                                 UltimoMarcado = CodDocumento;
                                 HoraMarcado = DateTime.Now.ToString();
                                 Marcado = string.Empty;
-                            }                                
+                            }
                         }
                         else
-                        {                                                 
-                            HoraMarcado = DateTime.Now.ToString();
-                            Marcado = string.Empty;
-                            Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es : " + situacion, "OK");
+                        {
+                            resultConsulta = Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es: " + situacion + "\n Desea Registrar tareo al trabajador?", "Si", "No").IsCompleted;
+
+                            if (resultConsulta)
+                            {
+                                Insert_Trabajador_Sin_Registro(CodDocumento);
+                            }
+                            else {
+                                HoraMarcado = DateTime.Now.ToString();
+                                Marcado = string.Empty;
+                                Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario", "OK");
+                            }
+                            
                         }
                     }
                     else
                     {
-                        HoraMarcado = DateTime.Now.ToString();
-                        Marcado = string.Empty;
-                        Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no se encuentra registrado", "OK");
+                        resultConsulta = Application.Current.MainPage.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO", "Si", "No").IsCompleted;
+
+                        if (resultConsulta)
+                        {
+                            Insert_Trabajador_Sin_Registro(CodDocumento);
+                        }
+                        else {
+                            HoraMarcado = DateTime.Now.ToString();
+                            Marcado = string.Empty;
+                            Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no se encuentra registrado", "OK");
+                        }
+                        
                     }
                 }
             }
         }
+
         public static IEnumerable<PersonalTareo> BuscarTrabajador(SQLiteConnection db, string documento)
         {
             return db.Query<PersonalTareo>("Select * From PersonalTareo where NUMERO_DOCUIDEN = ? and ID_TAREADOR = ? ", documento, App.Tareador);
         }
         public static IEnumerable<TareoPersonal> ValidarExistenciaTareoTrabajador(SQLiteConnection db, string documento)
         {
-            return db.Query<TareoPersonal>("Select * From TareoPersonal where ID_PERSONAL = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion,App.TipoMarcacion);
+            return db.Query<TareoPersonal>("Select * From TareoPersonal where ID_PERSONAL = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
         }
-        public static void InsertarTareo(string nombre_personal, Int32 ID_PERSONAL, string ID_PROYECTO, Int32 ID_SITUACION, Int32 ID_CLASE_TRABAJADOR)
+        public static void InsertarTareo(string nombre_personal, int ID_PERSONAL, string ID_PROYECTO, int ID_SITUACION, int ID_CLASE_TRABAJADOR, string dni)
         {
             try
             {
@@ -163,7 +185,8 @@ namespace HamburgerMenu.ViewModels
                         HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
-                        TOKEN = App.Token
+                        TOKEN = App.Token,
+                        NUMERO_DOCUIDEN = dni
                     };
                     conn.Insert(DatosRegistro);
                 }
@@ -173,7 +196,63 @@ namespace HamburgerMenu.ViewModels
                 throw;
             }
         }
+        public static void Insert_Trabajador_Sin_Registro(string numero_documento)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                {
+                    conn.CreateTable<PersonalTareo>();
+                    var DatosRegistro = new PersonalTareo
+                    {
+                        ID_PERSONAL = 0,
+                        NOMBRE = "Nuevo Trabajador",
+                        ID_TIPODOCUIDEN = "01",
+                        TIPODOCUIDEN = "01",
+                        NUMERO_DOCUIDEN = numero_documento,
+                        ID_SITUACION = 1,
+                        SITUACION = "1",
+                        ID_PROYECTO = "--",
+                        PROYECTO = "--",
+                        ID_TAREADOR = App.Tareador,
+                        TAREADOR = App.Tareador,
+                        ID_CLASE_TRABAJADOR = 0,
+                        CLASE_TRABAJADOR = "0",
+                        ID_USUARIO_SINCRONIZA = 0,
+                        FECHA_SINCRONIZADO = DateTime.Now
+                    };
+                    conn.Insert(DatosRegistro);
+                    InsertarTareo("", 0, "", 0, 0, numero_documento);
 
+                    var db = new SQLiteConnection(App.FilePath);
+                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                    if (RptConfiguracion.Count() > 0)
+                    {
+                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+
+                        bool Server = false;
+                        bool LocalServer = false;
+
+                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                        {
+                            Server = itemConfiguracionLocal.SERVER;
+                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                        }
+
+                        if (Server || LocalServer)
+                        {
+                            InsertarTareoServer();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public static IEnumerable<ConfiguracionLocal> BuscarConfiguracionLocal(SQLiteConnection db)
         {
             return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal where ID_USUARIO = ? ", App.Usuario);
@@ -200,7 +279,7 @@ namespace HamburgerMenu.ViewModels
                             TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
                             TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
                             TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO));
+                            TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
                         UpdTareo(TareoPersonalApiItem.ID);
                     }
                 }

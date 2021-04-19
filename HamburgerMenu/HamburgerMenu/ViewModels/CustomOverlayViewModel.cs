@@ -60,6 +60,8 @@ namespace HamburgerMenu.ViewModels
 
         async Task ScanCode()
         {
+            bool resultConsulta = false;
+
             var options = new MobileBarcodeScanningOptions
             {
                 PossibleFormats = new List<BarcodeFormat>()
@@ -98,7 +100,7 @@ namespace HamburgerMenu.ViewModels
                     if (string.IsNullOrEmpty(result.Text))
                     {
                         await Navigation.PopAsync();
-                        await page.DisplayAlert("Ayuda", "Coloca el código frente al dispositivo para escanearlo", "OK");
+                        await page.DisplayAlert("Ayuda", "Coloca el código frente al dispositivo para escanearlo", "Aceptar");
                     }
                     else
                     {
@@ -128,7 +130,7 @@ namespace HamburgerMenu.ViewModels
 
                                 if (id_situacion == "10")
                                 {                                
-                                    INSERT_TAREO(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase);
+                                    INSERT_TAREO(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase , result.Text);
 
                                     IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
                                     if (RptConfiguracion.Count() > 0)
@@ -161,16 +163,28 @@ namespace HamburgerMenu.ViewModels
                                     BarcodeText = result.Text;
                                     BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
                                     HoraMarcado = DateTime.Now.ToString();
-                                    await page.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es : " + situacion, "OK");
+                                    await page.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es : " + situacion, "Aceptar");
                                 }
                             }
                             else
                             {
-                                await Navigation.PopAsync();
-                                BarcodeText = result.Text;
-                                BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                HoraMarcado = DateTime.Now.ToString();
-                                await page.DisplayAlert("Ayuda", "El trabajador no se encuentra registrado", "OK");
+                                resultConsulta = await page.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO", "Si","No");
+
+                                if (resultConsulta) {
+
+                                    Insert_Trabajador_Sin_Registro(result.Text);
+
+                                }
+                                else {
+                                    await Navigation.PopAsync();
+                                    BarcodeText = result.Text;
+                                    BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
+                                    HoraMarcado = DateTime.Now.ToString();
+                                    await page.DisplayAlert("Ayuda", "Registro cancelado por el usuario.", "Aceptar");
+                                }
+
+
+                                
                             }
                         }
                         catch (Exception)
@@ -189,8 +203,64 @@ namespace HamburgerMenu.ViewModels
         {
             return db.Query<PersonalTareo>("Select * From PersonalTareo where NUMERO_DOCUIDEN = ? and ID_TAREADOR = ? ", numero, App.Tareador);
         }
+        public static void Insert_Trabajador_Sin_Registro(string numero_documento)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                {
+                    conn.CreateTable<PersonalTareo>();
+                    var DatosRegistro = new PersonalTareo
+                    {
+                        ID_PERSONAL = 0,
+                        NOMBRE = "Nuevo Trabajador",
+                        ID_TIPODOCUIDEN = "01",
+                        TIPODOCUIDEN = "01",
+                        NUMERO_DOCUIDEN = numero_documento,
+                        ID_SITUACION = 1,
+                        SITUACION = "1",
+                        ID_PROYECTO = "--",
+                        PROYECTO = "--",
+                        ID_TAREADOR = App.Tareador,
+                        TAREADOR = App.Tareador,
+                        ID_CLASE_TRABAJADOR = 0,
+                        CLASE_TRABAJADOR = "0",
+                        ID_USUARIO_SINCRONIZA = 0,
+                        FECHA_SINCRONIZADO = DateTime.Now
+                    };
+                    conn.Insert(DatosRegistro);
+                    INSERT_TAREO("", 0, "", 0, 0, numero_documento);
 
-        public static void INSERT_TAREO(string nombre_personal, Int32 ID_PERSONAL, string ID_PROYECTO, Int32 ID_SITUACION, Int32 ID_CLASE_TRABAJADOR)
+                    var db = new SQLiteConnection(App.FilePath);
+                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                    if (RptConfiguracion.Count() > 0)
+                    {
+                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+
+                        bool Server = false;
+                        bool LocalServer = false;
+
+                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                        {
+                            Server = itemConfiguracionLocal.SERVER;
+                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                        }
+
+                        if (Server || LocalServer)
+                        {
+                            InsertarTareoServer();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public static void INSERT_TAREO(string nombre_personal, int ID_PERSONAL, string ID_PROYECTO, int ID_SITUACION, int ID_CLASE_TRABAJADOR,string dni)
         {
             try
             {
@@ -210,7 +280,8 @@ namespace HamburgerMenu.ViewModels
                         HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
-                        TOKEN = App.Token
+                        TOKEN = App.Token,
+                        NUMERO_DOCUIDEN = dni
                     };
                     conn.Insert(DatosRegistro);                    
                 }
@@ -220,7 +291,6 @@ namespace HamburgerMenu.ViewModels
                 throw;
             }
         }
-
         public static IEnumerable<ConfiguracionLocal> BuscarConfiguracionLocal(SQLiteConnection db)
         {
             return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal where ID_USUARIO = ? ", App.Usuario);
@@ -246,7 +316,7 @@ namespace HamburgerMenu.ViewModels
                             TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
                             TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
                             TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO));
+                            TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
                         UpdTareo(TareoPersonalApiItem.ID);
                     }
                 }
