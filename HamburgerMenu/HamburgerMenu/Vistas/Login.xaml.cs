@@ -64,6 +64,9 @@ namespace HamburgerMenu.Vistas
         public static IEnumerable<LoginLocal> ConsultarUsuario(SQLiteConnection db, string usuario, string contra)
         {
             db.CreateTable<LoginLocal>();
+            db.CreateTable<Tablas.ConfiguracionLocal>();
+            db.CreateTable<Tablas.PersonalTareo>();
+            db.CreateTable<Tablas.TareoPersonal>();
             return db.Query<LoginLocal>("Select * From LoginLocal where USUARIO = ? and CONTRASENIA = ?", usuario, contra);
         }
 

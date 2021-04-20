@@ -1,4 +1,5 @@
-﻿using HamburgerMenu.Models;
+﻿using Acr.UserDialogs;
+using HamburgerMenu.Models;
 using HamburgerMenu.ServicioApi;
 using HamburgerMenu.Tablas;
 using Plugin.Connectivity;
@@ -48,7 +49,7 @@ namespace HamburgerMenu
         {
             return db.Query<TareoPersonal>("Select * From TareoPersonal Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);
         }
-        private void Btn_SincroPersoDisponible(object sender, EventArgs e)
+        private async void Btn_SincroPersoDisponible(object sender, EventArgs e)
         {
             try
             {
@@ -59,47 +60,54 @@ namespace HamburgerMenu
 
                     t.Wait();
 
-                    using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                    int contador = 0;
+
+                    using (var dialog = UserDialogs.Instance.Progress("Procesando"))
                     {
-                        conn.CreateTable<PersonalTareo>();
-                        foreach (PersonalTareoApi itemPersonalTareoApi in LstPersonalTareo)
+                        using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                         {
-                            var DatosRegistro = new PersonalTareo
+                            conn.CreateTable<PersonalTareo>();
+                            foreach (PersonalTareoApi itemPersonalTareoApi in LstPersonalTareo)
                             {
-                                ID_PERSONAL = int.Parse(itemPersonalTareoApi.ID_PERSONAL.ToString()),
-                                NOMBRE = itemPersonalTareoApi.NOMBRE.ToString(),
-                                ID_TIPODOCUIDEN = itemPersonalTareoApi.ID_TIPODOCUIDEN.ToString(),
-                                TIPODOCUIDEN = itemPersonalTareoApi.TIPODOCUIDEN.ToString(),
-                                NUMERO_DOCUIDEN = itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString(),
-                                ID_SITUACION = int.Parse(itemPersonalTareoApi.ID_SITUACION.ToString()),
-                                SITUACION = itemPersonalTareoApi.SITUACION.ToString(),
-                                ID_PROYECTO = itemPersonalTareoApi.ID_PROYECTO.ToString(),
-                                PROYECTO = itemPersonalTareoApi.PROYECTO.ToString(),
-                                ID_TAREADOR = itemPersonalTareoApi.ID_TAREADOR.ToString(),
-                                TAREADOR = itemPersonalTareoApi.TAREADOR.ToString(),
-                                ID_CLASE_TRABAJADOR = int.Parse(itemPersonalTareoApi.ID_CLASE_TRABAJADOR.ToString()),
-                                CLASE_TRABAJADOR = itemPersonalTareoApi.CLASE_TRABAJADOR.ToString(),
-                                ID_USUARIO_SINCRONIZA = 1,
-                                FECHA_SINCRONIZADO = DateTime.Now
-                            };
+                                var DatosRegistro = new PersonalTareo
+                                {
+                                    ID_PERSONAL = int.Parse(itemPersonalTareoApi.ID_PERSONAL.ToString()),
+                                    NOMBRE = itemPersonalTareoApi.NOMBRE.ToString(),
+                                    ID_TIPODOCUIDEN = itemPersonalTareoApi.ID_TIPODOCUIDEN.ToString(),
+                                    TIPODOCUIDEN = itemPersonalTareoApi.TIPODOCUIDEN.ToString(),
+                                    NUMERO_DOCUIDEN = itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString(),
+                                    ID_SITUACION = int.Parse(itemPersonalTareoApi.ID_SITUACION.ToString()),
+                                    SITUACION = itemPersonalTareoApi.SITUACION.ToString(),
+                                    ID_PROYECTO = itemPersonalTareoApi.ID_PROYECTO.ToString(),
+                                    PROYECTO = itemPersonalTareoApi.PROYECTO.ToString(),
+                                    ID_TAREADOR = itemPersonalTareoApi.ID_TAREADOR.ToString(),
+                                    TAREADOR = itemPersonalTareoApi.TAREADOR.ToString(),
+                                    ID_CLASE_TRABAJADOR = int.Parse(itemPersonalTareoApi.ID_CLASE_TRABAJADOR.ToString()),
+                                    CLASE_TRABAJADOR = itemPersonalTareoApi.CLASE_TRABAJADOR.ToString(),
+                                    ID_USUARIO_SINCRONIZA = 1,
+                                    FECHA_SINCRONIZADO = DateTime.Now
+                                };
 
-                            var db = new SQLiteConnection(App.FilePath);
-                            IEnumerable<PersonalTareo> resultado = ValidarExitencia(db, itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString());
-                            if (resultado.Count() > 0)
-                            {
-                                conn.Update(DatosRegistro);
+                                var db = new SQLiteConnection(App.FilePath);
+                                IEnumerable<PersonalTareo> resultado = ValidarExitencia(db, itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString());
+                                if (resultado.Count() > 0)
+                                {
+                                    conn.Update(DatosRegistro);
+                                }
+                                else
+                                {
+                                    conn.Insert(DatosRegistro);
+                                }
+                                contador += contador;
+                                dialog.PercentComplete = (contador / LstPersonalTareo.Count()) * 100;
                             }
-                            else
-                            {
-                                conn.Insert(DatosRegistro);
-                            }
-
                         }
-                    }
+                                              
+                    }                    
                 }
                 else
                 {
-                    DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
+                   await DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
                 }
 
             }
@@ -114,20 +122,29 @@ namespace HamburgerMenu
             {
                 if (CrossConnectivity.Current.IsConnected)
                 {
-                    LstTareoPersonal = new List<TareoPersonalApi>();
+                    int contador = 0;
 
-                    var db = new SQLiteConnection(App.FilePath);
-                    IEnumerable<TareoPersonal> resultado = ListarTareoPorSincronizar(db);
-
-                    foreach (TareoPersonal TareoPersonalApiItem in resultado)
+                    using (var dialog = UserDialogs.Instance.Progress("Procesando"))
                     {
-                        var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
-                            TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
-                            TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
-                            TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
-                        UpdTareo(TareoPersonalApiItem.ID);
+                        LstTareoPersonal = new List<TareoPersonalApi>();
+
+                        var db = new SQLiteConnection(App.FilePath);
+                        IEnumerable<TareoPersonal> resultado = ListarTareoPorSincronizar(db);
+
+                        foreach (TareoPersonal TareoPersonalApiItem in resultado)
+                        {
+                            var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
+                                TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
+                                TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
+                                TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
+                                TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
+                            UpdTareo(TareoPersonalApiItem.ID);
+
+                            contador += contador;
+                            dialog.PercentComplete = (contador / resultado.Count()) * 100;
+                        }
                     }
+                    
                 }
                 else
                 {

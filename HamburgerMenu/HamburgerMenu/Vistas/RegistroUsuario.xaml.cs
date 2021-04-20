@@ -36,7 +36,26 @@ namespace HamburgerMenu.Vistas
                         conn.CreateTable<LoginLocal>();
                         var DatosRegistro = new LoginLocal { NOMBRE = Nombre.Text, USUARIO = Usuario.Text, CONTRASENIA = Contrasenia.Text, TAREADOR = Tareador.Text, CELULAR = Celular.Text };
                         conn.Insert(DatosRegistro);
-                        LimpiarFormulario();
+
+                        IEnumerable<LoginLocal> resultado_reg = ValidarUsuario(conn, Usuario.Text);
+                        conn.CreateTable<Tablas.ConfiguracionLocal>();
+
+                        List<LoginLocal> listll = (List<LoginLocal>)resultado_reg;
+                        foreach (LoginLocal itemLoginLocal in listll)
+                        {
+                            var varConfigLocal = new Tablas.ConfiguracionLocal
+                            {
+                                ID_USUARIO = itemLoginLocal.ID,
+                                LOCAL = false,
+                                SERVER = false,
+                                LOCALSERVER = true,
+                                DISPOSITIVOZEBRA = false,
+                                MINUTOSENTREMARCACION = 1
+                            };
+                            conn.Insert(varConfigLocal);
+                        }
+
+                        LimpiarFormulario();                        
                     }
                     else
                     {

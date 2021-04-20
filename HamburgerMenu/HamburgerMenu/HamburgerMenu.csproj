@@ -9,9 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.483" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Naxam.BottomTabbedPage" Version="0.3.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Plugin.UserDialogs" Version="1.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.1.0.59" />
     <PackageReference Include="Syncfusion.Xamarin.SfBusyIndicator" Version="18.1.0.59" />

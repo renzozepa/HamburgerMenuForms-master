@@ -7,6 +7,7 @@ using Android.Widget;
 using Android.OS;
 using System.IO;
 using Syncfusion.Buttons.XForms.Android;
+using Acr.UserDialogs;
 
 namespace HamburgerMenu.Droid
 {
@@ -35,6 +36,10 @@ namespace HamburgerMenu.Droid
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
             global::Xamarin.Forms.FormsMaterial.Init(this, bundle);
+
+            
+            UserDialogs.Init(this);
+            
 
             string filename = "Tareo.db3";
             string foldername = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);

@@ -31,7 +31,7 @@ namespace HamburgerMenu
 
             try
             {
-                List<PersonalTareo> ListaPersonalTareo = SearchEmployers();
+                List<Tablas.PersonalTareo> ListaPersonalTareo = SearchEmployers();
 
                 for (int i = ListaPersonalTareo.Count - 1; i >= 0; i--)
                 {
@@ -51,12 +51,12 @@ namespace HamburgerMenu
             }
         }
 
-        public List<PersonalTareo> SearchEmployers()
+        public List<Tablas.PersonalTareo> SearchEmployers()
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
                 //conn.CreateTable<PersonalTareo>();
-                return conn.Table<PersonalTareo>().Where(x => x.ID_TAREADOR == App.Tareador && x.ID_SITUACION == 10).OrderBy(c => c.NOMBRE).ToList();
+                return conn.Table<Tablas.PersonalTareo>().Where(x => x.ID_TAREADOR == App.Tareador && x.ID_SITUACION == 10).OrderBy(c => c.NOMBRE).ToList();
             }
 
         }
@@ -67,7 +67,7 @@ namespace HamburgerMenu
             {
                 Navigation.PushAsync(new PersonalDetalle
                 {
-                    BindingContext = e.SelectedItem as PersonalTareo
+                    BindingContext = e.SelectedItem as Tablas.PersonalTareo
                 });
             }
         }

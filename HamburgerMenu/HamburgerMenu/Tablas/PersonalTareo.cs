@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using System;
 
-namespace HamburgerMenu
+namespace HamburgerMenu.Tablas
 {
     public class PersonalTareo
     {

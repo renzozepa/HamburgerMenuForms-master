@@ -1,4 +1,5 @@
-﻿using HamburgerMenu.Models;
+﻿using Acr.UserDialogs;
+using HamburgerMenu.Models;
 using HamburgerMenu.ServicioApi;
 using HamburgerMenu.Tablas;
 using Plugin.Connectivity;
@@ -23,6 +24,7 @@ namespace HamburgerMenu.ViewModels
 
         private bool resultConsulta = false;
 
+
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
 
         public string HoraMarcado
@@ -45,13 +47,15 @@ namespace HamburgerMenu.ViewModels
             get => ultimomarcado;
             set { ultimomarcado = value; OnPropertyChanged(); }
         }
+
         public MarcacionZebraViewModel(INavigation navigation, Entry entry)
         {
             Navigation = navigation;
             entry.TextChanged += Entry_TextChanged;
             horaMarcado = DateTime.Now.ToString();
         }
-        void Entry_TextChanged(object sender, TextChangedEventArgs e)
+
+        private async void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
             HoraMarcado = DateTime.Now.ToString();
             string CodDocumento = e.NewTextValue.ToString();
@@ -60,98 +64,129 @@ namespace HamburgerMenu.ViewModels
             {
                 if (e.ToString().Length >= 8)
                 {
-                    var db = new SQLiteConnection(App.FilePath);
-                    IEnumerable<PersonalTareo> resultado = BuscarTrabajador(db, CodDocumento);
-                    if (resultado.Count() > 0)
+                    try
                     {
-                        List<PersonalTareo> listll = (List<PersonalTareo>)resultado;
-                        string id_situacion = string.Empty;
-                        string situacion = string.Empty;
-                        int personal = 0;
-                        string nombre_personal = string.Empty;
-                        string proyecto = string.Empty;
-                        int clase = 0;
-
-                        foreach (PersonalTareo itemPersonalTareo in listll)
+                        var db = new SQLiteConnection(App.FilePath);
+                        IEnumerable<PersonalTareo> resultado = BuscarTrabajador(db, CodDocumento);
+                        if (resultado.Count() > 0)
                         {
-                            id_situacion = itemPersonalTareo.ID_SITUACION.ToString();
-                            situacion = itemPersonalTareo.SITUACION.ToString();
-                            personal = int.Parse(itemPersonalTareo.ID_PERSONAL.ToString());
-                            nombre_personal = itemPersonalTareo.NOMBRE.ToString();
-                            proyecto = itemPersonalTareo.ID_PROYECTO.ToString();
-                            clase = int.Parse(itemPersonalTareo.ID_CLASE_TRABAJADOR.ToString());
+                            List<PersonalTareo> listll = (List<PersonalTareo>)resultado;
+                            string id_situacion = string.Empty;
+                            string situacion = string.Empty;
+                            int personal = 0;
+                            string nombre_personal = string.Empty;
+                            string proyecto = string.Empty;
+                            int clase = 0;
+
+                            foreach (PersonalTareo itemPersonalTareo in listll)
+                            {
+                                id_situacion = itemPersonalTareo.ID_SITUACION.ToString();
+                                situacion = itemPersonalTareo.SITUACION.ToString();
+                                personal = int.Parse(itemPersonalTareo.ID_PERSONAL.ToString());
+                                nombre_personal = itemPersonalTareo.NOMBRE.ToString();
+                                proyecto = itemPersonalTareo.ID_PROYECTO.ToString();
+                                clase = int.Parse(itemPersonalTareo.ID_CLASE_TRABAJADOR.ToString());
+                            }
+
+                            if (id_situacion == "10")
+                            {
+                                IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
+                                if (RptValidacion.Count() > 0)
+                                {
+                                    await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
+                                    HoraMarcado = DateTime.Now.ToString();
+                                    Marcado = string.Empty;
+                                }
+                                else
+                                {
+                                    InsertarTareo(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
+
+                                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                                    if (RptConfiguracion.Count() > 0)
+                                    {
+                                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+
+                                        bool Server = false;
+                                        bool LocalServer = false;
+
+                                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                                        {
+                                            Server = itemConfiguracionLocal.SERVER;
+                                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                                        }
+
+                                        if (Server || LocalServer)
+                                        {
+                                            InsertarTareoServer();
+                                        }
+
+                                    }
+
+                                    UltimoHoraMarcado = DateTime.Now.ToString();
+                                    UltimoMarcado = CodDocumento;
+                                    HoraMarcado = DateTime.Now.ToString();
+                                    Marcado = string.Empty;
+                                }
+                            }
+                            else
+                            {
+                                IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
+                                if (RptValidacion.Count() > 0)
+                                {
+                                    await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
+                                    HoraMarcado = DateTime.Now.ToString();
+                                    Marcado = string.Empty;
+                                }
+                                else
+                                {
+                                    resultConsulta = await Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es: " + situacion + "\n Desea Registrar tareo al trabajador?.", "Si", "No");
+
+                                    if (resultConsulta == true)
+                                    {
+                                        Insert_Trabajador_Cesado_Otro(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
+                                        HoraMarcado = DateTime.Now.ToString();
+                                        Marcado = string.Empty;
+                                    }
+                                    else
+                                    {
+                                        HoraMarcado = DateTime.Now.ToString();
+                                        Marcado = string.Empty;
+                                        await Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario.", "OK");
+                                    }
+                                }
+                            }
                         }
-
-                        if (id_situacion == "10")
+                        else
                         {
-                            IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(personal));
+                            IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
                             if (RptValidacion.Count() > 0)
                             {
-                                Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
+                                await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
                                 HoraMarcado = DateTime.Now.ToString();
                                 Marcado = string.Empty;
                             }
                             else
                             {
-                                InsertarTareo(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
+                                resultConsulta = await Application.Current.MainPage.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO.", "Si", "No");
 
-                                IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
-                                if (RptConfiguracion.Count() > 0)
+                                if (resultConsulta)
                                 {
-                                    List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
-
-                                    bool Server = false;
-                                    bool LocalServer = false;
-
-                                    foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
-                                    {
-                                        Server = itemConfiguracionLocal.SERVER;
-                                        LocalServer = itemConfiguracionLocal.LOCALSERVER;
-                                    }
-
-                                    if (Server || LocalServer)
-                                    {
-                                        InsertarTareoServer();
-                                    }
-
+                                    Insert_Trabajador_Sin_Registro(CodDocumento);
+                                    HoraMarcado = DateTime.Now.ToString();
+                                    Marcado = string.Empty;
                                 }
-
-                                UltimoHoraMarcado = DateTime.Now.ToString();
-                                UltimoMarcado = CodDocumento;
-                                HoraMarcado = DateTime.Now.ToString();
-                                Marcado = string.Empty;
+                                else
+                                {
+                                    HoraMarcado = DateTime.Now.ToString();
+                                    Marcado = string.Empty;
+                                    await Application.Current.MainPage.DisplayAlert("Ayuda", "Proceso cancelado.", "OK");
+                                }
                             }
-                        }
-                        else
-                        {
-                            resultConsulta = Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es: " + situacion + "\n Desea Registrar tareo al trabajador?", "Si", "No").IsCompleted;
-
-                            if (resultConsulta)
-                            {
-                                Insert_Trabajador_Sin_Registro(CodDocumento);
-                            }
-                            else {
-                                HoraMarcado = DateTime.Now.ToString();
-                                Marcado = string.Empty;
-                                Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario", "OK");
-                            }
-                            
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        resultConsulta = Application.Current.MainPage.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO", "Si", "No").IsCompleted;
-
-                        if (resultConsulta)
-                        {
-                            Insert_Trabajador_Sin_Registro(CodDocumento);
-                        }
-                        else {
-                            HoraMarcado = DateTime.Now.ToString();
-                            Marcado = string.Empty;
-                            Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no se encuentra registrado", "OK");
-                        }
-                        
+                        await Application.Current.MainPage.DisplayAlert("Ayuda", ex.Message.ToString(), "OK");
                     }
                 }
             }
@@ -163,7 +198,46 @@ namespace HamburgerMenu.ViewModels
         }
         public static IEnumerable<TareoPersonal> ValidarExistenciaTareoTrabajador(SQLiteConnection db, string documento)
         {
-            return db.Query<TareoPersonal>("Select * From TareoPersonal where ID_PERSONAL = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
+            return db.Query<TareoPersonal>("Select * From TareoPersonal where NUMERO_DOCUIDEN = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
+        }
+        public static void Insert_Trabajador_Cesado_Otro(string nombre_personal, int ID_PERSONAL, string ID_PROYECTO, int ID_SITUACION, int ID_CLASE_TRABAJADOR, string dni)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                {
+
+                    InsertarTareo(nombre_personal, ID_PERSONAL, ID_PROYECTO, ID_SITUACION, ID_CLASE_TRABAJADOR, dni);
+
+                    var db = new SQLiteConnection(App.FilePath);
+                    conn.CreateTable<ConfiguracionLocal>();
+                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                    if (RptConfiguracion.Count() > 0)
+                    {
+                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+
+                        bool Server = false;
+                        bool LocalServer = false;
+
+                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                        {
+                            Server = itemConfiguracionLocal.SERVER;
+                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                        }
+
+                        if (Server || LocalServer)
+                        {
+                            InsertarTareoServer();
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string rpt = ex.InnerException.ToString();
+                throw;
+            }
         }
         public static void InsertarTareo(string nombre_personal, int ID_PERSONAL, string ID_PROYECTO, int ID_SITUACION, int ID_CLASE_TRABAJADOR, string dni)
         {
@@ -257,7 +331,6 @@ namespace HamburgerMenu.ViewModels
         {
             return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal where ID_USUARIO = ? ", App.Usuario);
         }
-
         public static IEnumerable<TareoPersonal> ListarTareoPorSincronizar(SQLiteConnection db)
         {
             return db.Query<TareoPersonal>("Select * From TareoPersonal Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);

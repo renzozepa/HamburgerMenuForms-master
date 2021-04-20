@@ -28,7 +28,7 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<PersonalTareo>();
+                conn.CreateTable<Tablas.PersonalTareo>();
                 var perfil = conn.Table<LoginLocal>().FirstOrDefault(j => j.ID == App.Usuario);
 
                 if (perfil == null)
@@ -59,7 +59,7 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<PersonalTareo>();
+                conn.CreateTable<Tablas.PersonalTareo>();
                 var perfil = conn.Table<LoginLocal>().FirstOrDefault(j => j.ID == App.Usuario);
 
                 if (perfil == null)
@@ -73,6 +73,8 @@ namespace HamburgerMenu
                 perfil.CELULAR = Celular.Text.ToString();
 
                 conn.Update(perfil);
+
+                App.Tareador = Tareador.Text.ToString();
             }
         }
     }
