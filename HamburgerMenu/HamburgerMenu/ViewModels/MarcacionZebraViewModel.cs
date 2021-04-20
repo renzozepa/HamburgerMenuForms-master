@@ -51,7 +51,7 @@ namespace HamburgerMenu.ViewModels
         public MarcacionZebraViewModel(INavigation navigation, Entry entry)
         {
             Navigation = navigation;
-            entry.TextChanged += Entry_TextChanged;
+            entry.TextChanged += Entry_TextChanged;            
             horaMarcado = DateTime.Now.ToString();
         }
 
@@ -96,6 +96,7 @@ namespace HamburgerMenu.ViewModels
                                     await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
                                     HoraMarcado = DateTime.Now.ToString();
                                     Marcado = string.Empty;
+                                    
                                 }
                                 else
                                 {
@@ -136,6 +137,8 @@ namespace HamburgerMenu.ViewModels
                                     await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
                                     HoraMarcado = DateTime.Now.ToString();
                                     Marcado = string.Empty;
+                                    Entry entry_var = (Entry)sender;
+                                    entry_var.Focus();
                                 }
                                 else
                                 {
@@ -146,12 +149,16 @@ namespace HamburgerMenu.ViewModels
                                         Insert_Trabajador_Cesado_Otro(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
                                         HoraMarcado = DateTime.Now.ToString();
                                         Marcado = string.Empty;
+                                        Entry entry_var = (Entry)sender;
+                                        entry_var.Focus();
                                     }
                                     else
                                     {
+                                        await Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario.", "OK");
                                         HoraMarcado = DateTime.Now.ToString();
                                         Marcado = string.Empty;
-                                        await Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario.", "OK");
+                                        Entry entry_var = (Entry)sender;
+                                        entry_var.Focus();
                                     }
                                 }
                             }
@@ -164,6 +171,8 @@ namespace HamburgerMenu.ViewModels
                                 await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
                                 HoraMarcado = DateTime.Now.ToString();
                                 Marcado = string.Empty;
+                                Entry entry_var = (Entry)sender;
+                                entry_var.Focus();
                             }
                             else
                             {
@@ -174,12 +183,16 @@ namespace HamburgerMenu.ViewModels
                                     Insert_Trabajador_Sin_Registro(CodDocumento);
                                     HoraMarcado = DateTime.Now.ToString();
                                     Marcado = string.Empty;
+                                    Entry entry_var = (Entry)sender;
+                                    entry_var.Focus();
                                 }
                                 else
                                 {
+                                    await Application.Current.MainPage.DisplayAlert("Ayuda", "Proceso cancelado.", "OK");
                                     HoraMarcado = DateTime.Now.ToString();
                                     Marcado = string.Empty;
-                                    await Application.Current.MainPage.DisplayAlert("Ayuda", "Proceso cancelado.", "OK");
+                                    Entry entry_var = (Entry)sender;
+                                    entry_var.Focus();
                                 }
                             }
                         }
