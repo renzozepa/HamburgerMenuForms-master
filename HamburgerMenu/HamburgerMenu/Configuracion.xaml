@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-xmlns:numericupdown="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:numericupdown="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Configuracion">
     <ScrollView >
-        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+        <FlexLayout Margin="1" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame Margin="2" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout Margin="5">
                     <StackLayout Orientation="Horizontal">
                         <Switch x:Name="AlmLocal" Toggled="AlmLocal_Toggled"/>

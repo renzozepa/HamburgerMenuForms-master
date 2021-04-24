@@ -60,10 +60,16 @@ namespace HamburgerMenu
 
                     t.Wait();
 
-                    int contador = 0;
+                    float contador = 0;
+                    float contador_s = 0;
+                    float cn = LstPersonalTareo.Count();
 
-                    using (var dialog = UserDialogs.Instance.Progress("Procesando"))
+                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
                     {
+                        //for (var i = 0; i < cn; i++)
+                        //{
+                            
+                        //}
                         using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                         {
                             conn.CreateTable<PersonalTareo>();
@@ -98,16 +104,24 @@ namespace HamburgerMenu
                                 {
                                     conn.Insert(DatosRegistro);
                                 }
-                                contador += contador;
-                                dialog.PercentComplete = (contador / LstPersonalTareo.Count()) * 100;
+
+                                if (contador_s <= cn)
+                                {
+                                    await Task.Delay(1);
+                                    contador = (contador_s / cn) * 100;
+                                    dialog.PercentComplete = Convert.ToInt32(contador);
+                                    contador_s = contador_s + 1;
+                                }
                             }
                         }
-                                              
-                    }                    
+
+
+                    }
+                    
                 }
                 else
                 {
-                   await DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
+                    await DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
                 }
 
             }
@@ -144,7 +158,7 @@ namespace HamburgerMenu
                             dialog.PercentComplete = (contador / resultado.Count()) * 100;
                         }
                     }
-                    
+
                 }
                 else
                 {
