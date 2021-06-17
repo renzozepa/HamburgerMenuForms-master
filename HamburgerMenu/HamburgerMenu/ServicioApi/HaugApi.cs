@@ -113,7 +113,9 @@ namespace HamburgerMenu.ServicioApi
                     SINCRONIZADO = 0,
                     FECHA_SINCRONIZADO = DateTime.Now.Date,
                     TOKEN = App.Token,
-                    NUMERO_DOCUIDEN = dni
+                    NUMERO_DOCUIDEN = dni,
+                    ORIGEN = 1
+                    
                 };
 
                 var httpClient = new HttpClient();

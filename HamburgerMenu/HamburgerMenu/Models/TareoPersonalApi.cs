@@ -21,5 +21,6 @@ namespace HamburgerMenu.Models
         public DateTime FECHA_SINCRONIZADO { get; set; }
         public string TOKEN { get; set; }
         public string NUMERO_DOCUIDEN { get; set; }
+        public int ORIGEN { get; set; }
     }
 }
