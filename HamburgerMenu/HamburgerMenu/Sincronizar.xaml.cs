@@ -17,6 +17,7 @@ namespace HamburgerMenu
     public partial class Sincronizar : ContentPage
     {
         public static List<TareadorDispositivosApi> LstTareadorDispositivos { get; set; }
+        public static List<HorarioApi> LstHorario { get; set; }
         public static List<PersonalTareoApi> LstPersonalTareo { get; set; }
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
         public Sincronizar()
@@ -27,18 +28,21 @@ namespace HamburgerMenu
                 BtnSincroAltaUsuario.IsEnabled = false;
                 BtnSincroPersoDisponible.IsEnabled = false;
                 BtnSincronizTareoPersonal.IsEnabled = false;
+                BtnSincronizHorario.IsEnabled = false;
             }
             else if (App.FExpiracion <= DateTime.Now.Date)
             {
                 BtnSincroAltaUsuario.IsEnabled = false;
                 BtnSincroPersoDisponible.IsEnabled = false;
                 BtnSincronizTareoPersonal.IsEnabled = false;
+                BtnSincronizHorario.IsEnabled = false;
             }
             else
             {
                 BtnSincroAltaUsuario.IsEnabled = true;
                 BtnSincroPersoDisponible.IsEnabled = true;
                 BtnSincronizTareoPersonal.IsEnabled = true;
+                BtnSincronizHorario.IsEnabled = true;
             }
         }
         public static IEnumerable<PersonalTareo> ValidarExitencia(SQLiteConnection db, string numerodocumento)
@@ -66,10 +70,6 @@ namespace HamburgerMenu
 
                     using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
                     {
-                        //for (var i = 0; i < cn; i++)
-                        //{
-                            
-                        //}
                         using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                         {
                             conn.CreateTable<PersonalTareo>();
@@ -91,7 +91,8 @@ namespace HamburgerMenu
                                     ID_CLASE_TRABAJADOR = int.Parse(itemPersonalTareoApi.ID_CLASE_TRABAJADOR.ToString()),
                                     CLASE_TRABAJADOR = itemPersonalTareoApi.CLASE_TRABAJADOR.ToString(),
                                     ID_USUARIO_SINCRONIZA = 1,
-                                    FECHA_SINCRONIZADO = DateTime.Now
+                                    FECHA_SINCRONIZADO = DateTime.Now,
+                                    ID_HORARIO = itemPersonalTareoApi.ID_HORARIO.ToString()
                                 };
 
                                 var db = new SQLiteConnection(App.FilePath);
@@ -114,10 +115,8 @@ namespace HamburgerMenu
                                 }
                             }
                         }
-
-
                     }
-                    
+
                 }
                 else
                 {
@@ -253,6 +252,91 @@ namespace HamburgerMenu
             }
 
         }
+        private async void Btn_SincronizHorario(object sender, EventArgs e)
+        {
+            try
+            {                
+                if (CrossConnectivity.Current.IsConnected)
+                {
+                    LstHorario = new List<HorarioApi>();
+                    var t = Task.Run(async () => LstHorario = await HaugApi.Metodo.GetAllHorarioApiAsync());                    
 
+                    t.Wait();
+
+                    float contador = 0;
+                    float contador_s = 0;
+                    float cn = LstHorario.Count();
+
+                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
+                    {
+                        using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                        {
+                            if (DoesTableExist(conn, "Horario"))
+                                conn.DropTable<Horario>();
+
+                            conn.CreateTable<Horario>();
+                            foreach (HorarioApi itemHorarioApi in LstHorario)
+                            {
+                                var DatosRegistro = new Horario
+                                {
+                                    ID_HORARIO = itemHorarioApi.ID_HORARIO.ToString(),
+                                    DESCRIPCION = itemHorarioApi.DESCRIPCION.ToString(),
+                                    COLOQUIAL = itemHorarioApi.COLOQUIAL.ToString(),
+                                    HORA_INICIO = itemHorarioApi.HORA_INICIO.ToString(),
+                                    HORA_FIN = itemHorarioApi.HORA_FIN.ToString(),
+                                    TOLERA_ING = int.Parse(itemHorarioApi.TOLERA_ING.ToString()),
+                                    TOLERA_SAL = int.Parse(itemHorarioApi.TOLERA_SAL.ToString()),
+                                    ESTADO = bool.Parse(itemHorarioApi.ESTADO.ToString()),
+                                    ID_USU_REG = int.Parse(itemHorarioApi.ID_USU_REG.ToString()),
+                                    ID_USUARIO_MOD = int.Parse(itemHorarioApi.ID_USUARIO_MOD.ToString())
+                                };
+
+                                var db = new SQLiteConnection(App.FilePath);
+                                IEnumerable<Horario> resultado = ValidarExitenciaHorario(db, itemHorarioApi.ID_HORARIO.ToString());
+                                if (resultado.Count() > 0)
+                                {
+                                    conn.Update(DatosRegistro);
+                                }
+                                else
+                                {
+                                    conn.Insert(DatosRegistro);
+                                }
+
+                                if (contador_s <= cn)
+                                {
+                                    await Task.Delay(1);
+                                    contador = (contador_s / cn) * 100;
+                                    dialog.PercentComplete = Convert.ToInt32(contador);
+                                    contador_s = contador_s + 1;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Horarios", "Verifique su conexion a internet", "Ok");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Horarios", ex.InnerException.ToString(), "Ok");
+            }
+        }
+        public static IEnumerable<Horario> ValidarExitenciaHorario(SQLiteConnection db, string id)
+        {
+            return db.Query<Horario>("SELECT * FROM Horario where ID_HORARIO = ? ", id);
+        }
+
+        private bool DoesTableExist(SQLiteConnection db, string name)
+        {
+            SQLiteCommand command = db.CreateCommand("SELECT COUNT(1) FROM SQLITE_MASTER WHERE TYPE = @TYPE AND NAME = @NAME");
+            command.Bind("@TYPE", "table");
+            command.Bind("@NAME", name);
+
+            int result = command.ExecuteScalar<int>();
+            return (result > 0);
+        }
     }
 }

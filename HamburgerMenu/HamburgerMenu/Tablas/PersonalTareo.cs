@@ -42,6 +42,7 @@ namespace HamburgerMenu.Tablas
 
         public int ID_USUARIO_SINCRONIZA { get; set; }
         public DateTime FECHA_SINCRONIZADO { get; set; }
+        public string ID_HORARIO { get; set; }
 
     }
 }

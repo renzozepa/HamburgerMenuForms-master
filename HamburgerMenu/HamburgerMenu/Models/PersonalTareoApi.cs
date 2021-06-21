@@ -19,5 +19,6 @@ namespace HamburgerMenu.Models
         public string TAREADOR { get; set; }
         public int ID_CLASE_TRABAJADOR { get; set; }
         public string CLASE_TRABAJADOR { get; set; }
+        public string ID_HORARIO { get; set; }
     }
 }

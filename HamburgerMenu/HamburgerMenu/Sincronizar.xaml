@@ -16,6 +16,7 @@
                     <Button x:Name="BtnSincroGetToken" Text="Obtener Token" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroGetToken"/>
                     <Button x:Name="BtnSincroPersoDisponible" Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
                     <Button x:Name="BtnSincronizTareoPersonal" Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
+                    <Button x:Name="BtnSincronizHorario" Text="Horario " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizHorario"/>
                 </StackLayout>
             </Frame>
         </FlexLayout>

@@ -67,9 +67,9 @@ namespace HamburgerMenu.Vistas
             db.CreateTable<Tablas.ConfiguracionLocal>();
             db.CreateTable<Tablas.PersonalTareo>();
             db.CreateTable<Tablas.TareoPersonal>();
+            db.CreateTable<Tablas.Horario>();
             return db.Query<LoginLocal>("Select * From LoginLocal where USUARIO = ? and CONTRASENIA = ?", usuario, contra);
-        }
-
+        }        
         private void Btn_Listar(object sender, EventArgs e)
         {
             Navigation.PushAsync(new ConsultaRegistro());
