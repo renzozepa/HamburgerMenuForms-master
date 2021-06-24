@@ -11,18 +11,25 @@
             <Frame BorderColor="OrangeRed" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="Iniciar Sesión" FontSize="25" TextColor="Black" HorizontalOptions="Center"/>
-                    <Entry Placeholder="Introduce tu usuario" Keyboard="Email" x:Name="usuario"/>
-                    <Entry Placeholder="Introduce tu contraseña" IsPassword="True" x:Name="contra"/>
+                    <Entry Placeholder="Introduce tu usuario" Keyboard="Email" x:Name="usuario" Text="{Binding Usuario}" />
+                    <Entry Placeholder="Introduce tu contraseña" IsPassword="True" x:Name="contra" Text="{Binding Clave}" />
+                    <Picker Title="Seleccionar Sucursal" 
+                            TitleColor="Red"
+                            ItemsSource="{Binding LstSucursaldisponible}" 
+                            ItemDisplayBinding="{Binding DESCRIPCION}" 
+                            SelectedIndex="{Binding SelectedIndexSucursal}"                            
+                            >
+                    </Picker>
                     <StackLayout Orientation="Horizontal">
                         <StackLayout Orientation="Horizontal" >
                             <Switch />
                             <Label Text="Recordarme"  HorizontalOptions="StartAndExpand" FontSize="10" />
                         </StackLayout>
-                        <Label Text="Olvidé mi contraseña?" TextColor="#0069c0" HorizontalOptions="EndAndExpand" FontSize="10"  />
+                        <Label Text="Olvidé mi contraseña?" TextColor="#0069c0" HorizontalOptions="EndAndExpand" FontSize="10" />
                     </StackLayout>
-                    <Button Text="Iniciar sesión" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_login"/>
-                    <Button Text="Registrar" BackgroundColor="#E6002B" TextColor="White" Clicked="btn_Registrar"/>
-                    <Button Text="Listar usuarios" BackgroundColor="#E6002B" IsVisible="False" TextColor="White" Clicked="Btn_Listar"/>
+                    <Button Text="Iniciar sesión" BackgroundColor="#E6002B" TextColor="White" Command="{Binding LoginCommand}" />
+                    <Button Text="Registrar" BackgroundColor="#E6002B" TextColor="White" Command="{Binding RegristrarCommand}" />
+                    <Button Text="Listar usuarios" BackgroundColor="#E6002B" IsVisible="False" TextColor="White" Command="{Binding UsuariosCommand}" />
                 </StackLayout>
             </Frame>
         </FlexLayout>

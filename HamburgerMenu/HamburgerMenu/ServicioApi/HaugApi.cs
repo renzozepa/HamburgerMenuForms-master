@@ -19,6 +19,7 @@ namespace HamburgerMenu.ServicioApi
         public const string urlapiTareo = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/TAREOPERSONAL";
         public const string urlapiToken = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/TAREADOR_DISPOSITIVOS";
         public const string urlapiHorario = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/HORARIO";
+        public const string urlapiSucursal = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/SUCURSAL";
 
         public async Task<List<TareadorDispositivosApi>> GetToken(string ParamCelular, string ParamTareador)
         {
@@ -81,6 +82,29 @@ namespace HamburgerMenu.ServicioApi
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     LstTask = JsonConvert.DeserializeObject<List<HorarioApi>>(content);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return LstTask;
+        }
+        public async Task<List<SucursalApi>> GetAllSucursalApiAsync()
+        {
+            List<SucursalApi> LstTask = new List<SucursalApi>();
+            try
+            {
+                HttpClient client = new HttpClient
+                {
+                    MaxResponseContentBufferSize = 256000
+                };
+                var uri = new Uri(urlapiSucursal);
+                var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    LstTask = JsonConvert.DeserializeObject<List<SucursalApi>>(content);
                 }
             }
             catch (Exception)

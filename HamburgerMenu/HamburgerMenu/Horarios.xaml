@@ -12,13 +12,6 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-
-                <SearchBar x:Name="SBBusqueda" 
-                       Placeholder="Horario"
-                       TextChanged="SBBusqueda_TextChanged"
-                       BackgroundColor="#FBCBF3"
-                       Grid.Row="0"/>
-
                 <ListView x:Name="HorarioListView" 
                       ItemSelected="OnListItemSelected" 
                       CachingStrategy="RecycleElementAndDataTemplate"

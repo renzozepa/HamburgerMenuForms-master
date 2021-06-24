@@ -27,35 +27,9 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                return conn.Table<Tablas.Horario>().OrderBy(c => c.DESCRIPCION).ToList();
+                return conn.Table<Tablas.Horario>().OrderBy(c => c.ID_HORARIO).ToList();
             }
-        }
-        private void SBBusqueda_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string variable = string.Empty;
-            variable = SBBusqueda.Text;
-
-            try
-            {
-                List<Tablas.Horario> ListaHorario = SearchHorario();
-
-                for (int i = ListaHorario.Count - 1; i >= 0; i--)
-                {
-                    var item = ListaHorario[i];
-                    if (!ListaHorario.Contains(item))
-                    {
-                        ListaHorario.Remove(item);
-                    }
-                }
-
-                var Horariotareo = SearchHorario().Where(f => f.DESCRIPCION.Contains(variable.ToUpper())).OrderBy(o => o.DESCRIPCION).ToList();
-                HorarioListView.ItemsSource = Horariotareo;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        }        
         private void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             //if (e.SelectedItem != null)

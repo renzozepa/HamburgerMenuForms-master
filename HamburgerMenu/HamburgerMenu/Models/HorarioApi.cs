@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HamburgerMenu.Models
+﻿namespace HamburgerMenu.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class HorarioApi
     {
         public string ID_HORARIO { get; set; }
