@@ -65,6 +65,7 @@ namespace HamburgerMenu
                     AlmLocalServer.IsToggled = objconfiguracion.LOCALSERVER;
                     DispositivoZebra.IsToggled = objconfiguracion.DISPOSITIVOZEBRA;
                     numericupdown.Value = objconfiguracion.MINUTOSENTREMARCACION;
+                    RegTareoEstado.IsToggled = objconfiguracion.REGMARCACIONESTADO;
 
                 }
             }
@@ -87,7 +88,7 @@ namespace HamburgerMenu
                     objconfiguracion.LOCALSERVER = AlmLocalServer.IsToggled;
                     objconfiguracion.DISPOSITIVOZEBRA = DispositivoZebra.IsToggled;
                     objconfiguracion.MINUTOSENTREMARCACION = Convert.ToInt32(numericupdown.Value.ToString());
-
+                    objconfiguracion.REGMARCACIONESTADO = RegTareoEstado.IsToggled;
                     conn.Update(objconfiguracion);
                     DisplayAlert("Haug Tareo", "Se actualizo correctamente los datos.", "Ok");
                 }
@@ -111,6 +112,11 @@ namespace HamburgerMenu
                 //conn.Query<ConfiguracionLocal>("Truncate table TareoPersonal");
                 conn.Execute("Delete From TareoPersonal");
             }
+
+        }
+
+        private void RegTareoEstado_Toggled(object sender, ToggledEventArgs e)
+        {
 
         }
     }

@@ -24,6 +24,10 @@
                         <Label Text="Dispositivo Zebra"  HorizontalOptions="StartAndExpand" FontSize="14" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
+                        <Switch x:Name="RegTareoEstado" Toggled="RegTareoEstado_Toggled" />
+                        <Label Text="Registrar tareo Trabajar No Registrado"  HorizontalOptions="StartAndExpand" FontSize="14" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
                         <StackLayout>
                             <numericupdown:SfNumericUpDown Value="0" x:Name="numericupdown" BorderColor="Red" />
                         </StackLayout>

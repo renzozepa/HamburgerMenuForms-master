@@ -15,5 +15,6 @@ namespace HamburgerMenu.Tablas
         public bool LOCALSERVER { get; set; }
         public bool DISPOSITIVOZEBRA { get; set; }
         public int MINUTOSENTREMARCACION { get; set; }
+        public bool REGMARCACIONESTADO { get; set; }
     }
 }

@@ -137,9 +137,13 @@ namespace HamburgerMenu.ViewModels
         {
             await App.Current.MainPage.Navigation.PushAsync(new ConsultaRegistro());
         }
-        public static IEnumerable<LoginLocal> ConsultarUsuario(SQLiteConnection db, string usuario, string contra)
+        public IEnumerable<LoginLocal> ConsultarUsuario(SQLiteConnection db, string usuario, string contra)
         {
             db.CreateTable<LoginLocal>();
+
+            if (DoesTableExist(db, "ConfiguracionLocal"))
+                db.DropTable<ConfiguracionLocal>();
+
             db.CreateTable<Tablas.ConfiguracionLocal>();
             db.CreateTable<Tablas.PersonalTareo>();
             db.CreateTable<Tablas.TareoPersonal>();

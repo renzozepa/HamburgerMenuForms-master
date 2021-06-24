@@ -162,7 +162,8 @@ namespace HamburgerMenu.ServicioApi
                     FECHA_SINCRONIZADO = DateTime.Now.Date,
                     TOKEN = App.Token,
                     NUMERO_DOCUIDEN = dni,
-                    ORIGEN = 1
+                    ORIGEN = 1,
+                    ID_SUCURSAL = App.Sucursal
                     
                 };
 

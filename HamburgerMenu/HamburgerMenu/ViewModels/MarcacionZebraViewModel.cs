@@ -51,7 +51,7 @@ namespace HamburgerMenu.ViewModels
         public MarcacionZebraViewModel(INavigation navigation, Entry entry)
         {
             Navigation = navigation;
-            entry.TextChanged += Entry_TextChanged;            
+            entry.TextChanged += Entry_TextChanged;
             horaMarcado = DateTime.Now.ToString();
         }
 
@@ -59,14 +59,30 @@ namespace HamburgerMenu.ViewModels
         {
             HoraMarcado = DateTime.Now.ToString();
             string CodDocumento = e.NewTextValue.ToString();
+            bool Server = false;
+            bool LocalServer = false;
+            bool RegistrarTrabajadorEstado = false;
 
             if (!string.IsNullOrWhiteSpace(CodDocumento))
             {
                 if (e.ToString().Length >= 8)
                 {
+                    var db = new SQLiteConnection(App.FilePath);
+                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                    if (RptConfiguracion.Count() > 0)
+                    {
+                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+
+                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                        {
+                            Server = itemConfiguracionLocal.SERVER;
+                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                            RegistrarTrabajadorEstado = itemConfiguracionLocal.REGMARCACIONESTADO;
+                        }
+                    }
+
                     try
                     {
-                        var db = new SQLiteConnection(App.FilePath);
                         IEnumerable<PersonalTareo> resultado = BuscarTrabajador(db, CodDocumento);
                         if (resultado.Count() > 0)
                         {
@@ -96,31 +112,14 @@ namespace HamburgerMenu.ViewModels
                                     await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
                                     HoraMarcado = DateTime.Now.ToString();
                                     Marcado = string.Empty;
-                                    
+
                                 }
                                 else
                                 {
                                     InsertarTareo(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
-
-                                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
-                                    if (RptConfiguracion.Count() > 0)
+                                    if (Server || LocalServer)
                                     {
-                                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
-
-                                        bool Server = false;
-                                        bool LocalServer = false;
-
-                                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
-                                        {
-                                            Server = itemConfiguracionLocal.SERVER;
-                                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
-                                        }
-
-                                        if (Server || LocalServer)
-                                        {
-                                            InsertarTareoServer();
-                                        }
-
+                                        InsertarTareoServer();
                                     }
 
                                     UltimoHoraMarcado = DateTime.Now.ToString();
@@ -131,22 +130,12 @@ namespace HamburgerMenu.ViewModels
                             }
                             else
                             {
-                                IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
-                                if (RptValidacion.Count() > 0)
+                                if (RegistrarTrabajadorEstado)
                                 {
-                                    await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
-                                    HoraMarcado = DateTime.Now.ToString();
-                                    Marcado = string.Empty;
-                                    Entry entry_var = (Entry)sender;
-                                    entry_var.Focus();
-                                }
-                                else
-                                {
-                                    resultConsulta = await Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es: " + situacion + "\n Desea Registrar tareo al trabajador?.", "Si", "No");
-
-                                    if (resultConsulta == true)
+                                    IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
+                                    if (RptValidacion.Count() > 0)
                                     {
-                                        Insert_Trabajador_Cesado_Otro(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
+                                        await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
                                         HoraMarcado = DateTime.Now.ToString();
                                         Marcado = string.Empty;
                                         Entry entry_var = (Entry)sender;
@@ -154,11 +143,24 @@ namespace HamburgerMenu.ViewModels
                                     }
                                     else
                                     {
-                                        await Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario.", "OK");
-                                        HoraMarcado = DateTime.Now.ToString();
-                                        Marcado = string.Empty;
-                                        Entry entry_var = (Entry)sender;
-                                        entry_var.Focus();
+                                        resultConsulta = await Application.Current.MainPage.DisplayAlert("Ayuda", "El trabajador no esta permitido para laborar, su situacion es: " + situacion + "\n Desea Registrar tareo al trabajador?.", "Si", "No");
+
+                                        if (resultConsulta == true)
+                                        {
+                                            Insert_Trabajador_Cesado_Otro(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, CodDocumento);
+                                            HoraMarcado = DateTime.Now.ToString();
+                                            Marcado = string.Empty;
+                                            Entry entry_var = (Entry)sender;
+                                            entry_var.Focus();
+                                        }
+                                        else
+                                        {
+                                            await Application.Current.MainPage.DisplayAlert("Ayuda", "Cancelado por el usuario.", "OK");
+                                            HoraMarcado = DateTime.Now.ToString();
+                                            Marcado = string.Empty;
+                                            Entry entry_var = (Entry)sender;
+                                            entry_var.Focus();
+                                        }
                                     }
                                 }
                             }
@@ -176,23 +178,26 @@ namespace HamburgerMenu.ViewModels
                             }
                             else
                             {
-                                resultConsulta = await Application.Current.MainPage.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO.", "Si", "No");
+                                if (RegistrarTrabajadorEstado)
+                                {
+                                    resultConsulta = await Application.Current.MainPage.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO.", "Si", "No");
 
-                                if (resultConsulta)
-                                {
-                                    Insert_Trabajador_Sin_Registro(CodDocumento);
-                                    HoraMarcado = DateTime.Now.ToString();
-                                    Marcado = string.Empty;
-                                    Entry entry_var = (Entry)sender;
-                                    entry_var.Focus();
-                                }
-                                else
-                                {
-                                    await Application.Current.MainPage.DisplayAlert("Ayuda", "Proceso cancelado.", "OK");
-                                    HoraMarcado = DateTime.Now.ToString();
-                                    Marcado = string.Empty;
-                                    Entry entry_var = (Entry)sender;
-                                    entry_var.Focus();
+                                    if (resultConsulta)
+                                    {
+                                        Insert_Trabajador_Sin_Registro(CodDocumento);
+                                        HoraMarcado = DateTime.Now.ToString();
+                                        Marcado = string.Empty;
+                                        Entry entry_var = (Entry)sender;
+                                        entry_var.Focus();
+                                    }
+                                    else
+                                    {
+                                        await Application.Current.MainPage.DisplayAlert("Ayuda", "Proceso cancelado.", "OK");
+                                        HoraMarcado = DateTime.Now.ToString();
+                                        Marcado = string.Empty;
+                                        Entry entry_var = (Entry)sender;
+                                        entry_var.Focus();
+                                    }
                                 }
                             }
                         }
