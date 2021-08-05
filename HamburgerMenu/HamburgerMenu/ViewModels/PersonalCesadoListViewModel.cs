@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace HamburgerMenu.ViewModels
 {
-    public class PersonalListViewModel : BaseViewModel
+    public class PersonalCesadoListViewModel : BaseViewModel
     {
         private bool _isRefreshing;
         public bool IsRefreshing
@@ -43,7 +43,7 @@ namespace HamburgerMenu.ViewModels
             set { _itemSeleccionado = value; OnPropertyChanged(); }
         }
 
-        public PersonalListViewModel(INavigation navigation)
+        public PersonalCesadoListViewModel(INavigation navigation)
         {
             Navigation = navigation;
 
@@ -57,10 +57,11 @@ namespace HamburgerMenu.ViewModels
             SearchByNameCommand = new Command<string>(async (name) => await LoadData());
             GoToDetailsCommand = new Command<Type>(async (pageType) => await GoToDetails(pageType));
         }
+
         async Task LoadData()
         {
             LPersonalsViewModel = new ObservableCollection<PersonalViewModel>();
-            var personalTareos = await App.Context.FilterItemsAsync<PersonalTareo>("PersonalTareo", $"ID_SITUACION = 10");
+            var personalTareos = await App.Context.FilterItemsAsync<PersonalTareo>("PersonalTareo", $"ID_SITUACION > 10");
 
             foreach (var item in personalTareos)
                 LPersonalsViewModel.Add(new PersonalViewModel(item));
