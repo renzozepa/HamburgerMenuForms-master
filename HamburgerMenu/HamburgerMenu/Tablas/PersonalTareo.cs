@@ -1,8 +1,8 @@
-﻿using SQLite;
-using System;
-
-namespace HamburgerMenu.Tablas
+﻿namespace HamburgerMenu.Tablas
 {
+    using SQLite;
+    using System;
+
     public class PersonalTareo
     {
         [PrimaryKey]

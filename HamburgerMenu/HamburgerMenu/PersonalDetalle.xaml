@@ -1,30 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="HamburgerMenu.PersonalDetalle"
-             Visual="Material">
+             Visual="Material"
+             mc:Ignorable="d"
+             Title="Detalle de trabajador">
     <ScrollView>
-        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+        <FlexLayout Margin="5" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
             <Frame BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="Id: "/>
-                    <Entry x:Name="Id" Text="{Binding ID_PERSONAL}"/>
+                    <Entry x:Name="Id" Text="{Binding PersonalVM.ID_PERSONAL}"/>
                     <Label Text="Nombre: "/>
-                    <Entry x:Name="Nombre" Text="{Binding NOMBRE}"/>
+                    <Entry x:Name="Nombre" Text="{Binding PersonalVM.NOMBRE}"/>
                     <Label Text="Tipo documento: "/>
-                    <Entry x:Name="Tdocumento" Text="{Binding TIPODOCUIDEN}"/>
+                    <Entry x:Name="Tdocumento" Text="{Binding PersonalVM.TIPODOCUIDEN}"/>
                     <Label Text="N° documento: "/>
-                    <Entry x:Name="Ndocumento" Text="{Binding NUMERO_DOCUIDEN}"/>
+                    <Entry x:Name="Ndocumento" Text="{Binding PersonalVM.NUMERO_DOCUIDEN}"/>
                     <Label Text="Situación "/>
-                    <Entry x:Name="Situación" Text="{Binding SITUACION}"/>
+                    <Entry x:Name="Situación" Text="{Binding PersonalVM.SITUACION}"/>
                     <Label Text="Proyecto: "/>
-                    <Entry x:Name="Proyecto" Text="{Binding PROYECTO}"/>
+                    <Entry x:Name="Proyecto" Text="{Binding PersonalVM.PROYECTO}"/>
                     <Label Text="Tareador: "/>
-                    <Entry x:Name="Tareador" Text="{Binding TAREADOR}"/>
+                    <Entry x:Name="Tareador" Text="{Binding PersonalVM.TAREADOR}"/>
                     <Label Text="Clase trabajador: "/>
-                    <Entry x:Name="ClaseTrabajador" Text="{Binding CLASE_TRABAJADOR}"/>
+                    <Entry x:Name="ClaseTrabajador" Text="{Binding PersonalVM.CLASE_TRABAJADOR}"/>
                     <Label Text="Fecha sincronizado: "/>
-                    <Entry x:Name="FSincronizado" Text="{Binding FECHA_SINCRONIZADO, StringFormat='.{0:dd/MM/yyyy}'}"/>
+                    <Entry x:Name="FSincronizado" Text="{Binding PersonalVM.FECHA_SINCRONIZADO, StringFormat='.{0:dd/MM/yyyy}'}"/>
                 </StackLayout>
             </Frame>
         </FlexLayout>

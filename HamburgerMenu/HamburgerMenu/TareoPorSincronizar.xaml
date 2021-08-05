@@ -6,57 +6,57 @@
              Visual="Material"
              Title="Tareo por sincronizar">
     <ContentPage.Content>
-        <StackLayout Padding="3">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180"></ColumnDefinition>
-                    <ColumnDefinition Width="80"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"
-                       FontAttributes="Bold"
-                       Text="NOMBRE"></Label>
-                <Label Grid.Column="1"
-                       FontAttributes="Bold"
-                       Text="FECHA"></Label>
-                <Label Grid.Column="2"
-                       FontAttributes="Bold"
-                       Text="HORA"></Label>
-                <Label Grid.Column="3"
-                       FontAttributes="Bold"
-                       Text="TIPO"></Label>
-                <Label Grid.Column="4"
-                       FontAttributes="Bold"
-                       Text=""></Label>
-            </Grid>
-            <CollectionView x:Name="TareoCollectionView">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"></GridItemsLayout>
-                </CollectionView.ItemsLayout>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding TareoXSincronizar}"
+                            SelectionMode="Single"
+                            EmptyView="No hay tareos registrados por sincronizar!"
+                            Margin="5">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="180"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                <ColumnDefinition Width="40"></ColumnDefinition>
-                                <ColumnDefinition Width="40"></ColumnDefinition>
-                                <ColumnDefinition Width="40"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Label forms:Grid.Column="0" Text="{Binding PERSONAL}"></Label>
-                            <Label forms:Grid.Column="1" Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}"></Label>
-                            <Label forms:Grid.Column="2" Text="{Binding HORA}"></Label>
-                            <Label forms:Grid.Column="3" Text="{Binding TIPO_MARCACION}"></Label>
-                            <Image forms:Grid.Column="4" Source="ic_more_vert"></Image>
-                        </Grid>
+                        <Frame Padding="10"
+                               CornerRadius="7"
+                               IsClippedToBounds="False">
+
+                            <Grid HeightRequest="100">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height=".3*"></RowDefinition>
+                                    <RowDefinition Height=".3*"></RowDefinition>
+                                    <RowDefinition Height=".3*"></RowDefinition>
+                                    <RowDefinition Height=".3*"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Label Grid.Row="1" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Medium"
+                                   VerticalOptions="Center" 
+                                   Text="{Binding PERSONAL}" />
+
+                                <Label Grid.Row="2" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Small"
+                                   VerticalOptions="Center" 
+                                   Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}" />
+
+                                <Label Grid.Row="3" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Small" 
+                                   VerticalOptions="Center" 
+                                   Text="{Binding HORA}" />
+
+                                <Label Grid.Row="4" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Small"
+                                   VerticalOptions="Center" 
+                                   Text="{Binding TIPO_MARCACION}" />
+                            </Grid>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </StackLayout>
+        </RefreshView>
     </ContentPage.Content>
 </ContentPage>

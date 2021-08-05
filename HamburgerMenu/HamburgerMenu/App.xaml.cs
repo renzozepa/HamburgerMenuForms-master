@@ -1,7 +1,9 @@
-﻿using HamburgerMenu.Vistas;
+﻿using HamburgerMenu.Data;
+using HamburgerMenu.Vistas;
 using Syncfusion.Licensing;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
@@ -20,20 +22,38 @@ namespace HamburgerMenu
         public static string Sucursal;
         public static DateTime FExpiracion;
 
-        public App ()
-		{
-            SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");
+        private static DatabaseContext context;
 
+        public static DatabaseContext Context
+        {
+            get
+            {
+                if (context == null)
+                {
+                    var dbPath = Path.Combine(
+                        Environment.GetFolderPath(
+                            System.Environment.SpecialFolder.Personal),
+                        "Tareo.db3");
+
+                    context = new DatabaseContext(dbPath);
+                }
+
+                return context;
+            }
+        }
+
+        public App ()
+		{            
+            SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");
             InitializeComponent();
 			MainPage = new NavigationPage(new Login()); 
 		}
         public App(string filepath)
         {
-            SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");
-
-            InitializeComponent();
-            MainPage = new NavigationPage(new Login());            
             FilePath = filepath;
+            SyncfusionLicenseProvider.RegisterLicense("MjkwNjkxQDMxMzgyZTMxMmUzME5FUHcybWR6VmllZjZESzhKMVFGME5LVWp2cU5DblBqNkhPT0FabDdIWE09");
+            InitializeComponent();
+            MainPage = new NavigationPage(new Login());                        
         }
 
         protected override void OnStart ()
