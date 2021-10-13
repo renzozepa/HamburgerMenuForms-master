@@ -9,8 +9,7 @@
              Title="Personal cesado"
              mc:Ignorable="d"
              NavigationPage.BackButtonTitle="Atrás">
-    <ContentPage.Content>
-        <RefreshView Padding="10" IsRefreshing="{Binding IsRefreshing}"
+    <RefreshView Margin="10" IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding LPersonalsViewModel}"
                             SelectedItem="{Binding ItemSeleccionado, Mode=TwoWay}"
@@ -18,13 +17,15 @@
                             SelectionChangedCommandParameter="{x:Type views:PersonalDetalle}"
                             SelectionMode="Single"
                             EmptyView="No hay personal registrado!"
-                            Margin="5">
+                            Margin="15">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="10"
-                               CornerRadius="7"
+                        <Frame Padding="5"
+                               Margin="7"
+                               BorderColor="#E6002B"
+                               CornerRadius="10"
                                IsClippedToBounds="False">
-                            <Grid HeightRequest="100">
+                            <Grid HeightRequest="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
@@ -48,5 +49,4 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
-    </ContentPage.Content>
 </ContentPage>

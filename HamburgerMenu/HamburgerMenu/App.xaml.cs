@@ -2,15 +2,12 @@
 using HamburgerMenu.Vistas;
 using Syncfusion.Licensing;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 
 namespace HamburgerMenu
 {
-	public partial class App : Application
+    public partial class App : Application
 	{
         public static string FilePath;
         public static string Tareador;

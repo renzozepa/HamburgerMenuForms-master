@@ -21,10 +21,12 @@
                             Margin="5">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="10"
-                               CornerRadius="7"
+                        <Frame Padding="5"
+                               Margin="7"
+                               BorderColor="#E6002B"
+                               CornerRadius="10"
                                IsClippedToBounds="False">
-                            <Grid HeightRequest="100">
+                            <Grid HeightRequest="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
