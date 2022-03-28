@@ -20,6 +20,7 @@ namespace HamburgerMenu
         public static List<HorarioApi> LstHorario { get; set; }
         public static List<PersonalTareoApi> LstPersonalTareo { get; set; }
         public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
+        public static List<PersonalS10Api> LstPersonalS10 { get; set; }
         public Sincronizar()
         {
             InitializeComponent();
@@ -48,6 +49,10 @@ namespace HamburgerMenu
         public static IEnumerable<PersonalTareo> ValidarExitencia(SQLiteConnection db, string numerodocumento)
         {
             return db.Query<PersonalTareo>("SELECT * FROM PersonalTareo where NUMERO_DOCUIDEN = ? And ID_TAREADOR = ?", numerodocumento, App.Tareador);
+        }
+        public static IEnumerable<Tablas.Personal> ValidarExitenciaS10(SQLiteConnection db, string numerodocumento)
+        {
+            return db.Query<Tablas.Personal>("SELECT * FROM Personal where DNI = ? ", numerodocumento);
         }
         public static IEnumerable<TareoPersonal> ListarTareoPorSincronizar(SQLiteConnection db)
         {
@@ -338,6 +343,74 @@ namespace HamburgerMenu
 
             int result = command.ExecuteScalar<int>();
             return (result > 0);
+        }
+
+        private async void BtnSincroPersonalS10_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CrossConnectivity.Current.IsConnected)
+                {
+                    LstPersonalS10 = new List<PersonalS10Api>();
+                    var t = Task.Run(async () => LstPersonalS10 = await HaugApi.Metodo.GetAllPersonalS10TareadorAsync(App.Tareador));
+
+                    t.Wait();
+
+                    float contador = 0;
+                    float contador_s = 0;
+                    float cn = LstPersonalS10.Count();
+
+                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
+                    {
+                        using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                        {
+                            conn.CreateTable<PersonalTareo>();
+                            foreach (PersonalS10Api itemPersonalS10Api in LstPersonalS10)
+                            {
+                                var DatosRegistro = new Tablas.Personal
+                                {
+                                    CodObrero = itemPersonalS10Api.CodObrero.ToString(),
+                                    Descripcion = itemPersonalS10Api.Descripcion.ToString(),
+                                    DNI = itemPersonalS10Api.DNI.ToString(),
+                                    NroEsquemaPlanilla = itemPersonalS10Api.NroEsquemaPlanilla,
+                                    CodProyecto = itemPersonalS10Api.CodProyecto.ToString(),
+                                    CodIdentificador = itemPersonalS10Api.CodIdentificador.ToString(),
+                                    Activo = itemPersonalS10Api.Activo
+                                };
+
+                                var db = new SQLiteConnection(App.FilePath);
+                                IEnumerable<Tablas.Personal> resultado = ValidarExitenciaS10(db, itemPersonalS10Api.DNI.ToString());
+                                if (resultado.Count() > 0)
+                                {
+                                    conn.Update(DatosRegistro);
+                                }
+                                else
+                                {
+                                    conn.Insert(DatosRegistro);
+                                }
+
+                                if (contador_s <= cn)
+                                {
+                                    await Task.Delay(1);
+                                    contador = (contador_s / cn) * 100;
+                                    dialog.PercentComplete = Convert.ToInt32(contador);
+                                    contador_s = contador_s + 1;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    await DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

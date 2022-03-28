@@ -13,13 +13,13 @@
                     <Label Text="Iniciar Sesión" FontSize="25" TextColor="Black" HorizontalOptions="Center"/>
                     <Entry Placeholder="Introduce tu usuario" Keyboard="Email" x:Name="usuario" Text="{Binding Usuario}" />
                     <Entry Placeholder="Introduce tu contraseña" IsPassword="True" x:Name="contra" Text="{Binding Clave}" />
-                    <Picker Title="Seleccionar Sucursal" 
+                    <!--<Picker Title="Seleccionar Sucursal" 
                             TitleColor="Red"
                             ItemsSource="{Binding LstSucursaldisponible}" 
                             ItemDisplayBinding="{Binding DESCRIPCION}" 
                             SelectedIndex="{Binding SelectedIndexSucursal}"                            
                             >
-                    </Picker>
+                    </Picker>-->
                     <StackLayout Orientation="Horizontal">
                         <StackLayout Orientation="Horizontal" >
                             <Switch />

@@ -5,7 +5,7 @@
             x:Class="HamburgerMenu.PersonalDisponible"
             Title="Personal disponible">
 
-    <views:Personal IconImageSource="ic_personal_disponible.png" />
+    <views:PersonalS10 IconImageSource="ic_personal_disponible.png" />
     <views:PersonalCesado IconImageSource="ic_personal_cesado.png" />
     
 </TabbedPage>

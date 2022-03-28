@@ -89,7 +89,7 @@ namespace HamburgerMenu.ViewModels
             RegristrarCommand = new Command(async () => await Registrarme());
             UsuariosCommand = new Command(async () => await ListarUsuarios());
 
-            LlenarSucursal();
+            //LlenarSucursal();
         }
         async Task ValidarUsuario()
         {
@@ -149,6 +149,8 @@ namespace HamburgerMenu.ViewModels
             db.CreateTable<Tablas.TareoPersonal>();
             db.CreateTable<Tablas.Horario>();
             db.CreateTable<Tablas.Sucursal>();
+            db.CreateTable<Tablas.Personal>();
+
             return db.Query<LoginLocal>("Select * From LoginLocal where USUARIO = ? and CONTRASENIA = ?", usuario, contra);
         }
         void Limpiar()
