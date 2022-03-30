@@ -76,25 +76,25 @@ namespace HamburgerMenu
 
         private void CbCambioFecha_StateChanged(object sender, Syncfusion.XForms.Buttons.StateChangedEventArgs e)
         {
-            if (CbCambioFecha.IsChecked == true)
-            {
-                DpFechaTransac.IsEnabled = true;
-            }
-            else {
-                DpFechaTransac.IsEnabled = false;
-            }
+            //if (CbCambioFecha.IsChecked == true)
+            //{
+            //    DpFechaTransac.IsEnabled = true;
+            //}
+            //else {
+            //    DpFechaTransac.IsEnabled = false;
+            //}
         }
 
         private void MarcarFecha()
         {
-            if (CbCambioFecha.IsChecked == true)
-            {
-                App.FMarcacion = DpFechaTransac.Date;
-            }
-            else
-            {
-                App.FMarcacion = DateTime.Now.Date;
-            }
+            //if (CbCambioFecha.IsChecked == true)
+            //{
+            //    App.FMarcacion = DpFechaTransac.Date;
+            //}
+            //else
+            //{
+            //    App.FMarcacion = DateTime.Now.Date;
+            //}
         }
 
         public bool ValidarTipoConfiguracion()

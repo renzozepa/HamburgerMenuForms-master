@@ -11,7 +11,7 @@
                     <Label x:Name="LblMarcado" Text="{Binding UltimoMarcado}"/>
                     <Label x:Name="LblUltimaHoraMarcado" Text="{Binding UltimoHoraMarcado}"/>
                     <Label Text="Código marcación: "/>
-                    <Entry Placeholder="Introduce código marcación" x:Name="CodMarcacion" Text="{Binding Marcado,Mode=TwoWay}"/>
+                    <Entry Keyboard="Numeric" Placeholder="Introduce código marcación" x:Name="CodMarcacion" Text="{Binding Marcado,Mode=TwoWay}"/>
                     <Label x:Name="LblHora" Text="{Binding HoraMarcado}"/>
 
                 </StackLayout>

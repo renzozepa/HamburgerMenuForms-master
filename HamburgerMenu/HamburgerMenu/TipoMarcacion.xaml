@@ -5,15 +5,56 @@ xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Butt
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.TipoMarcacion"
              Title=" Tipo de marcación ">
-    <ScrollView>
-        <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
-                <StackLayout>
-                    <Label Text="Tipo de marcación"
-                            VerticalOptions="CenterAndExpand" 
-                            HorizontalOptions="CenterAndExpand" />
-                    <checkbox:SfCheckBox x:Name="CbCambioFecha" Text="Cambiar fecha de marcación" StateChanged="CbCambioFecha_StateChanged" />
-                    <sfDatePicker:SfDatePicker
+    <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <sfDatePicker:SfDatePicker                
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="1"
+                        x:Name="DpFechaTransac"
+                        HeaderText="Fecha"
+                        HeaderBackgroundColor="Red"
+                        HeaderTextColor="White"
+                        DayHeaderText="Día"
+                        MonthHeaderText="Mes"
+                        YearHeaderText="Año"
+                        ShowFooter="False"
+                        PickerHeight="300"
+                        PickerWidth="300"
+                        PickerMode="Default"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Format="dd_MMM_yyyy"
+                        Visual="Material"
+                        IsEnabled="False">
+            </sfDatePicker:SfDatePicker>
+
+            <checkbox:SfButton Text="Registrar Ingreso" ShowIcon="True" Grid.Row="2" Grid.Column="0"
+                             ImageSource="MarcacionIn.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_Ingreso"/>
+
+            <checkbox:SfButton Text="Registrar Salida" ShowIcon="True" Grid.Row="2" Grid.Column="1"
+                             ImageSource="MarcacionSa.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_Salida"/>
+            
+            
+
+        </Grid>
+        <!--<Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
+            <StackLayout>
+                <Label Text="Tipo de marcación" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+                <checkbox:SfCheckBox x:Name="CbCambioFecha" Text="Cambiar fecha de marcación" IsVisible="False" StateChanged="CbCambioFecha_StateChanged" />
+                <sfDatePicker:SfDatePicker
                         x:Name="DpFechaTransac"
                         HeaderText="Seleccionar fecha"
                         HeaderBackgroundColor="#E6002B"
@@ -30,13 +71,14 @@ xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Butt
                         Format="dd_MMM_yyyy"
                         Visual="Material"
                         IsEnabled="False">
-                    </sfDatePicker:SfDatePicker>
-                    <Button Text="Ingreso" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Ingreso"/>
-                    <Button Text=" Salida almorzar" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SalidaAlmorzar"/>
-                    <Button Text=" Retorno almorzar " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Ingresoalmorzar"/>
-                    <Button Text="Salida " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Salida"/>
-                </StackLayout>
-            </Frame>
-        </FlexLayout>
-    </ScrollView>
+                </sfDatePicker:SfDatePicker>
+                
+                
+                <Button Text="Ingreso" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Ingreso"/>
+                <Button Text=" Salida almorzar" BackgroundColor="#E6002B" TextColor="White" IsVisible="False" Clicked="Btn_SalidaAlmorzar"/>
+                <Button Text=" Retorno almorzar " BackgroundColor="#E6002B" TextColor="White" IsVisible="False" Clicked="Btn_Ingresoalmorzar"/>
+                <Button Text="Salida " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_Salida"/>
+            </StackLayout>
+        </Frame>-->
+    </FlexLayout>
 </ContentPage>

@@ -24,27 +24,27 @@ namespace HamburgerMenu
         public Sincronizar()
         {
             InitializeComponent();
-            if (App.Token == null)
-            {
-                BtnSincroAltaUsuario.IsEnabled = false;
-                BtnSincroPersoDisponible.IsEnabled = false;
-                BtnSincronizTareoPersonal.IsEnabled = false;
-                BtnSincronizHorario.IsEnabled = false;
-            }
-            else if (App.FExpiracion <= DateTime.Now.Date)
-            {
-                BtnSincroAltaUsuario.IsEnabled = false;
-                BtnSincroPersoDisponible.IsEnabled = false;
-                BtnSincronizTareoPersonal.IsEnabled = false;
-                BtnSincronizHorario.IsEnabled = false;
-            }
-            else
-            {
-                BtnSincroAltaUsuario.IsEnabled = true;
-                BtnSincroPersoDisponible.IsEnabled = true;
-                BtnSincronizTareoPersonal.IsEnabled = true;
-                BtnSincronizHorario.IsEnabled = true;
-            }
+            //if (App.Token == null)
+            //{
+            //    BtnSincroAltaUsuario.IsEnabled = false;
+            //    BtnSincroPersoDisponible.IsEnabled = false;
+            //    BtnSincronizTareoPersonal.IsEnabled = false;
+            //    BtnSincronizHorario.IsEnabled = false;
+            //}
+            //else if (App.FExpiracion <= DateTime.Now.Date)
+            //{
+            //    BtnSincroAltaUsuario.IsEnabled = false;
+            //    BtnSincroPersoDisponible.IsEnabled = false;
+            //    BtnSincronizTareoPersonal.IsEnabled = false;
+            //    BtnSincronizHorario.IsEnabled = false;
+            //}
+            //else
+            //{
+            //    BtnSincroAltaUsuario.IsEnabled = true;
+            //    BtnSincroPersoDisponible.IsEnabled = true;
+            //    BtnSincronizTareoPersonal.IsEnabled = true;
+            //    BtnSincronizHorario.IsEnabled = true;
+            //}
         }
         public static IEnumerable<PersonalTareo> ValidarExitencia(SQLiteConnection db, string numerodocumento)
         {
