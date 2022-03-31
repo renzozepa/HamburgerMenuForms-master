@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:sfDatePicker="clr-namespace:Syncfusion.XForms.Pickers;assembly=Syncfusion.SfPicker.XForms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.TipoMarcacion"
@@ -10,7 +10,7 @@ xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Butt
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height=".5*" />
+                <RowDefinition Height=".3*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -41,13 +41,11 @@ xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Butt
                         IsEnabled="False">
             </sfDatePicker:SfDatePicker>
 
-            <checkbox:SfButton Text="Registrar Ingreso" ShowIcon="True" Grid.Row="2" Grid.Column="0"
-                             ImageSource="MarcacionIn.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_Ingreso"/>
+            <checkbox:SfButton Text="Registrar Ingreso" ShowIcon="True" Grid.Row="2" Grid.Column="0" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="MarcacionIn.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_Ingreso"/>
 
-            <checkbox:SfButton Text="Registrar Salida" ShowIcon="True" Grid.Row="2" Grid.Column="1"
-                             ImageSource="MarcacionSa.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_Salida"/>
-            
-            
+            <checkbox:SfButton Text="Registrar Salida" ShowIcon="True" Grid.Row="2" Grid.Column="1" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="MarcacionSa.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_Salida"/>
 
         </Grid>
         <!--<Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">

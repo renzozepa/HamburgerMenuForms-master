@@ -233,10 +233,10 @@ namespace HamburgerMenu
 
                                 if (App.Token != null)
                                 {
-                                    BtnSincroAltaUsuario.IsEnabled = true;
-                                    BtnSincroPersoDisponible.IsEnabled = true;
-                                    BtnSincronizTareoPersonal.IsEnabled = true;
-                                    BtnSincronizHorario.IsEnabled = true;
+                                    //BtnSincroAltaUsuario.IsEnabled = true;
+                                    //BtnSincroPersoDisponible.IsEnabled = true;
+                                    //BtnSincronizTareoPersonal.IsEnabled = true;
+                                    //BtnSincronizHorario.IsEnabled = true;
                                 }
 
                                 Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);

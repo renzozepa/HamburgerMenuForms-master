@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:checkbox="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HamburgerMenu.Sincronizar"
              NavigationPage.BackButtonTitle="Atrás"
              Title="Sincronizar">
-    <ScrollView Padding="5">
+    <!--<ScrollView Padding="5">
         <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
             <Frame BorderColor="Orange" BackgroundColor="White" HorizontalOptions="Center">
                 <StackLayout>
@@ -15,11 +16,45 @@
                     <Button x:Name="BtnSincroAltaUsuario" Text="Alta de usuario" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroAltaUsuario"/>
                     <Button x:Name="BtnSincroGetToken" Text="Obtener Token" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroGetToken"/>
                     <Button x:Name="BtnSincroPersoDisponible" Text="Personal disponible" BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincroPersoDisponible"/>
+                    
                     <Button x:Name="BtnSincroPersonalS10" Text="Personal S10" BackgroundColor="#E6002B" TextColor="White" Clicked="BtnSincroPersonalS10_Clicked"/>
                     <Button x:Name="BtnSincronizTareoPersonal" Text="Tareo de Personal " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizTareoPersonal"/>
                     <Button x:Name="BtnSincronizHorario" Text="Horario " BackgroundColor="#E6002B" TextColor="White" Clicked="Btn_SincronizHorario"/>
                 </StackLayout>
             </Frame>
         </FlexLayout>
-    </ScrollView>
+    </ScrollView>-->
+
+    <FlexLayout Margin="20" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <checkbox:SfButton x:Name="BtnSincroAltaUsuario" Text="Alta de usuario" ShowIcon="True" Grid.Row="1" Grid.Column="0" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="AltaUsuario.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincroAltaUsuario"/>
+
+            <checkbox:SfButton x:Name="BtnSincroGetToken" Text="Obtener Token" ShowIcon="True" Grid.Row="1" Grid.Column="1" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="ObtenerToken.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincroGetToken"/>
+
+            <checkbox:SfButton x:Name="BtnSincroPersonalS10" Text="Personal S10" ShowIcon="True" Grid.Row="2" Grid.Column="0" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="SyncPersonal.png" CornerRadius="15" WidthRequest="100" Clicked="BtnSincroPersonalS10_Clicked"/>
+
+            <checkbox:SfButton x:Name="BtnSincronizHorario" Text="Horario" ShowIcon="True" Grid.Row="2" Grid.Column="1" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="SyncHorario.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincronizHorario"/>
+
+            <checkbox:SfButton x:Name="BtnSincronizTareoPersonal" Text="Sincronizar Tareo" ShowIcon="True" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="#E0E0E0"
+                             TextColor="Black" ImageSource="SyncTareo.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincronizTareoPersonal"/>
+            
+        </Grid>
+    </FlexLayout>
 </ContentPage>

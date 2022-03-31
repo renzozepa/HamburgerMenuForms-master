@@ -8,6 +8,7 @@ using Android.OS;
 using System.IO;
 using Syncfusion.Buttons.XForms.Android;
 using Acr.UserDialogs;
+using Xamarin.Essentials;
 
 namespace HamburgerMenu.Droid
 {
@@ -35,8 +36,8 @@ namespace HamburgerMenu.Droid
 
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            global::Xamarin.Forms.FormsMaterial.Init(this, bundle);            
-
+            global::Xamarin.Forms.FormsMaterial.Init(this, bundle);
+            
 
             UserDialogs.Init(this);
             
@@ -46,11 +47,13 @@ namespace HamburgerMenu.Droid
             string CompletePath = Path.Combine(foldername, filename);
 
             global::ZXing.Net.Mobile.Forms.Android.Platform.Init();
-
+           
             LoadApplication(new App(CompletePath));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
+        {        
+            
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             //global::ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
