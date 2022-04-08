@@ -21,5 +21,10 @@ namespace HamburgerMenu.Models
         public string TOKEN { get; set; }
         public string ID_SUCURSAL { get; set; }
         public string ORIGEN { get; set; }
+        public Guid NroEsquemaPlanilla { get; set; }
+        public string CodInsumo { get; set; }
+        public string Insumo { get; set; }
+        public string CodOcupacion { get; set; }
+        public string Ocupacion { get; set; }
     }
 }

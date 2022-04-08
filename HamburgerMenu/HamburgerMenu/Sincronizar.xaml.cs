@@ -154,8 +154,9 @@ namespace HamburgerMenu
                             var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
                             TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
                             TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
-                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO));
+                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA, TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NroEsquemaPlanilla,
+                            TareoPersonalApiItem.CodInsumo, TareoPersonalApiItem.Insumo, TareoPersonalApiItem.CodOcupacion, TareoPersonalApiItem.Ocupacion
+                            ));
 
                             UpdTareo(TareoPersonalApiItem.ID);
 

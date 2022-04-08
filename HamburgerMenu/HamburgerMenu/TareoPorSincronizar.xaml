@@ -20,38 +20,31 @@
 
                             <Grid HeightRequest="100">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*"></ColumnDefinition>
                                     <ColumnDefinition Width="auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height=".3*"></RowDefinition>
-                                    <RowDefinition Height=".3*"></RowDefinition>
-                                    <RowDefinition Height=".3*"></RowDefinition>
-                                    <RowDefinition Height=".3*"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
                                 </Grid.RowDefinitions>
 
-                                <Label Grid.Row="1" 
+                                <Label Grid.Row="1" Grid.ColumnSpan="2"
                                    FontAttributes="Bold" 
                                    FontSize="Medium"
                                    VerticalOptions="Center" 
                                    Text="{Binding PERSONAL}" />
 
-                                <Label Grid.Row="2" 
+                                <Label Grid.Row="2" Grid.Column="0"
                                    FontAttributes="Bold" 
                                    FontSize="Small"
                                    VerticalOptions="Center" 
-                                   Text="{Binding FECHA_TAREO, StringFormat='.{0:dd/MM/yyyy}'}" />
+                                   Text="{Binding FECHA_TAREO, StringFormat='{}{0:dd/MM/yyyy}'}" />
 
-                                <Label Grid.Row="3" 
+                                <Label Grid.Row="2" Grid.Column="1"
                                    FontAttributes="Bold" 
-                                   FontSize="Small" 
+                                   FontSize="Small"
                                    VerticalOptions="Center" 
                                    Text="{Binding HORA}" />
-
-                                <Label Grid.Row="4" 
-                                   FontAttributes="Bold" 
-                                   FontSize="Small"
-                                   VerticalOptions="Center" 
-                                   Text="{Binding TIPO_MARCACION}" />
                             </Grid>
                         </Frame>
                     </DataTemplate>

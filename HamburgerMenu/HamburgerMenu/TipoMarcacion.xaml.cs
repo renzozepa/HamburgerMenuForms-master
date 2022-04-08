@@ -93,7 +93,7 @@ namespace HamburgerMenu
             //}
             //else
             //{
-            //    App.FMarcacion = DateTime.Now.Date;
+                App.FMarcacion = DateTime.Now.Date;
             //}
         }
 

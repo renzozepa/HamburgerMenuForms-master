@@ -147,6 +147,7 @@ namespace HamburgerMenu.ViewModels
             db.CreateTable<Tablas.ConfiguracionLocal>();
             db.CreateTable<Tablas.PersonalTareo>();
             db.CreateTable<Tablas.TareoPersonal>();
+            db.CreateTable<Tablas.TareoPersonalS10>();
             db.CreateTable<Tablas.Horario>();
             db.CreateTable<Tablas.Sucursal>();
             db.CreateTable<Tablas.Personal>();

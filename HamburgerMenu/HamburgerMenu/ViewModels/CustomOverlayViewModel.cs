@@ -117,12 +117,22 @@ namespace HamburgerMenu.ViewModels
                                 string CodObrero = string.Empty;
                                 string Empleado = string.Empty;
                                 bool Activo = false;
+                                Guid NroEsquemaPlanilla = Guid.Empty;
+                                string CodInsumo = string.Empty;
+                                string Insumo = string.Empty;
+                                string CodOcupacion = string.Empty;
+                                string Ocupacion = string.Empty;
 
                                 foreach (Tablas.Personal itemPersonalTareo in listll)
                                 {
                                     CodObrero = itemPersonalTareo.CodObrero.ToString();
                                     Empleado = itemPersonalTareo.Descripcion.ToString();
                                     Activo = itemPersonalTareo.Activo;
+                                    NroEsquemaPlanilla = itemPersonalTareo.NroEsquemaPlanilla;
+                                    CodInsumo = itemPersonalTareo.CodInsumo.ToString();
+                                    Insumo = itemPersonalTareo.Insumo.ToString();
+                                    CodOcupacion = itemPersonalTareo.CodOcupacion.ToString();
+                                    Ocupacion = itemPersonalTareo.Ocupacion.ToString();
                                 }                                
 
                                 if (Activo == true)
@@ -150,7 +160,7 @@ namespace HamburgerMenu.ViewModels
                                     }
                                     else
                                     {
-                                        InsertarTareo(CodObrero, Empleado, result.Text);
+                                        InsertarTareo(CodObrero, Empleado, result.Text, NroEsquemaPlanilla, CodInsumo, Insumo, CodOcupacion, Ocupacion);
 
                                         if (Server || LocalServer)
                                         {
@@ -190,7 +200,7 @@ namespace HamburgerMenu.ViewModels
             db.CreateTable<Tablas.Personal>();
             return db.Query<Tablas.Personal>("Select * From Personal where DNI = ? and CodIdentificador = ? and Activo = true ", numero, App.Tareador);
         }
-        public static void InsertarTareo(string codobrero, string empleado, string dni)
+        public static void InsertarTareo(string codobrero, string empleado, string dni, Guid esquemaplanilla, string codinsumo, string insumo, string codocupacion, string ocupacion)
         {
             try
             {
@@ -210,7 +220,12 @@ namespace HamburgerMenu.ViewModels
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
                         TOKEN = App.Token,
-                        ID_SUCURSAL = App.Sucursal
+                        ID_SUCURSAL = App.Sucursal,
+                        NroEsquemaPlanilla = esquemaplanilla,
+                        CodInsumo = codinsumo,
+                        Insumo = insumo,
+                        CodOcupacion = codocupacion,
+                        Ocupacion = ocupacion
                     };
                     conn.Insert(DatosRegistro);
                 }
@@ -245,8 +260,9 @@ namespace HamburgerMenu.ViewModels
                         var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
                             TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
                             TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
-                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO));
+                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA,TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NroEsquemaPlanilla,
+                            TareoPersonalApiItem.CodInsumo, TareoPersonalApiItem.Insumo, TareoPersonalApiItem.CodOcupacion, TareoPersonalApiItem.Ocupacion
+                            ));
                         UpdTareo(TareoPersonalApiItem.ID);
                     }
                 }

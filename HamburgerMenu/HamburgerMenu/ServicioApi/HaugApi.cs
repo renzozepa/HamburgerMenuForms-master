@@ -142,7 +142,8 @@ namespace HamburgerMenu.ServicioApi
             return httpContent;
         }
         //public async Task PostJsonHttpClient(object content, CancellationToken cancellationToken)
-        public async Task PostJsonHttpClient(string ID_TAREADOR, string PROYECTO, string CODOBRERO, string PERSONAL, string DNI,string TIPO_MARCACION, DateTime FECHA_TAREO,string HORA,DateTime FECHA_REGISTRO)
+        public async Task PostJsonHttpClient(string ID_TAREADOR, string PROYECTO, string CODOBRERO, string PERSONAL, string DNI,string TIPO_MARCACION, DateTime FECHA_TAREO,string HORA,DateTime FECHA_REGISTRO,
+           Guid NroEsquemaPlanilla, string CodInsumo, string Insumo, string CodOcupacion, string Ocupacion)
         {
             try
             {
@@ -162,7 +163,12 @@ namespace HamburgerMenu.ServicioApi
                     FECHA_SINCRONIZADO = DateTime.Now.Date,
                     TOKEN = App.Token,
                     ID_SUCURSAL = App.Sucursal,
-                    ORIGEN = "1"
+                    ORIGEN = "1",
+                    NroEsquemaPlanilla = NroEsquemaPlanilla,
+                    CodInsumo = CodInsumo,
+                    Insumo = Insumo,
+                    CodOcupacion = CodOcupacion,
+                    Ocupacion = Ocupacion
                 };
 
                 var httpClient = new HttpClient();

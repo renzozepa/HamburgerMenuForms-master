@@ -89,13 +89,22 @@ namespace HamburgerMenu.ViewModels
                             string CodObrero = string.Empty;
                             string Empleado = string.Empty;
                             bool Activo = false;
-
+                            Guid NroEsquemaPlanilla = Guid.Empty;
+                            string CodInsumo = string.Empty;
+                            string Insumo = string.Empty;
+                            string CodOcupacion = string.Empty;
+                            string Ocupacion = string.Empty;
 
                             foreach (Tablas.Personal itemPersonalTareo in listll)
                             {
                                 CodObrero = itemPersonalTareo.CodObrero.ToString();
                                 Empleado = itemPersonalTareo.Descripcion.ToString();
-                                Activo = itemPersonalTareo.Activo;                                
+                                Activo = itemPersonalTareo.Activo;
+                                NroEsquemaPlanilla = itemPersonalTareo.NroEsquemaPlanilla;
+                                CodInsumo = itemPersonalTareo.CodInsumo.ToString();
+                                Insumo = itemPersonalTareo.Insumo.ToString();
+                                CodOcupacion = itemPersonalTareo.CodOcupacion.ToString();
+                                Ocupacion = itemPersonalTareo.Ocupacion.ToString();
                             }
 
                             if (Activo == true)
@@ -110,7 +119,7 @@ namespace HamburgerMenu.ViewModels
                                 }
                                 else
                                 {
-                                    InsertarTareo(CodObrero, Empleado, CodDocumento);
+                                    InsertarTareo(CodObrero, Empleado, CodDocumento, NroEsquemaPlanilla, CodInsumo, Insumo, CodOcupacion, Ocupacion);
                                     if (Server || LocalServer)
                                     {
                                         InsertarTareoServer();
@@ -154,7 +163,7 @@ namespace HamburgerMenu.ViewModels
             db.CreateTable<TareoPersonalS10>();
             return db.Query<TareoPersonalS10>("Select * From TareoPersonalS10 where DNI = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
         }        
-        public static void InsertarTareo(string codobrero, string empleado, string dni)
+        public static void InsertarTareo(string codobrero, string empleado, string dni , Guid esquemaplanilla , string codinsumo , string insumo , string codocupacion , string ocupacion)
         {
             try
             {
@@ -174,7 +183,12 @@ namespace HamburgerMenu.ViewModels
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
                         TOKEN = App.Token,
-                        ID_SUCURSAL = App.Sucursal
+                        ID_SUCURSAL = App.Sucursal,
+                        NroEsquemaPlanilla = esquemaplanilla,
+                        CodInsumo = codinsumo,
+                        Insumo = insumo,
+                        CodOcupacion = codocupacion,
+                        Ocupacion = ocupacion
                     };
                     conn.Insert(DatosRegistro);
                 }
@@ -206,10 +220,11 @@ namespace HamburgerMenu.ViewModels
                     foreach (TareoPersonalS10 TareoPersonalApiItem in resultado)
                     {
                         var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
-                            TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO,TareoPersonalApiItem.CODOBRERO,
-                            TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
-                            TareoPersonalApiItem.FECHA_TAREO,TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO));
+                             TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
+                             TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
+                             TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA, TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NroEsquemaPlanilla,
+                             TareoPersonalApiItem.CodInsumo, TareoPersonalApiItem.Insumo, TareoPersonalApiItem.CodOcupacion, TareoPersonalApiItem.Ocupacion
+                             ));
                         UpdTareo(TareoPersonalApiItem.ID);
                     }
                 }

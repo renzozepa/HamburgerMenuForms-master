@@ -19,6 +19,11 @@ namespace HamburgerMenu.Tablas
         public int SINCRONIZADO { get; set; }
         public DateTime FECHA_SINCRONIZADO { get; set; }
         public string TOKEN { get; set; }
-        public string ID_SUCURSAL { get; set; }        
+        public string ID_SUCURSAL { get; set; }
+        public Guid NroEsquemaPlanilla { get; set; }
+        public string CodInsumo { get; set; }
+        public string Insumo { get; set; }
+        public string CodOcupacion { get; set; }
+        public string Ocupacion { get; set; }
     }
 }

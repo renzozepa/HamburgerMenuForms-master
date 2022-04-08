@@ -22,8 +22,8 @@ namespace HamburgerMenu.ViewModels
         }
         public ICommand RefreshCommand { get; set; }
         public INavigation Navigation { get; set; }
-        public ObservableCollection<TareoPersonal> _tareoXSincronizar;
-        public ObservableCollection<TareoPersonal> TareoXSincronizar
+        public ObservableCollection<TareoPersonalS10> _tareoXSincronizar;
+        public ObservableCollection<TareoPersonalS10> TareoXSincronizar
         {
             get { return _tareoXSincronizar; }
             set { _tareoXSincronizar = value; OnPropertyChanged(); }
@@ -46,12 +46,12 @@ namespace HamburgerMenu.ViewModels
 
         public void TareoPersonalXSincronizar()
         {
-            TareoXSincronizar = new ObservableCollection<TareoPersonal>();
+            TareoXSincronizar = new ObservableCollection<TareoPersonalS10>();
 
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
                 conn.CreateTable<TareoPersonal>();
-                var LTareoPorSincronizar = conn.Table<TareoPersonal>().ToList().Where(x => x.ID_TAREADOR == App.Tareador && x.SINCRONIZADO == 0);
+                var LTareoPorSincronizar = conn.Table<TareoPersonalS10>().ToList().Where(x => x.ID_TAREADOR == App.Tareador && x.SINCRONIZADO == 0);
                 foreach (var item in LTareoPorSincronizar)
                     TareoXSincronizar.Add(item);
             }
