@@ -1,16 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="HaugTareo.HaugTareo" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="27" android:targetSdkVersion="28" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="HaugTareo.HaugTareo" android:installLocation="preferExternal">
+	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.FLASHLIGHT" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<application android:label="TareoHaug" android:icon="@drawable/logo"></application>
-  <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1" />
-  <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2.1" />
-  <PackageReference Include="Xamarin.Android.Support.v4" Version="27.0.2.1" />
-  <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="27.0.2.1" />
-  <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
-  <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="27.0.2.1" />
-  <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="27.0.2.1" />
 </manifest>

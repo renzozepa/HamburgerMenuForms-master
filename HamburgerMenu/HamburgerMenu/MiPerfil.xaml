@@ -18,6 +18,8 @@
                     <Label Text="Nro. Celular: "/>
                     <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
                     <Label Text="Token: "/>
+                    <Entry Placeholder="Introduce Proyecto" x:Name="Proyecto"/>
+                    <Label Text="Proyecto: "/>
                     <Entry Placeholder="" x:Name="Token"/>
                     <Label Text="F. Expiración token: "/>
                     <Entry Placeholder="" x:Name="FToken"/>

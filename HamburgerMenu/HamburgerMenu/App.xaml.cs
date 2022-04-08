@@ -18,6 +18,7 @@ namespace HamburgerMenu
         public static string Celular;
         public static string Sucursal;
         public static DateTime FExpiracion;
+        public static string Proyecto;
 
         private static DatabaseContext context;
 

@@ -6,6 +6,6 @@
             Title="Personal disponible">
 
     <views:PersonalS10 IconImageSource="ic_personal_disponible.png" />
-    <views:PersonalCesado IconImageSource="ic_personal_cesado.png" />
+    <views:PersonalS10Cesado IconImageSource="ic_personal_cesado.png" />
     
 </TabbedPage>

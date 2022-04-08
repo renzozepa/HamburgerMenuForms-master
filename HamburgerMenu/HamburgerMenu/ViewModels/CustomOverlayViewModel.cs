@@ -59,9 +59,7 @@ namespace HamburgerMenu.ViewModels
         }
 
         async Task ScanCode()
-        {
-            bool resultConsulta = false;
-
+        {          
             var options = new MobileBarcodeScanningOptions
             {
                 PossibleFormats = new List<BarcodeFormat>()
@@ -111,43 +109,38 @@ namespace HamburgerMenu.ViewModels
                         try
                         {
                             var db = new SQLiteConnection(App.FilePath);
-                            IEnumerable<PersonalTareo> resultado = SELECT_WHERE(db, result.Text);
+                            IEnumerable<Tablas.Personal> resultado = SELECT_WHERE(db, result.Text);
                             if (resultado.Count() > 0)
                             {
-                                List<PersonalTareo> listll = (List<PersonalTareo>)resultado;
-                                string id_situacion = string.Empty;
-                                string situacion = string.Empty;
-                                int personal = 0;
-                                string nombre_personal = string.Empty;
-                                string proyecto = string.Empty;
-                                int clase = 0;
+                                List<Tablas.Personal> listll = (List<Tablas.Personal>)resultado;
 
-                                foreach (PersonalTareo itemPersonalTareo in listll)
+                                string CodObrero = string.Empty;
+                                string Empleado = string.Empty;
+                                bool Activo = false;
+
+                                foreach (Tablas.Personal itemPersonalTareo in listll)
                                 {
-                                    id_situacion = itemPersonalTareo.ID_SITUACION.ToString();
-                                    situacion = itemPersonalTareo.SITUACION.ToString();
-                                    personal = int.Parse(itemPersonalTareo.ID_PERSONAL.ToString());
-                                    nombre_personal = itemPersonalTareo.NOMBRE.ToString();
-                                    proyecto = itemPersonalTareo.ID_PROYECTO.ToString();
-                                    clase = int.Parse(itemPersonalTareo.ID_CLASE_TRABAJADOR.ToString());
-                                }
+                                    CodObrero = itemPersonalTareo.CodObrero.ToString();
+                                    Empleado = itemPersonalTareo.Descripcion.ToString();
+                                    Activo = itemPersonalTareo.Activo;
+                                }                                
 
-                                IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
-                                if (RptConfiguracion.Count() > 0)
+                                if (Activo == true)
                                 {
-                                    List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
-
-                                    foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                                    if (RptConfiguracion.Count() > 0)
                                     {
-                                        Server = itemConfiguracionLocal.SERVER;
-                                        LocalServer = itemConfiguracionLocal.LOCALSERVER;
-                                        RegistrarTrabajadorEstado = itemConfiguracionLocal.REGMARCACIONESTADO;
-                                    }
-                                }
+                                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
 
-                                if (id_situacion == "10")
-                                {
-                                    IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(result.Text));
+                                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                                        {
+                                            Server = itemConfiguracionLocal.SERVER;
+                                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                                            RegistrarTrabajadorEstado = itemConfiguracionLocal.REGMARCACIONESTADO;
+                                        }
+                                    }
+
+                                    IEnumerable<TareoPersonalS10> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(result.Text));
                                     if (RptValidacion.Count() > 0)
                                     {
                                         await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
@@ -157,7 +150,7 @@ namespace HamburgerMenu.ViewModels
                                     }
                                     else
                                     {
-                                        INSERT_TAREO(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, result.Text);
+                                        InsertarTareo(CodObrero, Empleado, result.Text);
 
                                         if (Server || LocalServer)
                                         {
@@ -173,74 +166,14 @@ namespace HamburgerMenu.ViewModels
                                 }
                                 else
                                 {
-                                    if (RegistrarTrabajadorEstado)
-                                    {
-                                        IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(result.Text));
-                                        if (RptValidacion.Count() > 0)
-                                        {
-                                            await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
-                                            BarcodeText = result.Text;
-                                            BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                            HoraMarcado = DateTime.Now.ToString();
-                                        }
-                                        else
-                                        {
-                                            resultConsulta = await page.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador", "Si", "No");
-
-                                            if (resultConsulta)
-                                            {
-                                                Insert_Trabajador_Cesado_Otro(nombre_personal, personal, proyecto, Convert.ToInt32(id_situacion), clase, result.Text);
-                                                await Navigation.PopAsync();
-                                                BarcodeText = result.Text;
-                                                BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                                HoraMarcado = DateTime.Now.ToString();
-                                            }
-                                            else
-                                            {
-                                                await Navigation.PopAsync();
-                                                BarcodeText = result.Text;
-                                                BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                                HoraMarcado = DateTime.Now.ToString();
-                                                await page.DisplayAlert("Ayuda", "Registro cancelado por el usuario.", "Aceptar");
-                                            }
-                                        }
-                                    }
+                                    await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
+                                    HoraMarcado = DateTime.Now.ToString();
                                 }
                             }
                             else
                             {
-                                if (RegistrarTrabajadorEstado)
-                                {
-                                    IEnumerable<TareoPersonal> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(result.Text));
-                                    if (RptValidacion.Count() > 0)
-                                    {
-                                        await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
-                                        BarcodeText = result.Text;
-                                        BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                        HoraMarcado = DateTime.Now.ToString();
-                                    }
-                                    else
-                                    {
-                                        resultConsulta = await page.DisplayAlert("Ayuda", "Desea Registrar tareo al trabajador NO REGISTADO", "Si", "No");
-
-                                        if (resultConsulta)
-                                        {
-                                            Insert_Trabajador_Sin_Registro(result.Text);
-                                            await Navigation.PopAsync();
-                                            BarcodeText = result.Text;
-                                            BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                            HoraMarcado = DateTime.Now.ToString();
-                                        }
-                                        else
-                                        {
-                                            await Navigation.PopAsync();
-                                            BarcodeText = result.Text;
-                                            BarcodeFormat = BarcodeFormatConverter.ConvertEnumToString(result.BarcodeFormat);
-                                            HoraMarcado = DateTime.Now.ToString();
-                                            await page.DisplayAlert("Ayuda", "Registro cancelado por el usuario.", "Aceptar");
-                                        }
-                                    }
-                                }
+                                await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
+                                HoraMarcado = DateTime.Now.ToString();
                             }
                         }
                         catch (Exception ex)
@@ -252,129 +185,31 @@ namespace HamburgerMenu.ViewModels
             };
         }
 
-        public static IEnumerable<PersonalTareo> SELECT_WHERE(SQLiteConnection db, string numero)
+        public static IEnumerable<Tablas.Personal> SELECT_WHERE(SQLiteConnection db, string numero)
         {
-            return db.Query<PersonalTareo>("Select * From PersonalTareo where NUMERO_DOCUIDEN = ? and ID_TAREADOR = ? ", numero, App.Tareador);
+            db.CreateTable<Tablas.Personal>();
+            return db.Query<Tablas.Personal>("Select * From Personal where DNI = ? and CodIdentificador = ? and Activo = true ", numero, App.Tareador);
         }
-        public static void Insert_Trabajador_Cesado_Otro(string nombre_personal, int ID_PERSONAL, string ID_PROYECTO, int ID_SITUACION, int ID_CLASE_TRABAJADOR, string dni)
+        public static void InsertarTareo(string codobrero, string empleado, string dni)
         {
             try
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                 {
-
-                    INSERT_TAREO(nombre_personal, ID_PERSONAL, ID_PROYECTO, ID_SITUACION, ID_CLASE_TRABAJADOR, dni);
-
-                    var db = new SQLiteConnection(App.FilePath);
-                    conn.CreateTable<ConfiguracionLocal>();
-                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
-                    if (RptConfiguracion.Count() > 0)
-                    {
-                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
-
-                        bool Server = false;
-                        bool LocalServer = false;
-
-                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
-                        {
-                            Server = itemConfiguracionLocal.SERVER;
-                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
-                        }
-
-                        if (Server || LocalServer)
-                        {
-                            InsertarTareoServer();
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string rpt = ex.InnerException.ToString();
-                throw;
-            }
-        }
-        public static void Insert_Trabajador_Sin_Registro(string numero_documento)
-        {
-            try
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
-                {
-                    conn.CreateTable<PersonalTareo>();
-                    var DatosRegistro = new PersonalTareo
-                    {
-                        ID_PERSONAL = 0,
-                        NOMBRE = "Nuevo Trabajador",
-                        ID_TIPODOCUIDEN = "01",
-                        TIPODOCUIDEN = "01",
-                        NUMERO_DOCUIDEN = numero_documento,
-                        ID_SITUACION = 1,
-                        SITUACION = "1",
-                        ID_PROYECTO = "--",
-                        PROYECTO = "--",
-                        ID_TAREADOR = App.Tareador,
-                        TAREADOR = App.Tareador,
-                        ID_CLASE_TRABAJADOR = 0,
-                        CLASE_TRABAJADOR = "0",
-                        ID_USUARIO_SINCRONIZA = 0,
-                        FECHA_SINCRONIZADO = DateTime.Now
-                    };
-                    conn.Insert(DatosRegistro);
-                    INSERT_TAREO("", 0, "", 0, 0, numero_documento);
-
-                    var db = new SQLiteConnection(App.FilePath);
-                    conn.CreateTable<ConfiguracionLocal>();
-                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
-                    if (RptConfiguracion.Count() > 0)
-                    {
-                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
-
-                        bool Server = false;
-                        bool LocalServer = false;
-
-                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
-                        {
-                            Server = itemConfiguracionLocal.SERVER;
-                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
-                        }
-
-                        if (Server || LocalServer)
-                        {
-                            InsertarTareoServer();
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                string rpt = ex.InnerException.ToString();
-                throw;
-            }
-        }
-        public static void INSERT_TAREO(string nombre_personal, int ID_PERSONAL, string ID_PROYECTO, int ID_SITUACION, int ID_CLASE_TRABAJADOR, string dni)
-        {
-            try
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
-                {
-                    conn.CreateTable<TareoPersonal>();
-                    var DatosRegistro = new TareoPersonal
+                    conn.CreateTable<TareoPersonalS10>();
+                    var DatosRegistro = new TareoPersonalS10
                     {
                         ID_TAREADOR = App.Tareador,
-                        ID_PERSONAL = ID_PERSONAL,
-                        PERSONAL = nombre_personal,
-                        ID_PROYECTO = ID_PROYECTO,
-                        ID_SITUACION = ID_SITUACION,
-                        ID_CLASE_TRABAJADOR = ID_CLASE_TRABAJADOR,
-                        FECHA_TAREO = App.FMarcacion,
+                        PROYECTO = App.Proyecto,
+                        CODOBRERO = codobrero,
+                        PERSONAL = empleado,
+                        DNI = dni,
                         TIPO_MARCACION = App.TipoMarcacion,
+                        FECHA_TAREO = App.FMarcacion,
                         HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
                         TOKEN = App.Token,
-                        NUMERO_DOCUIDEN = dni,
                         ID_SUCURSAL = App.Sucursal
                     };
                     conn.Insert(DatosRegistro);
@@ -382,16 +217,17 @@ namespace HamburgerMenu.ViewModels
             }
             catch (Exception ex)
             {
-                throw;
+                Application.Current.MainPage.DisplayAlert("Error : Insertar Local", ex.Message.ToString(), "OK");
             }
         }
         public static IEnumerable<ConfiguracionLocal> BuscarConfiguracionLocal(SQLiteConnection db)
         {
             return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal where ID_USUARIO = ? ", App.Usuario);
         }
-        public static IEnumerable<TareoPersonal> ListarTareoPorSincronizar(SQLiteConnection db)
+        public static IEnumerable<TareoPersonalS10> ListarTareoPorSincronizar(SQLiteConnection db)
         {
-            return db.Query<TareoPersonal>("Select * From TareoPersonal Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);
+            db.CreateTable<TareoPersonalS10>();
+            return db.Query<TareoPersonalS10>("Select * From TareoPersonalS10 Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);
         }
         private static void InsertarTareoServer()
         {
@@ -402,15 +238,15 @@ namespace HamburgerMenu.ViewModels
                     LstTareoPersonal = new List<TareoPersonalApi>();
 
                     var db = new SQLiteConnection(App.FilePath);
-                    IEnumerable<TareoPersonal> resultado = ListarTareoPorSincronizar(db);
+                    IEnumerable<TareoPersonalS10> resultado = ListarTareoPorSincronizar(db);
 
-                    foreach (TareoPersonal TareoPersonalApiItem in resultado)
+                    foreach (TareoPersonalS10 TareoPersonalApiItem in resultado)
                     {
                         var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
-                            TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
-                            TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
-                            TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                            TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
+                            TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
+                            TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
+                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA,
+                            TareoPersonalApiItem.FECHA_REGISTRO));
                         UpdTareo(TareoPersonalApiItem.ID);
                     }
                 }
@@ -422,7 +258,7 @@ namespace HamburgerMenu.ViewModels
             }
             catch (Exception)
             {
-                throw;
+                Application.Current.MainPage.DisplayAlert("Haug Tareo : Error", "Verifique su conexion a internet", "Ok");
             }
         }
         public static void UpdTareo(int id)
@@ -431,7 +267,7 @@ namespace HamburgerMenu.ViewModels
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                 {
-                    var tareo = conn.Table<TareoPersonal>().FirstOrDefault(j => j.ID == id);
+                    var tareo = conn.Table<TareoPersonalS10>().FirstOrDefault(j => j.ID == id);
 
                     if (tareo == null)
                     {
@@ -451,9 +287,10 @@ namespace HamburgerMenu.ViewModels
                 throw;
             }
         }
-        public static IEnumerable<TareoPersonal> ValidarExistenciaTareoTrabajador(SQLiteConnection db, string documento)
+        public static IEnumerable<TareoPersonalS10> ValidarExistenciaTareoTrabajador(SQLiteConnection db, string documento)
         {
-            return db.Query<TareoPersonal>("Select * From TareoPersonal where NUMERO_DOCUIDEN = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
+            db.CreateTable<TareoPersonalS10>();
+            return db.Query<TareoPersonalS10>("Select * From TareoPersonalS10 where DNI = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
         }
     }
 }

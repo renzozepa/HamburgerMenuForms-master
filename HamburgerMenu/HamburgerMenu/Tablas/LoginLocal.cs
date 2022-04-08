@@ -20,6 +20,7 @@ namespace HamburgerMenu
         [MaxLength(15)]
         public string CELULAR { get; set; }
         public string TOKEN { get; set; }
+        public string PROYECTO { get; set; }
         public DateTime FECHA_VIGENCIA { get; set; }
     }
 }

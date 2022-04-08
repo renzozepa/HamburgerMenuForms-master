@@ -22,6 +22,7 @@ namespace HamburgerMenu.ServicioApi
         public const string urlapiSucursal = "http://ti.haug.com.pe/WebApiPersonalTareo/Api/SUCURSAL";
 
         public const string urlapiS10 = "http://ti.haug.com.pe/WATareoS10/Api/Listar_Personal_S10";
+        public const string urlapiTareoS10 = "http://ti.haug.com.pe/WATareoS10/Api/MARCACION_PERSONAL";
 
         public async Task<List<TareadorDispositivosApi>> GetToken(string ParamCelular, string ParamTareador)
         {
@@ -141,32 +142,27 @@ namespace HamburgerMenu.ServicioApi
             return httpContent;
         }
         //public async Task PostJsonHttpClient(object content, CancellationToken cancellationToken)
-        public async Task PostJsonHttpClient(string ID_TAREADOR, string ID_PERSONAL, string PERSONAL, string ID_PROYECTO,
-            string ID_SITUACION, string ID_CLASE_TRABAJADOR, DateTime FECHA_TAREO, string TIPO_MARCACION, string HORA,
-            DateTime FECHA_REGISTRO, string dni)
+        public async Task PostJsonHttpClient(string ID_TAREADOR, string PROYECTO, string CODOBRERO, string PERSONAL, string DNI,string TIPO_MARCACION, DateTime FECHA_TAREO,string HORA,DateTime FECHA_REGISTRO)
         {
             try
             {
-                TareoPersonalApi varTareo = new TareoPersonalApi
+                TareoPersonalS10Api varTareo = new TareoPersonalS10Api
                 {
                     ID = 1,
                     ID_TAREADOR = ID_TAREADOR,
-                    ID_PERSONAL = Convert.ToInt32(ID_PERSONAL),
+                    PROYECTO = PROYECTO,
+                    CODOBRERO = CODOBRERO,
                     PERSONAL = PERSONAL,
-                    ID_PROYECTO = ID_PROYECTO,
-                    ID_SITUACION = Convert.ToInt32(ID_SITUACION),
-                    ID_CLASE_TRABAJADOR = Convert.ToInt32(ID_CLASE_TRABAJADOR),
-                    FECHA_TAREO = FECHA_TAREO,
+                    DNI = DNI,
                     TIPO_MARCACION = Convert.ToInt32(TIPO_MARCACION),
+                    FECHA_MARCACION = FECHA_TAREO,
                     HORA = HORA,
                     FECHA_REGISTRO = FECHA_REGISTRO,
                     SINCRONIZADO = 0,
                     FECHA_SINCRONIZADO = DateTime.Now.Date,
                     TOKEN = App.Token,
-                    NUMERO_DOCUIDEN = dni,
-                    ORIGEN = 1,
-                    ID_SUCURSAL = App.Sucursal
-
+                    ID_SUCURSAL = App.Sucursal,
+                    ORIGEN = "1"
                 };
 
                 var httpClient = new HttpClient();
@@ -174,7 +170,7 @@ namespace HamburgerMenu.ServicioApi
                 HttpContent httpContent = new StringContent(json);
                 httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                HttpResponseMessage response = await httpClient.PostAsync(urlapiTareo, httpContent).ConfigureAwait(false);
+                HttpResponseMessage response = await httpClient.PostAsync(urlapiTareoS10, httpContent).ConfigureAwait(false);
                 string respuesta = response.RequestMessage.ToString();
                 string status_code = response.StatusCode.ToString();
             }
@@ -199,7 +195,7 @@ namespace HamburgerMenu.ServicioApi
                                         NullValueHandling = NullValueHandling.Ignore
                                     });
 
-                    client.BaseAddress = new Uri(urlapiTareo);
+                    client.BaseAddress = new Uri(urlapiTareoS10);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                     client.Timeout = TimeSpan.FromMinutes(10);

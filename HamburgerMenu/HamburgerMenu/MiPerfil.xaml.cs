@@ -28,7 +28,7 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<Tablas.PersonalTareo>();
+                conn.CreateTable<Tablas.Personal>();
                 var perfil = conn.Table<LoginLocal>().FirstOrDefault(j => j.ID == App.Usuario);
 
                 if (perfil == null)
@@ -40,6 +40,13 @@ namespace HamburgerMenu
                 Usuario.Text = perfil.USUARIO.ToString();
                 Contrasenia.Text = perfil.CONTRASENIA.ToString();
                 Tareador.Text = perfil.TAREADOR.ToString();
+
+                if (!string.IsNullOrEmpty(perfil.PROYECTO))
+                {
+                    Proyecto.Text = perfil.PROYECTO.ToString();
+                }
+
+
                 if (!string.IsNullOrEmpty(perfil.CELULAR))
                 {
                     Celular.Text = perfil.CELULAR.ToString();
@@ -49,9 +56,9 @@ namespace HamburgerMenu
                 {
                     Token.Text = perfil.TOKEN.ToString();
                 }
-                
+
                 FToken.Text = perfil.FECHA_VIGENCIA.ToString("dd/MM/yyyy");
-                
+
             }
         }
 
@@ -59,7 +66,7 @@ namespace HamburgerMenu
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
-                conn.CreateTable<Tablas.PersonalTareo>();
+                conn.CreateTable<Tablas.Personal>();
                 var perfil = conn.Table<LoginLocal>().FirstOrDefault(j => j.ID == App.Usuario);
 
                 if (perfil == null)
@@ -71,10 +78,12 @@ namespace HamburgerMenu
                 perfil.CONTRASENIA = Contrasenia.Text.ToString();
                 perfil.TAREADOR = Tareador.Text.ToString();
                 perfil.CELULAR = Celular.Text.ToString();
+                perfil.PROYECTO = Proyecto.Text.ToString();
 
                 conn.Update(perfil);
 
                 App.Tareador = Tareador.Text.ToString();
+                App.Proyecto = Proyecto.Text.ToString();
             }
         }
     }

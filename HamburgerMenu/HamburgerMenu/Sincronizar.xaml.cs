@@ -19,7 +19,7 @@ namespace HamburgerMenu
         public static List<TareadorDispositivosApi> LstTareadorDispositivos { get; set; }
         public static List<HorarioApi> LstHorario { get; set; }
         public static List<PersonalTareoApi> LstPersonalTareo { get; set; }
-        public static List<TareoPersonalApi> LstTareoPersonal { get; set; }
+        public static List<TareoPersonalS10Api> LstTareoPersonal { get; set; }
         public static List<PersonalS10Api> LstPersonalS10 { get; set; }
         public Sincronizar()
         {
@@ -54,9 +54,9 @@ namespace HamburgerMenu
         {
             return db.Query<Tablas.Personal>("SELECT * FROM Personal where DNI = ? ", numerodocumento);
         }
-        public static IEnumerable<TareoPersonal> ListarTareoPorSincronizar(SQLiteConnection db)
+        public static IEnumerable<TareoPersonalS10> ListarTareoPorSincronizar(SQLiteConnection db)
         {
-            return db.Query<TareoPersonal>("Select * From TareoPersonal Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);
+            return db.Query<TareoPersonalS10>("Select * From TareoPersonalS10 Where SINCRONIZADO = 0 And ID_TAREADOR = ?", App.Tareador);
         }
         private async void Btn_SincroPersoDisponible(object sender, EventArgs e)
         {
@@ -144,18 +144,19 @@ namespace HamburgerMenu
 
                     using (var dialog = UserDialogs.Instance.Progress("Procesando"))
                     {
-                        LstTareoPersonal = new List<TareoPersonalApi>();
+                        LstTareoPersonal = new List<TareoPersonalS10Api>();
 
                         var db = new SQLiteConnection(App.FilePath);
-                        IEnumerable<TareoPersonal> resultado = ListarTareoPorSincronizar(db);
+                        IEnumerable<TareoPersonalS10> resultado = ListarTareoPorSincronizar(db);
 
-                        foreach (TareoPersonal TareoPersonalApiItem in resultado)
+                        foreach (TareoPersonalS10 TareoPersonalApiItem in resultado)
                         {
                             var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
-                                TareoPersonalApiItem.ID_TAREADOR, Convert.ToString(TareoPersonalApiItem.ID_PERSONAL), TareoPersonalApiItem.PERSONAL,
-                                TareoPersonalApiItem.ID_PROYECTO, Convert.ToString(TareoPersonalApiItem.ID_SITUACION), Convert.ToString(TareoPersonalApiItem.ID_CLASE_TRABAJADOR),
-                                TareoPersonalApiItem.FECHA_TAREO, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION), TareoPersonalApiItem.HORA,
-                                TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NUMERO_DOCUIDEN));
+                            TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
+                            TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
+                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA,
+                            TareoPersonalApiItem.FECHA_REGISTRO));
+
                             UpdTareo(TareoPersonalApiItem.ID);
 
                             contador += contador;
@@ -181,7 +182,7 @@ namespace HamburgerMenu
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                 {
-                    var tareo = conn.Table<TareoPersonal>().FirstOrDefault(j => j.ID == id);
+                    var tareo = conn.Table<TareoPersonalS10>().FirstOrDefault(j => j.ID == id);
 
                     if (tareo == null)
                     {
@@ -356,15 +357,15 @@ namespace HamburgerMenu
 
                     t.Wait();
 
-                    float contador = 0;
-                    float contador_s = 0;
-                    float cn = LstPersonalS10.Count();
+                    int contador = 0;
+                    //float contador_s = 0;
+                    int cn = LstPersonalS10.Count();
 
                     using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
                     {
                         using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                         {
-                            conn.CreateTable<PersonalTareo>();
+                            conn.CreateTable<Tablas.Personal>();
                             foreach (PersonalS10Api itemPersonalS10Api in LstPersonalS10)
                             {
                                 var DatosRegistro = new Tablas.Personal
@@ -375,7 +376,11 @@ namespace HamburgerMenu
                                     NroEsquemaPlanilla = itemPersonalS10Api.NroEsquemaPlanilla,
                                     CodProyecto = itemPersonalS10Api.CodProyecto.ToString(),
                                     CodIdentificador = itemPersonalS10Api.CodIdentificador.ToString(),
-                                    Activo = itemPersonalS10Api.Activo
+                                    Activo = itemPersonalS10Api.Activo,
+                                    CodInsumo = itemPersonalS10Api.CodInsumo.ToString(),
+                                    Insumo = itemPersonalS10Api.Insumo.ToString(),
+                                    CodOcupacion = itemPersonalS10Api.CodOcupacion.ToString(),
+                                    Ocupacion = itemPersonalS10Api.Ocupacion.ToString()
                                 };
 
                                 var db = new SQLiteConnection(App.FilePath);
@@ -388,14 +393,9 @@ namespace HamburgerMenu
                                 {
                                     conn.Insert(DatosRegistro);
                                 }
-
-                                if (contador_s <= cn)
-                                {
-                                    await Task.Delay(1);
-                                    contador = (contador_s / cn) * 100;
-                                    dialog.PercentComplete = Convert.ToInt32(contador);
-                                    contador_s = contador_s + 1;
-                                }
+                                await Task.Delay(1);
+                                contador += contador;
+                                dialog.PercentComplete = (contador / cn) * 100;
                             }
                         }
                     }

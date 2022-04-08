@@ -29,9 +29,9 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height=".5*" />
-                <RowDefinition Height=".5*" />
-                <RowDefinition Height=".5*" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -41,19 +41,19 @@
             </Grid.ColumnDefinitions>
 
             <checkbox:SfButton x:Name="BtnSincroAltaUsuario" Text="Alta de usuario" ShowIcon="True" Grid.Row="1" Grid.Column="0" BackgroundColor="#E0E0E0"
-                             TextColor="Black" ImageSource="AltaUsuario.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincroAltaUsuario"/>
+                             TextColor="Black" ImageSource="AltaUsuario.png" CornerRadius="25" WidthRequest="100" Clicked="Btn_SincroAltaUsuario"/>
 
             <checkbox:SfButton x:Name="BtnSincroGetToken" Text="Obtener Token" ShowIcon="True" Grid.Row="1" Grid.Column="1" BackgroundColor="#E0E0E0"
-                             TextColor="Black" ImageSource="ObtenerToken.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincroGetToken"/>
+                             TextColor="Black" ImageSource="ObtenerToken.png" CornerRadius="25" WidthRequest="100" Clicked="Btn_SincroGetToken"/>
 
             <checkbox:SfButton x:Name="BtnSincroPersonalS10" Text="Personal S10" ShowIcon="True" Grid.Row="2" Grid.Column="0" BackgroundColor="#E0E0E0"
-                             TextColor="Black" ImageSource="SyncPersonal.png" CornerRadius="15" WidthRequest="100" Clicked="BtnSincroPersonalS10_Clicked"/>
+                             TextColor="Black" ImageSource="SyncPersonal.png" CornerRadius="25" WidthRequest="100" Clicked="BtnSincroPersonalS10_Clicked"/>
 
             <checkbox:SfButton x:Name="BtnSincronizHorario" Text="Horario" ShowIcon="True" Grid.Row="2" Grid.Column="1" BackgroundColor="#E0E0E0"
-                             TextColor="Black" ImageSource="SyncHorario.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincronizHorario"/>
+                             TextColor="Black" ImageSource="SyncHorario.png" CornerRadius="25" WidthRequest="100" Clicked="Btn_SincronizHorario"/>
 
             <checkbox:SfButton x:Name="BtnSincronizTareoPersonal" Text="Sincronizar Tareo" ShowIcon="True" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="#E0E0E0"
-                             TextColor="Black" ImageSource="SyncTareo.png" CornerRadius="15" WidthRequest="100" Clicked="Btn_SincronizTareoPersonal"/>
+                             TextColor="Black" ImageSource="SyncTareo.png" CornerRadius="25" WidthRequest="100" Clicked="Btn_SincronizTareoPersonal"/>
             
         </Grid>
     </FlexLayout>

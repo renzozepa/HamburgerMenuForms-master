@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using HamburgerMenu.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,9 +7,18 @@ namespace HamburgerMenu
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PersonalS10Cesado : ContentPage
 	{
-		public PersonalS10Cesado ()
+        PersonalS10CesadoViewModel vm;
+
+        public PersonalS10Cesado ()
 		{
-			InitializeComponent ();
-		}
-	}
+            InitializeComponent();
+            vm = new PersonalS10CesadoViewModel(this.Navigation);
+            BindingContext = vm;
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            vm.SearchByNameCommand.Execute(string.Empty);
+        }
+    }
 }

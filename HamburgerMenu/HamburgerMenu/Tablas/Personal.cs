@@ -22,5 +22,10 @@
         public string CodIdentificador { get; set; }
 
         public bool Activo { get; set; }
+        public string CodInsumo { get; set; }
+        public string Insumo { get; set; }
+
+        public string CodOcupacion { get; set; }
+        public string Ocupacion { get; set; }
     }
 }

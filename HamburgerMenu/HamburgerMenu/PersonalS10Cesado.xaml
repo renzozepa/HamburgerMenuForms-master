@@ -1,12 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HamburgerMenu.PersonalS10Cesado">
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:HamburgerMenu"
+             x:Class="HamburgerMenu.PersonalS10Cesado"
+             Visual="Material"
+             Title="Personal cesado"
+             mc:Ignorable="d"
+             NavigationPage.BackButtonTitle="Atrás">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <RefreshView Padding="10" IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding LPersonalsS10ViewModel}"
+                            SelectedItem="{Binding ItemSeleccionado, Mode=TwoWay}"
+                            SelectionChangedCommand="{Binding GoToDetailsCommand}"
+                            SelectionChangedCommandParameter="{x:Type views:PersonalDetalle}"
+                            SelectionMode="Single"
+                            EmptyView="No hay personal registrado!"
+                            Margin="5">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="5"
+                               Margin="7"
+                               BorderColor="#E6002B"
+                               CornerRadius="10"
+                               IsClippedToBounds="False">
+                            <Grid HeightRequest="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Medium" 
+                                   VerticalOptions="Center" 
+                                   Text="{Binding Descripcion}" />
+                                <Label Grid.Row="1" 
+                                   FontAttributes="Bold" 
+                                   FontSize="Small"
+                                   VerticalOptions="Center" 
+                                   Text="{Binding DNI}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
     </ContentPage.Content>
 </ContentPage>
