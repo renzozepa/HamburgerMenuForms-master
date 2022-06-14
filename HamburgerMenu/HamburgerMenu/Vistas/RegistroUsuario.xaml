@@ -10,7 +10,7 @@
             <Label Text="Usuario: "/>
             <Entry Placeholder="Escribe tu usuario" Keyboard="Email" x:Name="Usuario"/>
             <Label Text="Contraseña: "/>
-            <Entry Placeholder="Elige una contraseña" IsPassword="True" x:Name="Contrasenia"/>
+            <Entry Placeholder="Ingresar contraseña" IsPassword="True" x:Name="Contrasenia"/>
             <Label Text="Confirmar contraseña: "/>
             <Entry Placeholder="Confirmar contraseña" IsPassword="True" x:Name="Conf_Contrasenia"/>
             <Label Text="Tareador: "/>

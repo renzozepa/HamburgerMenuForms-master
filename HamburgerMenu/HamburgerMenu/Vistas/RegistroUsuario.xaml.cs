@@ -54,8 +54,8 @@ namespace HamburgerMenu.Vistas
                             };
                             conn.Insert(varConfigLocal);
                         }
-
-                        LimpiarFormulario();                        
+                        LimpiarFormulario();
+                        App.Current.MainPage.Navigation.PushAsync(new Vistas.Login());
                     }
                     else
                     {

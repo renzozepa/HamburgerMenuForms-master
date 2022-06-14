@@ -58,7 +58,7 @@ namespace HamburgerMenu.ViewModels
         async Task LoadData()
         {
             LPersonalsS10ViewModel = new ObservableCollection<PersonalS10ViewModel>();
-            var personalTareos = await App.Context.FilterItemsAsync<Tablas.Personal>("Personal", $"CodIdentificador = '" + App.Tareador + "' And Activo = 'false' ");
+            var personalTareos = await App.Context.FilterItemsAsync<Tablas.Personal>("Personal", $"CodIdentificador = '" + App.Tareador + "' And Activo = false ");
 
             foreach (var item in personalTareos)
                 LPersonalsS10ViewModel.Add(new PersonalS10ViewModel(item));

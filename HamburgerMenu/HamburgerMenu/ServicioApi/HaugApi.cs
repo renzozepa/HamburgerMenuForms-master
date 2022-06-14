@@ -239,7 +239,7 @@ namespace HamburgerMenu.ServicioApi
                 {
                     MaxResponseContentBufferSize = 256000
                 };
-                var uri = new Uri(urlapiS10 + "?proyecto=01002001&&tareador=" + ParamTareador + "&planilla=89BE31CF-5A9D-43A2-BD1F-6E025DAF8F12&activo=true");
+                var uri = new Uri(urlapiS10 + "?proyecto=01002001&&tareador=" + ParamTareador);
                 var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
                 if (response.IsSuccessStatusCode)
                 {

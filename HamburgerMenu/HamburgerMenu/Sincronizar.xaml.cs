@@ -400,7 +400,6 @@ namespace HamburgerMenu
                             }
                         }
                     }
-
                 }
                 else
                 {
