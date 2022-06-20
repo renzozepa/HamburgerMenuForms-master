@@ -19,5 +19,7 @@ namespace HamburgerMenu.Models
         public DateTime? FECHA_REGISTRO { get; set; }
         public int ID_USUARIO_MOD { get; set; }
         public DateTime? FECHA_MODIFICACION { get; set; }
+        public int MULTI_PROYECTO { get; set; }
+        public string CodProyectoNoProd { get; set; }
     }
 }

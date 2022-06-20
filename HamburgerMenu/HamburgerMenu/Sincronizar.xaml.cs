@@ -243,6 +243,7 @@ namespace HamburgerMenu
 
                                 Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);
                                 App.FExpiracion = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO.Value);
+                                Usuario.FECHA_VIGENCIA = App.FExpiracion;
                                 conn.Update(Usuario);
                             }
                         }
@@ -381,7 +382,8 @@ namespace HamburgerMenu
                                     CodInsumo = itemPersonalS10Api.CodInsumo.ToString(),
                                     Insumo = itemPersonalS10Api.Insumo.ToString(),
                                     CodOcupacion = itemPersonalS10Api.CodOcupacion.ToString(),
-                                    Ocupacion = itemPersonalS10Api.Ocupacion.ToString()
+                                    Ocupacion = itemPersonalS10Api.Ocupacion.ToString(),
+                                    CodProyectoNoProd = itemPersonalS10Api.CodProyectoNoProd.ToString()
                                 };
 
                                 var db = new SQLiteConnection(App.FilePath);

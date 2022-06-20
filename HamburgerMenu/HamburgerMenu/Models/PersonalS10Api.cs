@@ -24,5 +24,6 @@
 
         public string CodOcupacion { get; set; }
         public string Ocupacion { get; set; }
+        public string CodProyectoNoProd { get; set; }
     }
 }

@@ -72,32 +72,38 @@ namespace HamburgerMenu
         }
         private void Btn_Actualizar(object sender, EventArgs e)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+            try
             {
-                IEnumerable<ConfiguracionLocal> VarConfiguracionLocal = ValidarExistenciaConfiguracion(conn);
-                if (VarConfiguracionLocal.Count() > 0)
+                using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                 {
-                    var objconfiguracion = conn.Table<ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
-                    if (objconfiguracion == null)
+                    IEnumerable<ConfiguracionLocal> VarConfiguracionLocal = ValidarExistenciaConfiguracion(conn);
+
+                    var objconfiguracion = conn.Table<Tablas.ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
+                    if (objconfiguracion != null)
                     {
+                        objconfiguracion.LOCAL = AlmLocal.IsToggled;
+                        objconfiguracion.SERVER = AlmServer.IsToggled;
+                        objconfiguracion.LOCALSERVER = AlmLocalServer.IsToggled;
+                        objconfiguracion.DISPOSITIVOZEBRA = DispositivoZebra.IsToggled;
+                        objconfiguracion.MINUTOSENTREMARCACION = Convert.ToInt32(numericupdown.Value.ToString());
+                        objconfiguracion.REGMARCACIONESTADO = RegTareoEstado.IsToggled;
 
+                        conn.Update(objconfiguracion);
+                        DisplayAlert("Haug Tareo", "Se actualizo correctamente los datos.", "Ok");
                     }
-
-                    objconfiguracion.LOCAL = AlmLocal.IsToggled;
-                    objconfiguracion.SERVER = AlmServer.IsToggled;
-                    objconfiguracion.LOCALSERVER = AlmLocalServer.IsToggled;
-                    objconfiguracion.DISPOSITIVOZEBRA = DispositivoZebra.IsToggled;
-                    objconfiguracion.MINUTOSENTREMARCACION = Convert.ToInt32(numericupdown.Value.ToString());
-                    objconfiguracion.REGMARCACIONESTADO = RegTareoEstado.IsToggled;
-                    conn.Update(objconfiguracion);
-                    DisplayAlert("Haug Tareo", "Se actualizo correctamente los datos.", "Ok");
-                }
-                else
-                {
-                    var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
-                    conn.Insert(DatosRegistro);
+                    else
+                    {
+                        var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
+                        conn.Insert(DatosRegistro);
+                        //conn.Insert(objconfiguracion);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                DisplayAlert("Haug Tareo", ex.InnerException.ToString() , "Ok");
+            }
+            
         }
         public static IEnumerable<ConfiguracionLocal> ValidarExistenciaConfiguracion(SQLiteConnection db)
         {

@@ -59,12 +59,10 @@ namespace HamburgerMenu.ViewModels
             bool LocalServer = false;
             bool RegistrarTrabajadorEstado = false;
 
-            int rpt = e.NewTextValue.ToString().Length;
-
             if (!string.IsNullOrWhiteSpace(CodDocumento))
             {
-                if (e.NewTextValue.ToString().Length >= 8)
-                {
+                //if (e.NewTextValue.ToString().Length >= 8)
+                //{
                     var db = new SQLiteConnection(App.FilePath);
                     IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
                     if (RptConfiguracion.Count() > 0)
@@ -94,6 +92,7 @@ namespace HamburgerMenu.ViewModels
                             string Insumo = string.Empty;
                             string CodOcupacion = string.Empty;
                             string Ocupacion = string.Empty;
+                            string proy = string.Empty;
 
                             foreach (Tablas.Personal itemPersonalTareo in listll)
                             {
@@ -105,7 +104,8 @@ namespace HamburgerMenu.ViewModels
                                 Insumo = itemPersonalTareo.Insumo.ToString();
                                 CodOcupacion = itemPersonalTareo.CodOcupacion.ToString();
                                 Ocupacion = itemPersonalTareo.Ocupacion.ToString();
-                            }
+                                proy = itemPersonalTareo.CodProyectoNoProd.ToString();
+                        }
 
                             if (Activo == true)
                             {
@@ -138,18 +138,18 @@ namespace HamburgerMenu.ViewModels
                                 Marcado = string.Empty;
                             }
                         }
-                        else
-                        {
-                            await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
-                            HoraMarcado = DateTime.Now.ToString();
-                            Marcado = string.Empty;
-                        }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
+                        HoraMarcado = DateTime.Now.ToString();
+                        Marcado = string.Empty;
                     }
+                }
                     catch (Exception ex)
                     {
                         await Application.Current.MainPage.DisplayAlert("Ayuda", ex.Message.ToString(), "OK");
                     }
-                }
+                //}
             }
         }
 

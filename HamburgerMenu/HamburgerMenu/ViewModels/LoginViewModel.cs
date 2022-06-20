@@ -117,6 +117,14 @@ namespace HamburgerMenu.ViewModels
                     }
                     
                     Limpiar();
+
+                    var objconfiguracion = db.Table<Tablas.ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
+                    if (objconfiguracion == null)
+                    {
+                        var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
+                        db.Insert(DatosRegistro);
+                    }
+                    
                     await App.Current.MainPage.Navigation.PushAsync(new HamburgerMenu());
                 }
                 else
@@ -141,8 +149,8 @@ namespace HamburgerMenu.ViewModels
         {
             db.CreateTable<LoginLocal>();
 
-            if (DoesTableExist(db, "ConfiguracionLocal"))
-                db.DropTable<ConfiguracionLocal>();
+            //if (DoesTableExist(db, "ConfiguracionLocal"))
+            //    db.DropTable<ConfiguracionLocal>();
 
             db.CreateTable<Tablas.ConfiguracionLocal>();
             db.CreateTable<Tablas.PersonalTareo>();

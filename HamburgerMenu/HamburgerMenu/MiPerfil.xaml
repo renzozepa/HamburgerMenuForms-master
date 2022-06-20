@@ -18,9 +18,9 @@
                     <Label Text="Nro. Celular: "/>
                     <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
                     <Label Text="Token: "/>
-                    <Entry Placeholder="Introduce Proyecto" x:Name="Proyecto"/>
+                    <Entry Placeholder="Introduce Proyecto" x:Name="Token"/>
                     <Label Text="Proyecto: "/>
-                    <Entry Placeholder="" x:Name="Token"/>
+                    <Entry Placeholder="" x:Name="Proyecto"/>
                     <Label Text="F. Expiración token: "/>
                     <Entry Placeholder="" x:Name="FToken"/>
                     <Button Text="Actualizar" BackgroundColor="#E6002B" Clicked="BtnActualizar_Clicked"></Button>
