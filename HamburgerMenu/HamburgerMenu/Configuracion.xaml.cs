@@ -116,7 +116,7 @@ namespace HamburgerMenu
             using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
             {
                 //conn.Query<ConfiguracionLocal>("Truncate table TareoPersonal");
-                conn.Execute("Delete From TareoPersonal");
+                conn.Execute("Delete From TareoPersonalS10");
             }
 
         }

@@ -122,6 +122,8 @@ namespace HamburgerMenu.ViewModels
                                 string Insumo = string.Empty;
                                 string CodOcupacion = string.Empty;
                                 string Ocupacion = string.Empty;
+                                string proy = string.Empty;
+                                string multi_proyecto = string.Empty;
 
                                 foreach (Tablas.Personal itemPersonalTareo in listll)
                                 {
@@ -133,6 +135,12 @@ namespace HamburgerMenu.ViewModels
                                     Insumo = itemPersonalTareo.Insumo.ToString();
                                     CodOcupacion = itemPersonalTareo.CodOcupacion.ToString();
                                     Ocupacion = itemPersonalTareo.Ocupacion.ToString();
+                                    proy = itemPersonalTareo.CodProyectoNoProd.ToString();
+
+                                    if (App.Multi_Proyecto == "1")
+                                        multi_proyecto = App.Proyecto;
+                                    else
+                                        multi_proyecto = proy;
                                 }                                
 
                                 if (Activo == true)
@@ -160,7 +168,7 @@ namespace HamburgerMenu.ViewModels
                                     }
                                     else
                                     {
-                                        InsertarTareo(CodObrero, Empleado, result.Text, NroEsquemaPlanilla, CodInsumo, Insumo, CodOcupacion, Ocupacion);
+                                        InsertarTareo(CodObrero, Empleado, result.Text, NroEsquemaPlanilla, CodInsumo, Insumo, CodOcupacion, Ocupacion, multi_proyecto);
 
                                         if (Server || LocalServer)
                                         {
@@ -200,7 +208,7 @@ namespace HamburgerMenu.ViewModels
             db.CreateTable<Tablas.Personal>();
             return db.Query<Tablas.Personal>("Select * From Personal where DNI = ? and CodIdentificador = ? and Activo = true ", numero, App.Tareador);
         }
-        public static void InsertarTareo(string codobrero, string empleado, string dni, Guid esquemaplanilla, string codinsumo, string insumo, string codocupacion, string ocupacion)
+        public static void InsertarTareo(string codobrero, string empleado, string dni, Guid esquemaplanilla, string codinsumo, string insumo, string codocupacion, string ocupacion, string proyecto)
         {
             try
             {
@@ -210,7 +218,7 @@ namespace HamburgerMenu.ViewModels
                     var DatosRegistro = new TareoPersonalS10
                     {
                         ID_TAREADOR = App.Tareador,
-                        PROYECTO = App.Proyecto,
+                        PROYECTO = proyecto,
                         CODOBRERO = codobrero,
                         PERSONAL = empleado,
                         DNI = dni,

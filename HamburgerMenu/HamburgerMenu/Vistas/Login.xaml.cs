@@ -1,4 +1,5 @@
 ﻿using HamburgerMenu.ViewModels;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -8,13 +9,15 @@ namespace HamburgerMenu.Vistas
     public partial class Login : ContentPage
     {
         public Login()
-        {            
-            InitializeComponent ();
+        {
+            InitializeComponent();
             BindingContext = new LoginViewModel(this.Navigation);
         }
+
         //protected override void OnAppearing()
         //{
         //    base.OnAppearing();
+        //    //Task.Run(LoadCredenciales);
         //    //LlenarSucursal();                       
         //}
         //private void btn_login(object sender, EventArgs e)
@@ -35,13 +38,13 @@ namespace HamburgerMenu.Vistas
         //                    App.Token = itemLoginLocal.TOKEN.ToString();
         //                    App.FExpiracion = itemLoginLocal.FECHA_VIGENCIA.Date;
         //                }
-                        
+
         //                if (!string.IsNullOrEmpty(itemLoginLocal.CELULAR))
         //                {
         //                    App.Celular = itemLoginLocal.CELULAR.ToString();
         //                }                        
         //            }
-                    
+
         //            Navigation.PushAsync(new HamburgerMenu());
         //        }
         //        else
@@ -53,7 +56,7 @@ namespace HamburgerMenu.Vistas
         //    {
         //        DisplayAlert("Error", ex.Message.ToString(),"Ok");
         //    }
-            
+
         //}
         //private void btn_Registrar(object sender, EventArgs e)
         //{

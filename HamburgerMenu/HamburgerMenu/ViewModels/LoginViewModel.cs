@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using HamburgerMenu.Helpers;
 
 namespace HamburgerMenu.ViewModels
 {
@@ -21,6 +22,8 @@ namespace HamburgerMenu.ViewModels
         public ICommand LoginCommand { get; set; }
         public ICommand RegristrarCommand { get; set; }
         public ICommand UsuariosCommand { get; set; }
+
+        public bool IsRemember { get; set; }
 
         private string _usuario;
         public string Usuario
@@ -89,47 +92,67 @@ namespace HamburgerMenu.ViewModels
             RegristrarCommand = new Command(async () => await Registrarme());
             UsuariosCommand = new Command(async () => await ListarUsuarios());
 
+            if (Settings.IsRemember)
+            {
+                Usuario = Settings.Usuario;
+                Clave = Settings.Clave;
+                IsRemember = Settings.IsRemember;
+            }
+
             //LlenarSucursal();
+            MostrarSucursal();
         }
         async Task ValidarUsuario()
         {
             try
             {
-                var db = new SQLiteConnection(App.FilePath);
-                IEnumerable<LoginLocal> resultado = ConsultarUsuario(db, Usuario, Clave);
-                if (resultado.Count() > 0)
+                if (Usuario != string.Empty && Clave != string.Empty && App.Sucursal != string.Empty && App.Sucursal != null)
                 {
-                    List<LoginLocal> listll = (List<LoginLocal>)resultado;
-                    foreach (LoginLocal itemLoginLocal in listll)
+                    var db = new SQLiteConnection(App.FilePath);
+                    IEnumerable<LoginLocal> resultado = ConsultarUsuario(db, Usuario, Clave);
+                    if (resultado.Count() > 0)
                     {
-                        App.Tareador = itemLoginLocal.TAREADOR.ToString();
-                        App.Usuario = Convert.ToInt32(itemLoginLocal.ID.ToString());
-                        if (!string.IsNullOrEmpty(itemLoginLocal.TOKEN))
+                        List<LoginLocal> listll = (List<LoginLocal>)resultado;
+                        foreach (LoginLocal itemLoginLocal in listll)
                         {
-                            App.Token = itemLoginLocal.TOKEN.ToString();
-                            App.FExpiracion = itemLoginLocal.FECHA_VIGENCIA.Date;
+                            App.Tareador = itemLoginLocal.TAREADOR.ToString();
+                            App.Usuario = Convert.ToInt32(itemLoginLocal.ID.ToString());
+                            if (!string.IsNullOrEmpty(itemLoginLocal.TOKEN))
+                            {
+                                App.Token = itemLoginLocal.TOKEN.ToString();
+                                App.FExpiracion = itemLoginLocal.FECHA_VIGENCIA.Date;
+                            }
+
+                            if (!string.IsNullOrEmpty(itemLoginLocal.CELULAR))
+                            {
+                                App.Celular = itemLoginLocal.CELULAR.ToString();
+                            }
+                            App.Proyecto = itemLoginLocal.CodProyectoNoProd;
+                            App.Multi_Proyecto = itemLoginLocal.MULTI_PROYECTO.ToString();
                         }
 
-                        if (!string.IsNullOrEmpty(itemLoginLocal.CELULAR))
-                        {
-                            App.Celular = itemLoginLocal.CELULAR.ToString();
-                        }
-                    }
-                    
-                    Limpiar();
+                        Settings.IsRemember = this.IsRemember;
+                        Settings.Usuario = this.Usuario;
+                        Settings.Clave = this.Clave;
 
-                    var objconfiguracion = db.Table<Tablas.ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
-                    if (objconfiguracion == null)
-                    {
-                        var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
-                        db.Insert(DatosRegistro);
+                        Limpiar();
+
+                        var objconfiguracion = db.Table<Tablas.ConfiguracionLocal>().FirstOrDefault(u => u.ID_USUARIO == App.Usuario);
+                        if (objconfiguracion == null)
+                        {
+                            var DatosRegistro = new ConfiguracionLocal { ID_USUARIO = App.Usuario, LOCAL = false, SERVER = false, LOCALSERVER = false };
+                            db.Insert(DatosRegistro);
+                        }
+
+                        await App.Current.MainPage.Navigation.PushAsync(new HamburgerMenu());
                     }
-                    
-                    await App.Current.MainPage.Navigation.PushAsync(new HamburgerMenu());
+                    else
+                    {
+                        await App.Current.MainPage.DisplayAlert("Inicio sesión", "Verifique su usuario/contraseña", "Aceptar");
+                    }
                 }
-                else
-                {
-                    await App.Current.MainPage.DisplayAlert("Inicio sesión", "Verifique su usuario/contraseña", "Aceptar");
+                else {
+                    await App.Current.MainPage.DisplayAlert("Inicio sesión", "Completar los datos necesarios para iniciar sesión.", "Aceptar");
                 }
             }
             catch (Exception ex)
@@ -230,10 +253,10 @@ namespace HamburgerMenu.ViewModels
                         }
                     }
                 }
-                else
-                {
-                    await App.Current.MainPage.DisplayAlert("Sucursal", "Verifique su conexion a internet", "Ok");
-                }
+                //else
+                //{
+                //    await App.Current.MainPage.DisplayAlert("Sucursal", "Verifique su conexion a internet", "Ok");
+                //}
 
             }
             catch (Exception ex)

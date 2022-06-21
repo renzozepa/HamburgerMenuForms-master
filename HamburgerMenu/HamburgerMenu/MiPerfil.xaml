@@ -4,9 +4,9 @@
              x:Class="HamburgerMenu.MiPerfil"
              Visual="Material">
     <ScrollView>
-        <FlexLayout Margin="10" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
-            <Frame Margin="5" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
-                <StackLayout Margin="5">
+        <FlexLayout Margin="5" Direction="Column" AlignContent="Center" JustifyContent="SpaceAround">
+            <Frame Margin="1" BorderColor="White" BackgroundColor="White" HorizontalOptions="Center">
+                <StackLayout Margin="1">
                     <Label Text="Nombre: "/>
                     <Entry Placeholder="Introduce tu nombre" x:Name="Nombre"/>
                     <Label Text="Usuario: "/>
@@ -18,9 +18,7 @@
                     <Label Text="Nro. Celular: "/>
                     <Entry Placeholder="Introduce Nro. Celular" x:Name="Celular"/>
                     <Label Text="Token: "/>
-                    <Entry Placeholder="Introduce Proyecto" x:Name="Token"/>
-                    <Label Text="Proyecto: "/>
-                    <Entry Placeholder="" x:Name="Proyecto"/>
+                    <Entry Placeholder="Token" x:Name="Token"/>
                     <Label Text="F. Expiración token: "/>
                     <Entry Placeholder="" x:Name="FToken"/>
                     <Button Text="Actualizar" BackgroundColor="#E6002B" Clicked="BtnActualizar_Clicked"></Button>
@@ -28,4 +26,5 @@
             </Frame>
         </FlexLayout>
     </ScrollView>
+    
 </ContentPage>

@@ -22,5 +22,7 @@ namespace HamburgerMenu
         public string TOKEN { get; set; }
         public string PROYECTO { get; set; }
         public DateTime FECHA_VIGENCIA { get; set; }
+        public int MULTI_PROYECTO { get; set; }
+        public string CodProyectoNoProd { get; set; }
     }
 }

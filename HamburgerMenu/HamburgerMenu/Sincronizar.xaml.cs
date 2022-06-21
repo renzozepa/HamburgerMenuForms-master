@@ -113,7 +113,7 @@ namespace HamburgerMenu
 
                                 if (contador_s <= cn)
                                 {
-                                    await Task.Delay(1);
+                                    await Task.Delay(2);
                                     contador = (contador_s / cn) * 100;
                                     dialog.PercentComplete = Convert.ToInt32(contador);
                                     contador_s = contador_s + 1;
@@ -233,16 +233,10 @@ namespace HamburgerMenu
                                 Usuario.TOKEN = LstTareadorDispositivos[0].TOKEN.ToString();
                                 App.Token = LstTareadorDispositivos[0].TOKEN.ToString();
 
-                                if (App.Token != null)
-                                {
-                                    //BtnSincroAltaUsuario.IsEnabled = true;
-                                    //BtnSincroPersoDisponible.IsEnabled = true;
-                                    //BtnSincronizTareoPersonal.IsEnabled = true;
-                                    //BtnSincronizHorario.IsEnabled = true;
-                                }
-
                                 Usuario.FECHA_VIGENCIA = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO);
                                 App.FExpiracion = Convert.ToDateTime(LstTareadorDispositivos[0].FECHA_VENCIMIENTO.Value);
+                                Usuario.MULTI_PROYECTO = Convert.ToInt32(LstTareadorDispositivos[0].MULTI_PROYECTO);
+                                Usuario.CodProyectoNoProd = Convert.ToString(LstTareadorDispositivos[0].CodProyectoNoProd);
                                 Usuario.FECHA_VIGENCIA = App.FExpiracion;
                                 conn.Update(Usuario);
                             }
@@ -396,7 +390,7 @@ namespace HamburgerMenu
                                 {
                                     conn.Insert(DatosRegistro);
                                 }
-                                await Task.Delay(1);
+                                await Task.Delay(10);
                                 contador += contador;
                                 dialog.PercentComplete = (contador / cn) * 100;
                             }

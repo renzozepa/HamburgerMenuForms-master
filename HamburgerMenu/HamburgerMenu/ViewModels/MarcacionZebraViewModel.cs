@@ -63,81 +63,88 @@ namespace HamburgerMenu.ViewModels
             {
                 //if (e.NewTextValue.ToString().Length >= 8)
                 //{
-                    var db = new SQLiteConnection(App.FilePath);
-                    IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
-                    if (RptConfiguracion.Count() > 0)
-                    {
-                        List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
+                var db = new SQLiteConnection(App.FilePath);
+                IEnumerable<ConfiguracionLocal> RptConfiguracion = BuscarConfiguracionLocal(db);
+                if (RptConfiguracion.Count() > 0)
+                {
+                    List<ConfiguracionLocal> ListRptConfigLocal = (List<ConfiguracionLocal>)RptConfiguracion;
 
-                        foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
-                        {
-                            Server = itemConfiguracionLocal.SERVER;
-                            LocalServer = itemConfiguracionLocal.LOCALSERVER;
-                            RegistrarTrabajadorEstado = itemConfiguracionLocal.REGMARCACIONESTADO;
-                        }
+                    foreach (ConfiguracionLocal itemConfiguracionLocal in ListRptConfigLocal)
+                    {
+                        Server = itemConfiguracionLocal.SERVER;
+                        LocalServer = itemConfiguracionLocal.LOCALSERVER;
+                        RegistrarTrabajadorEstado = itemConfiguracionLocal.REGMARCACIONESTADO;
                     }
+                }
 
-                    try
+                try
+                {
+                    IEnumerable<Tablas.Personal> resultado = BuscarTrabajador(db, CodDocumento);
+                    if (resultado.Count() > 0)
                     {
-                        IEnumerable<Tablas.Personal> resultado = BuscarTrabajador(db, CodDocumento);
-                        if (resultado.Count() > 0)
+                        List<Tablas.Personal> listll = (List<Tablas.Personal>)resultado;
+
+                        string CodObrero = string.Empty;
+                        string Empleado = string.Empty;
+                        bool Activo = false;
+                        Guid NroEsquemaPlanilla = Guid.Empty;
+                        string CodInsumo = string.Empty;
+                        string Insumo = string.Empty;
+                        string CodOcupacion = string.Empty;
+                        string Ocupacion = string.Empty;
+                        string proy = string.Empty;
+                        string multi_proyecto = string.Empty;
+
+                        foreach (Tablas.Personal itemPersonalTareo in listll)
                         {
-                            List<Tablas.Personal> listll = (List<Tablas.Personal>)resultado;
+                            CodObrero = itemPersonalTareo.CodObrero.ToString();
+                            Empleado = itemPersonalTareo.Descripcion.ToString();
+                            Activo = itemPersonalTareo.Activo;
+                            NroEsquemaPlanilla = itemPersonalTareo.NroEsquemaPlanilla;
+                            CodInsumo = itemPersonalTareo.CodInsumo.ToString();
+                            Insumo = itemPersonalTareo.Insumo.ToString();
+                            CodOcupacion = itemPersonalTareo.CodOcupacion.ToString();
+                            Ocupacion = itemPersonalTareo.Ocupacion.ToString();
+                            proy = itemPersonalTareo.CodProyectoNoProd.ToString();
 
-                            string CodObrero = string.Empty;
-                            string Empleado = string.Empty;
-                            bool Activo = false;
-                            Guid NroEsquemaPlanilla = Guid.Empty;
-                            string CodInsumo = string.Empty;
-                            string Insumo = string.Empty;
-                            string CodOcupacion = string.Empty;
-                            string Ocupacion = string.Empty;
-                            string proy = string.Empty;
+                            if (App.Multi_Proyecto == "1")
+                                multi_proyecto = App.Proyecto;
+                            else
+                                multi_proyecto = proy;
 
-                            foreach (Tablas.Personal itemPersonalTareo in listll)
-                            {
-                                CodObrero = itemPersonalTareo.CodObrero.ToString();
-                                Empleado = itemPersonalTareo.Descripcion.ToString();
-                                Activo = itemPersonalTareo.Activo;
-                                NroEsquemaPlanilla = itemPersonalTareo.NroEsquemaPlanilla;
-                                CodInsumo = itemPersonalTareo.CodInsumo.ToString();
-                                Insumo = itemPersonalTareo.Insumo.ToString();
-                                CodOcupacion = itemPersonalTareo.CodOcupacion.ToString();
-                                Ocupacion = itemPersonalTareo.Ocupacion.ToString();
-                                proy = itemPersonalTareo.CodProyectoNoProd.ToString();
                         }
 
-                            if (Activo == true)
+                        if (Activo == true)
+                        {
+                            IEnumerable<TareoPersonalS10> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
+                            if (RptValidacion.Count() > 0)
                             {
-                                IEnumerable<TareoPersonalS10> RptValidacion = ValidarExistenciaTareoTrabajador(db, Convert.ToString(CodDocumento));
-                                if (RptValidacion.Count() > 0)
-                                {
-                                    await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
-                                    HoraMarcado = DateTime.Now.ToString();
-                                    Marcado = string.Empty;
+                                await Application.Current.MainPage.DisplayAlert("Validación", "Ya existe el tipo de marcación que desea registrar", "OK");
+                                HoraMarcado = DateTime.Now.ToString();
+                                Marcado = string.Empty;
 
-                                }
-                                else
-                                {
-                                    InsertarTareo(CodObrero, Empleado, CodDocumento, NroEsquemaPlanilla, CodInsumo, Insumo, CodOcupacion, Ocupacion);
-                                    if (Server || LocalServer)
-                                    {
-                                        InsertarTareoServer();
-                                    }
-
-                                    UltimoHoraMarcado = DateTime.Now.ToString();
-                                    UltimoMarcado = CodDocumento;
-                                    HoraMarcado = DateTime.Now.ToString();
-                                    Marcado = string.Empty;
-                                }
                             }
                             else
                             {
-                                await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
+                                InsertarTareo(CodObrero, Empleado, CodDocumento, NroEsquemaPlanilla, CodInsumo, Insumo, CodOcupacion, Ocupacion, multi_proyecto);
+                                if (Server || LocalServer)
+                                {
+                                    InsertarTareoServer();
+                                }
+
+                                UltimoHoraMarcado = DateTime.Now.ToString();
+                                UltimoMarcado = CodDocumento;
                                 HoraMarcado = DateTime.Now.ToString();
                                 Marcado = string.Empty;
                             }
                         }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
+                            HoraMarcado = DateTime.Now.ToString();
+                            Marcado = string.Empty;
+                        }
+                    }
                     else
                     {
                         await Application.Current.MainPage.DisplayAlert("Validación", "Trabajador no existe o no esta activo para tareo.", "OK");
@@ -145,11 +152,10 @@ namespace HamburgerMenu.ViewModels
                         Marcado = string.Empty;
                     }
                 }
-                    catch (Exception ex)
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Ayuda", ex.Message.ToString(), "OK");
-                    }
-                //}
+                catch (Exception ex)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Ayuda", ex.Message.ToString(), "OK");
+                }
             }
         }
 
@@ -162,8 +168,8 @@ namespace HamburgerMenu.ViewModels
         {
             db.CreateTable<TareoPersonalS10>();
             return db.Query<TareoPersonalS10>("Select * From TareoPersonalS10 where DNI = ? and FECHA_TAREO = ? and TIPO_MARCACION = ? ", documento, App.FMarcacion, App.TipoMarcacion);
-        }        
-        public static void InsertarTareo(string codobrero, string empleado, string dni , Guid esquemaplanilla , string codinsumo , string insumo , string codocupacion , string ocupacion)
+        }
+        public static void InsertarTareo(string codobrero, string empleado, string dni, Guid esquemaplanilla, string codinsumo, string insumo, string codocupacion, string ocupacion, string proyecto)
         {
             try
             {
@@ -173,12 +179,12 @@ namespace HamburgerMenu.ViewModels
                     var DatosRegistro = new TareoPersonalS10
                     {
                         ID_TAREADOR = App.Tareador,
-                        PROYECTO = App.Proyecto,
+                        PROYECTO = proyecto,
                         CODOBRERO = codobrero,
                         PERSONAL = empleado,
                         DNI = dni,
                         TIPO_MARCACION = App.TipoMarcacion,
-                        FECHA_TAREO = App.FMarcacion,                        
+                        FECHA_TAREO = App.FMarcacion,
                         HORA = DateTime.Now.ToString("HH:mm"),
                         FECHA_REGISTRO = DateTime.Now,
                         SINCRONIZADO = 0,
@@ -197,7 +203,7 @@ namespace HamburgerMenu.ViewModels
             {
                 Application.Current.MainPage.DisplayAlert("Error : Insertar Local", ex.Message.ToString(), "OK");
             }
-        }        
+        }
         public static IEnumerable<ConfiguracionLocal> BuscarConfiguracionLocal(SQLiteConnection db)
         {
             return db.Query<ConfiguracionLocal>("Select * From ConfiguracionLocal where ID_USUARIO = ? ", App.Usuario);

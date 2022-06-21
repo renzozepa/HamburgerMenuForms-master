@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using SQLite;
 
 using Xamarin.Forms;
@@ -41,12 +42,6 @@ namespace HamburgerMenu
                 Contrasenia.Text = perfil.CONTRASENIA.ToString();
                 Tareador.Text = perfil.TAREADOR.ToString();
 
-                if (!string.IsNullOrEmpty(perfil.PROYECTO))
-                {
-                    Proyecto.Text = perfil.PROYECTO.ToString();
-                }
-
-
                 if (!string.IsNullOrEmpty(perfil.CELULAR))
                 {
                     Celular.Text = perfil.CELULAR.ToString();
@@ -78,12 +73,12 @@ namespace HamburgerMenu
                 perfil.CONTRASENIA = Contrasenia.Text.ToString();
                 perfil.TAREADOR = Tareador.Text.ToString();
                 perfil.CELULAR = Celular.Text.ToString();
-                perfil.PROYECTO = Proyecto.Text.ToString();
+                //perfil.PROYECTO = Proyecto.Text.ToString();
 
                 conn.Update(perfil);
 
                 App.Tareador = Tareador.Text.ToString();
-                App.Proyecto = Proyecto.Text.ToString();
+                //App.Proyecto = Proyecto.Text.ToString();
             }
         }
     }

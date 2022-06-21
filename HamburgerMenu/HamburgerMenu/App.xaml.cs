@@ -19,6 +19,7 @@ namespace HamburgerMenu
         public static string Sucursal;
         public static DateTime FExpiracion;
         public static string Proyecto;
+        public static string Multi_Proyecto;
 
         private static DatabaseContext context;
 
