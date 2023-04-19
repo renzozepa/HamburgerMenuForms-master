@@ -99,7 +99,16 @@ namespace HamburgerMenu.ViewModels
                 IsRemember = Settings.IsRemember;
             }
 
-            //LlenarSucursal();
+            string filename = "Tareo.db3";
+            string foldername = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string CompletePath = Path.Combine(foldername, filename);
+
+            var db = new SQLiteConnection(CompletePath);
+            db.CreateTable<Sucursal>();
+            var RSucursal = db.Query<Sucursal>("SELECT * FROM Sucursal");
+            if (RSucursal.Count == 0)
+                LlenarSucursal();
+
             MostrarSucursal();
         }
         async Task ValidarUsuario()
@@ -151,7 +160,8 @@ namespace HamburgerMenu.ViewModels
                         await App.Current.MainPage.DisplayAlert("Inicio sesión", "Verifique su usuario/contraseña", "Aceptar");
                     }
                 }
-                else {
+                else
+                {
                     await App.Current.MainPage.DisplayAlert("Inicio sesión", "Completar los datos necesarios para iniciar sesión.", "Aceptar");
                 }
             }
@@ -198,65 +208,54 @@ namespace HamburgerMenu.ViewModels
 
             try
             {
-                if (CrossConnectivity.Current.IsConnected)
+                if (!CrossConnectivity.Current.IsConnected)
                 {
-                    LstSucursal = new List<SucursalApi>();
-                    var t = Task.Run(async () => LstSucursal = await HaugApi.Metodo.GetAllSucursalApiAsync());
+                    await App.Current.MainPage.DisplayAlert("Sucursal", "Verifique su conexión a internet", "Ok");
+                    return;
+                }
+                LstSucursal = new List<SucursalApi>();
+                var t = Task.Run(async () => LstSucursal = await HaugApi.Metodo.GetAllSucursalApiAsync());
 
-                    t.Wait();
+                t.Wait();
 
-                    float contador = 0;
-                    float contador_s = 0;
-                    float cn = LstSucursal.Count();
+                float contador_s = 0;
+                float cn = LstSucursal.Count;
 
-                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
+                using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(CompletePath))
                     {
-                        //using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
-                        using (SQLiteConnection conn = new SQLiteConnection(CompletePath))
+                        if (DoesTableExist(conn, "Sucursal"))
+                            conn.DropTable<Sucursal>();
+
+                        conn.CreateTable<Sucursal>();
+                        foreach (SucursalApi itemSucursalApi in LstSucursal)
                         {
-                            if (DoesTableExist(conn, "Sucursal"))
-                                conn.DropTable<Sucursal>();
-
-                            conn.CreateTable<Sucursal>();
-                            foreach (SucursalApi itemSucursalApi in LstSucursal)
+                            var DatosRegistro = new Sucursal
                             {
-                                var DatosRegistro = new Sucursal
-                                {
-                                    ID_SUCURSAL = itemSucursalApi.ID_SUCURSAL.ToString(),
-                                    DESCRIPCION = itemSucursalApi.DESCRIPCION.ToString(),
-                                    RUC = itemSucursalApi.RUC.ToString(),
-                                    ESTADO = bool.Parse(itemSucursalApi.ESTADO.ToString()),
-                                    ID_USU_REG = int.Parse(itemSucursalApi.ID_USU_REG.ToString()),
-                                    ID_USUARIO_MOD = int.Parse(itemSucursalApi.ID_USUARIO_MOD.ToString())
-                                };
+                                ID_SUCURSAL = itemSucursalApi.ID_SUCURSAL.ToString(),
+                                DESCRIPCION = itemSucursalApi.DESCRIPCION.ToString(),
+                                RUC = itemSucursalApi.RUC.ToString(),
+                                ESTADO = bool.Parse(itemSucursalApi.ESTADO.ToString()),
+                                ID_USU_REG = int.Parse(itemSucursalApi.ID_USU_REG.ToString()),
+                                ID_USUARIO_MOD = int.Parse(itemSucursalApi.ID_USUARIO_MOD.ToString())
+                            };
 
-                                //var db = new SQLiteConnection(App.FilePath);
-                                var db = new SQLiteConnection(CompletePath);
-                                IEnumerable<Sucursal> resultado = ValidarExitenciaSucursal(db, itemSucursalApi.ID_SUCURSAL.ToString());
-                                if (resultado.Count() > 0)
-                                {
-                                    conn.Update(DatosRegistro);
-                                }
-                                else
-                                {
-                                    conn.Insert(DatosRegistro);
-                                }
+                            IEnumerable<Sucursal> resultado = ValidarExitenciaSucursal(conn, itemSucursalApi.ID_SUCURSAL);
+                            if (resultado.Count() > 0)
+                                conn.Update(DatosRegistro);
+                            else
+                                conn.Insert(DatosRegistro);
 
-                                if (contador_s <= cn)
-                                {
-                                    await Task.Delay(1);
-                                    contador = (contador_s / cn) * 100;
-                                    dialog.PercentComplete = Convert.ToInt32(contador);
-                                    contador_s = contador_s + 1;
-                                }
+                            if (contador_s <= cn)
+                            {
+                                await Task.Delay(1);
+                                dialog.PercentComplete = Convert.ToInt32((contador_s / cn) * 100);
+                                contador_s++;
                             }
                         }
                     }
                 }
-                //else
-                //{
-                //    await App.Current.MainPage.DisplayAlert("Sucursal", "Verifique su conexion a internet", "Ok");
-                //}
 
             }
             catch (Exception ex)

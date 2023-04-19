@@ -62,119 +62,113 @@ namespace HamburgerMenu
         {
             try
             {
-                if (CrossConnectivity.Current.IsConnected)
+                if (!CrossConnectivity.Current.IsConnected)
                 {
+                    await DisplayAlert("Horarios", "Verifique su conexion a internet", "Ok");
+                    return;
+                }
+                using (var dialog = UserDialogs.Instance.Progress("Sincronizando Personal Disponible..."))
+                {
+                    dialog.Show();
+                    await Task.Delay(2);
+
                     LstPersonalTareo = new List<PersonalTareoApi>();
                     var t = Task.Run(async () => LstPersonalTareo = await HaugApi.Metodo.GetAllPersonalTareadorAsync(App.Tareador));
 
                     t.Wait();
 
-                    float contador = 0;
                     float contador_s = 0;
                     float cn = LstPersonalTareo.Count();
 
-                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
+                    using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                     {
-                        using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                        conn.CreateTable<PersonalTareo>();
+                        foreach (PersonalTareoApi itemPersonalTareoApi in LstPersonalTareo)
                         {
-                            conn.CreateTable<PersonalTareo>();
-                            foreach (PersonalTareoApi itemPersonalTareoApi in LstPersonalTareo)
+                            var DatosRegistro = new PersonalTareo
                             {
-                                var DatosRegistro = new PersonalTareo
-                                {
-                                    ID_PERSONAL = int.Parse(itemPersonalTareoApi.ID_PERSONAL.ToString()),
-                                    NOMBRE = itemPersonalTareoApi.NOMBRE.ToString(),
-                                    ID_TIPODOCUIDEN = itemPersonalTareoApi.ID_TIPODOCUIDEN.ToString(),
-                                    TIPODOCUIDEN = itemPersonalTareoApi.TIPODOCUIDEN.ToString(),
-                                    NUMERO_DOCUIDEN = itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString(),
-                                    ID_SITUACION = int.Parse(itemPersonalTareoApi.ID_SITUACION.ToString()),
-                                    SITUACION = itemPersonalTareoApi.SITUACION.ToString(),
-                                    ID_PROYECTO = itemPersonalTareoApi.ID_PROYECTO.ToString(),
-                                    PROYECTO = itemPersonalTareoApi.PROYECTO.ToString(),
-                                    ID_TAREADOR = itemPersonalTareoApi.ID_TAREADOR.ToString(),
-                                    TAREADOR = itemPersonalTareoApi.TAREADOR.ToString(),
-                                    ID_CLASE_TRABAJADOR = int.Parse(itemPersonalTareoApi.ID_CLASE_TRABAJADOR.ToString()),
-                                    CLASE_TRABAJADOR = itemPersonalTareoApi.CLASE_TRABAJADOR.ToString(),
-                                    ID_USUARIO_SINCRONIZA = 1,
-                                    FECHA_SINCRONIZADO = DateTime.Now,
-                                    ID_HORARIO = itemPersonalTareoApi.ID_HORARIO.ToString()
-                                };
+                                ID_PERSONAL = int.Parse(itemPersonalTareoApi.ID_PERSONAL.ToString()),
+                                NOMBRE = itemPersonalTareoApi.NOMBRE.ToString(),
+                                ID_TIPODOCUIDEN = itemPersonalTareoApi.ID_TIPODOCUIDEN.ToString(),
+                                TIPODOCUIDEN = itemPersonalTareoApi.TIPODOCUIDEN.ToString(),
+                                NUMERO_DOCUIDEN = itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString(),
+                                ID_SITUACION = int.Parse(itemPersonalTareoApi.ID_SITUACION.ToString()),
+                                SITUACION = itemPersonalTareoApi.SITUACION.ToString(),
+                                ID_PROYECTO = itemPersonalTareoApi.ID_PROYECTO.ToString(),
+                                PROYECTO = itemPersonalTareoApi.PROYECTO.ToString(),
+                                ID_TAREADOR = itemPersonalTareoApi.ID_TAREADOR.ToString(),
+                                TAREADOR = itemPersonalTareoApi.TAREADOR.ToString(),
+                                ID_CLASE_TRABAJADOR = int.Parse(itemPersonalTareoApi.ID_CLASE_TRABAJADOR.ToString()),
+                                CLASE_TRABAJADOR = itemPersonalTareoApi.CLASE_TRABAJADOR.ToString(),
+                                ID_USUARIO_SINCRONIZA = 1,
+                                FECHA_SINCRONIZADO = DateTime.Now,
+                                ID_HORARIO = itemPersonalTareoApi.ID_HORARIO.ToString()
+                            };
 
-                                var db = new SQLiteConnection(App.FilePath);
-                                IEnumerable<PersonalTareo> resultado = ValidarExitencia(db, itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString());
-                                if (resultado.Count() > 0)
-                                {
-                                    conn.Update(DatosRegistro);
-                                }
-                                else
-                                {
-                                    conn.Insert(DatosRegistro);
-                                }
-
-                                if (contador_s <= cn)
-                                {
-                                    await Task.Delay(2);
-                                    contador = (contador_s / cn) * 100;
-                                    dialog.PercentComplete = Convert.ToInt32(contador);
-                                    contador_s = contador_s + 1;
-                                }
+                            IEnumerable<PersonalTareo> resultado = ValidarExitencia(conn, itemPersonalTareoApi.NUMERO_DOCUIDEN.ToString());
+                            if (resultado.Count() > 0)
+                                conn.Update(DatosRegistro);
+                            else
+                                conn.Insert(DatosRegistro);
+                            
+                            if (contador_s <= cn)
+                            {
+                                await Task.Delay(2);
+                                contador_s = contador_s + 1;
+                                dialog.PercentComplete = Convert.ToInt32((contador_s / cn) * 100);                                
                             }
                         }
                     }
-
                 }
-                else
-                {
-                    await DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
-                }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                await DisplayAlert("Sincronizar", ex.Message.ToString(), "Ok");
             }
         }
-        private void Btn_SincronizTareoPersonal(object sender, EventArgs e)
+        private async void Btn_SincronizTareoPersonal(object sender, EventArgs e)
         {
             try
             {
-                if (CrossConnectivity.Current.IsConnected)
+                if (!CrossConnectivity.Current.IsConnected)
                 {
-                    int contador = 0;
+                    await DisplayAlert("Horarios", "Verifique su conexion a internet", "Ok");
+                    return;
+                }
 
-                    using (var dialog = UserDialogs.Instance.Progress("Procesando"))
+                int contador = 0;
+
+                using (var dialog = UserDialogs.Instance.Progress("Sincronizando Tareo Personal..."))
+                {
+                    dialog.Show();
+                    await Task.Delay(5);
+
+                    LstTareoPersonal = new List<TareoPersonalS10Api>();
+
+                    var db = new SQLiteConnection(App.FilePath);
+                    IEnumerable<TareoPersonalS10> resultado = ListarTareoPorSincronizar(db);
+
+                    foreach (TareoPersonalS10 TareoPersonalApiItem in resultado)
                     {
-                        LstTareoPersonal = new List<TareoPersonalS10Api>();
+                        var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
+                        TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
+                        TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
+                        TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA, TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NroEsquemaPlanilla,
+                        TareoPersonalApiItem.CodInsumo, TareoPersonalApiItem.Insumo, TareoPersonalApiItem.CodOcupacion, TareoPersonalApiItem.Ocupacion
+                        ));
 
-                        var db = new SQLiteConnection(App.FilePath);
-                        IEnumerable<TareoPersonalS10> resultado = ListarTareoPorSincronizar(db);
+                        UpdTareo(TareoPersonalApiItem.ID);
 
-                        foreach (TareoPersonalS10 TareoPersonalApiItem in resultado)
-                        {
-                            var t = Task.Run(async () => await HaugApi.Metodo.PostJsonHttpClient(
-                            TareoPersonalApiItem.ID_TAREADOR, TareoPersonalApiItem.PROYECTO, TareoPersonalApiItem.CODOBRERO,
-                            TareoPersonalApiItem.PERSONAL, TareoPersonalApiItem.DNI, Convert.ToString(TareoPersonalApiItem.TIPO_MARCACION),
-                            TareoPersonalApiItem.FECHA_TAREO, TareoPersonalApiItem.HORA, TareoPersonalApiItem.FECHA_REGISTRO, TareoPersonalApiItem.NroEsquemaPlanilla,
-                            TareoPersonalApiItem.CodInsumo, TareoPersonalApiItem.Insumo, TareoPersonalApiItem.CodOcupacion, TareoPersonalApiItem.Ocupacion
-                            ));
-
-                            UpdTareo(TareoPersonalApiItem.ID);
-
-                            contador += contador;
-                            dialog.PercentComplete = (contador / resultado.Count()) * 100;
-                        }
+                        await Task.Delay(2);
+                        contador += contador;
+                        dialog.PercentComplete = (contador / resultado.Count()) * 100;
                     }
-
+                    dialog.Hide();
                 }
-                else
-                {
-                    DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
-                }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                await DisplayAlert("Sincronizar", ex.Message.ToString(), "Ok");
             }
         }
         public static void UpdTareo(int id)
@@ -200,19 +194,27 @@ namespace HamburgerMenu
             {
                 string mensaje = ex.InnerException.ToString();
                 string mensaje_1 = mensaje;
-                throw;
             }
         }
         private void Btn_SincroAltaUsuario(object sender, EventArgs e)
         {
 
         }
-        private void Btn_SincroGetToken(object sender, EventArgs e)
+        private async void Btn_SincroGetToken(object sender, EventArgs e)
         {
             try
             {
-                if (CrossConnectivity.Current.IsConnected)
+                if (!CrossConnectivity.Current.IsConnected)
                 {
+                    await DisplayAlert("Token", "Verifique su conexion a internet", "Ok");
+                    return;
+                }
+
+                using (var dialog = UserDialogs.Instance.Progress("Sincronizando Token..."))
+                {
+                    dialog.Show();
+                    await Task.Delay(5);
+
                     LstTareadorDispositivos = new List<TareadorDispositivosApi>();
                     var t = Task.Run(async () => LstTareadorDispositivos = await HaugApi.Metodo.GetToken(App.Celular, App.Tareador));
 
@@ -242,85 +244,80 @@ namespace HamburgerMenu
                             }
                         }
                     }
-                }
-                else
-                {
-                    DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
+                    dialog.PercentComplete = 98;
+                    await Task.Delay(2);
+                    dialog.Hide();
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                await DisplayAlert("Token", ex.InnerException.ToString(), "Ok");
             }
 
         }
         private async void Btn_SincronizHorario(object sender, EventArgs e)
         {
             try
-            {                
-                if (CrossConnectivity.Current.IsConnected)
+            {
+                if (!CrossConnectivity.Current.IsConnected)
                 {
+                    await DisplayAlert("Horarios", "Verifique su conexion a internet", "Ok");
+                    return;
+                }
+
+                using (var dialog = UserDialogs.Instance.Progress("Sincronizando Horario..."))
+                {
+                    dialog.Show();
+                    await Task.Delay(1);
+
                     LstHorario = new List<HorarioApi>();
-                    var t = Task.Run(async () => LstHorario = await HaugApi.Metodo.GetAllHorarioApiAsync());                    
+                    var t = Task.Run(async () => LstHorario = await HaugApi.Metodo.GetAllHorarioApiAsync());
 
                     t.Wait();
 
-                    float contador = 0;
                     float contador_s = 0;
                     float cn = LstHorario.Count();
 
-                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
+
+                    using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
                     {
-                        using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                        if (DoesTableExist(conn, "Horario"))
+                            conn.DropTable<Horario>();
+
+                        conn.CreateTable<Horario>();
+                        foreach (HorarioApi itemHorarioApi in LstHorario)
                         {
-                            if (DoesTableExist(conn, "Horario"))
-                                conn.DropTable<Horario>();
-
-                            conn.CreateTable<Horario>();
-                            foreach (HorarioApi itemHorarioApi in LstHorario)
+                            var DatosRegistro = new Horario
                             {
-                                var DatosRegistro = new Horario
-                                {
-                                    ID_HORARIO = itemHorarioApi.ID_HORARIO.ToString(),
-                                    DESCRIPCION = itemHorarioApi.DESCRIPCION.ToString(),
-                                    COLOQUIAL = itemHorarioApi.COLOQUIAL.ToString(),
-                                    HORA_INICIO = itemHorarioApi.HORA_INICIO.ToString(),
-                                    HORA_FIN = itemHorarioApi.HORA_FIN.ToString(),
-                                    TOLERA_ING = int.Parse(itemHorarioApi.TOLERA_ING.ToString()),
-                                    TOLERA_SAL = int.Parse(itemHorarioApi.TOLERA_SAL.ToString()),
-                                    ESTADO = bool.Parse(itemHorarioApi.ESTADO.ToString()),
-                                    ID_USU_REG = int.Parse(itemHorarioApi.ID_USU_REG.ToString()),
-                                    ID_USUARIO_MOD = int.Parse(itemHorarioApi.ID_USUARIO_MOD.ToString())
-                                };
+                                ID_HORARIO = itemHorarioApi.ID_HORARIO.ToString(),
+                                DESCRIPCION = itemHorarioApi.DESCRIPCION.ToString(),
+                                COLOQUIAL = itemHorarioApi.COLOQUIAL.ToString(),
+                                HORA_INICIO = itemHorarioApi.HORA_INICIO.ToString(),
+                                HORA_FIN = itemHorarioApi.HORA_FIN.ToString(),
+                                TOLERA_ING = int.Parse(itemHorarioApi.TOLERA_ING.ToString()),
+                                TOLERA_SAL = int.Parse(itemHorarioApi.TOLERA_SAL.ToString()),
+                                ESTADO = bool.Parse(itemHorarioApi.ESTADO.ToString()),
+                                ID_USU_REG = int.Parse(itemHorarioApi.ID_USU_REG.ToString()),
+                                ID_USUARIO_MOD = int.Parse(itemHorarioApi.ID_USUARIO_MOD.ToString())
+                            };
 
-                                var db = new SQLiteConnection(App.FilePath);
-                                IEnumerable<Horario> resultado = ValidarExitenciaHorario(db, itemHorarioApi.ID_HORARIO.ToString());
-                                if (resultado.Count() > 0)
-                                {
-                                    conn.Update(DatosRegistro);
-                                }
-                                else
-                                {
-                                    conn.Insert(DatosRegistro);
-                                }
+                            IEnumerable<Horario> resultado = ValidarExitenciaHorario(conn, itemHorarioApi.ID_HORARIO.ToString());
+                            if (resultado.Count() > 0)
+                                conn.Update(DatosRegistro);
+                            else
+                                conn.Insert(DatosRegistro);
 
-                                if (contador_s <= cn)
-                                {
-                                    await Task.Delay(1);
-                                    contador = (contador_s / cn) * 100;
-                                    dialog.PercentComplete = Convert.ToInt32(contador);
-                                    contador_s = contador_s + 1;
-                                }
+                            if (contador_s <= cn)
+                            {
+                                await Task.Delay(3);
+                                contador_s += contador_s;
+                                dialog.PercentComplete = Convert.ToInt32((contador_s / cn) * 100);                                
                             }
                         }
                     }
+                    dialog.Hide();
                 }
-                else
-                {
-                    await DisplayAlert("Horarios", "Verifique su conexion a internet", "Ok");
-                }
-
             }
             catch (Exception ex)
             {
@@ -331,7 +328,6 @@ namespace HamburgerMenu
         {
             return db.Query<Horario>("SELECT * FROM Horario where ID_HORARIO = ? ", id);
         }
-
         private bool DoesTableExist(SQLiteConnection db, string name)
         {
             SQLiteCommand command = db.CreateCommand("SELECT COUNT(1) FROM SQLITE_MASTER WHERE TYPE = @TYPE AND NAME = @NAME");
@@ -341,71 +337,72 @@ namespace HamburgerMenu
             int result = command.ExecuteScalar<int>();
             return (result > 0);
         }
-
         private async void BtnSincroPersonalS10_Clicked(object sender, EventArgs e)
         {
             try
             {
-                if (CrossConnectivity.Current.IsConnected)
+                if (!CrossConnectivity.Current.IsConnected)
                 {
+                    await DisplayAlert("Horarios", "Verifique su conexion a internet", "Ok");
+                    return;
+                }
+
+                using (var dialog = UserDialogs.Instance.Progress("Sincronizando Personal..."))
+                {
+                    dialog.Show();
+                    await Task.Delay(1);
+
                     LstPersonalS10 = new List<PersonalS10Api>();
                     var t = Task.Run(async () => LstPersonalS10 = await HaugApi.Metodo.GetAllPersonalS10TareadorAsync(App.Tareador));
 
                     t.Wait();
 
                     int contador = 0;
-                    //float contador_s = 0;
                     int cn = LstPersonalS10.Count();
 
-                    using (var dialog = UserDialogs.Instance.Progress("Procesando..."))
-                    {
-                        using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
-                        {
-                            conn.CreateTable<Tablas.Personal>();
-                            foreach (PersonalS10Api itemPersonalS10Api in LstPersonalS10)
-                            {
-                                var DatosRegistro = new Tablas.Personal
-                                {
-                                    CodObrero = itemPersonalS10Api.CodObrero.ToString(),
-                                    Descripcion = itemPersonalS10Api.Descripcion.ToString(),
-                                    DNI = itemPersonalS10Api.DNI.ToString(),
-                                    NroEsquemaPlanilla = itemPersonalS10Api.NroEsquemaPlanilla,
-                                    CodProyecto = itemPersonalS10Api.CodProyecto.ToString(),
-                                    CodIdentificador = itemPersonalS10Api.CodIdentificador.ToString(),
-                                    Activo = itemPersonalS10Api.Activo,
-                                    CodInsumo = itemPersonalS10Api.CodInsumo.ToString(),
-                                    Insumo = itemPersonalS10Api.Insumo.ToString(),
-                                    CodOcupacion = itemPersonalS10Api.CodOcupacion.ToString(),
-                                    Ocupacion = itemPersonalS10Api.Ocupacion.ToString(),
-                                    CodProyectoNoProd = itemPersonalS10Api.CodProyectoNoProd.ToString()
-                                };
+                    await DisplayAlert("Personal", cn.ToString(), "Ok");
 
-                                var db = new SQLiteConnection(App.FilePath);
-                                IEnumerable<Tablas.Personal> resultado = ValidarExitenciaS10(db, itemPersonalS10Api.DNI.ToString());
-                                if (resultado.Count() > 0)
-                                {
-                                    conn.Update(DatosRegistro);
-                                }
-                                else
-                                {
-                                    conn.Insert(DatosRegistro);
-                                }
-                                await Task.Delay(10);
+                    using (SQLiteConnection conn = new SQLiteConnection(App.FilePath))
+                    {
+                        conn.CreateTable<Tablas.Personal>();
+                        foreach (PersonalS10Api itemPersonalS10Api in LstPersonalS10)
+                        {
+                            var DatosRegistro = new Tablas.Personal
+                            {
+                                CodObrero = itemPersonalS10Api.CodObrero.ToString(),
+                                Descripcion = itemPersonalS10Api.Descripcion.ToString(),
+                                DNI = itemPersonalS10Api.DNI.ToString(),
+                                NroEsquemaPlanilla = itemPersonalS10Api.NroEsquemaPlanilla,
+                                CodProyecto = itemPersonalS10Api.CodProyecto.ToString(),
+                                CodIdentificador = itemPersonalS10Api.CodIdentificador.ToString(),
+                                Activo = itemPersonalS10Api.Activo,
+                                CodInsumo = itemPersonalS10Api.CodInsumo.ToString(),
+                                Insumo = itemPersonalS10Api.Insumo.ToString(),
+                                CodOcupacion = itemPersonalS10Api.CodOcupacion.ToString(),
+                                Ocupacion = itemPersonalS10Api.Ocupacion.ToString(),
+                                CodProyectoNoProd = itemPersonalS10Api.CodProyectoNoProd.ToString()
+                            };
+
+                            IEnumerable<Tablas.Personal> resultado = ValidarExitenciaS10(conn, itemPersonalS10Api.DNI.ToString());
+                            if (resultado.Count() > 0)
+                                conn.Update(DatosRegistro);
+                            else
+                                conn.Insert(DatosRegistro);
+
+                            if (contador <= cn)
+                            {
+                                await Task.Delay(2);
+                                
+                                dialog.PercentComplete = Convert.ToInt32((contador / cn) * 100);
                                 contador += contador;
-                                dialog.PercentComplete = (contador / cn) * 100;
                             }
                         }
                     }
                 }
-                else
-                {
-                    await DisplayAlert("Haug Tareo", "Verifique su conexion a internet", "Ok");
-                }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                await DisplayAlert("Personal", ex.InnerException.ToString(), "Ok");
             }
         }
     }
